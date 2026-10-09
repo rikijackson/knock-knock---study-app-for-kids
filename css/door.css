@@ -78,3 +78,21 @@
 .door--ajar  .door-panel { transform: rotateY(-40deg); }
 .door--crack .door-panel::after { opacity: 0.08; }
 .door--ajar  .door-panel::after { opacity: 0.2; }
+
+/* Slam: the door shuts fast, then the whole scene shakes. */
+.door--slam .door-panel {
+  transition-duration: 0.18s;
+  transition-timing-function: cubic-bezier(0.6, 0, 1, 1);
+}
+
+.door--shake {
+  animation: door-shake 0.35s ease-out;
+}
+
+@keyframes door-shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-6px, 2px); }
+  40% { transform: translate(5px, -2px); }
+  60% { transform: translate(-3px, 1px); }
+  80% { transform: translate(2px, 0); }
+}

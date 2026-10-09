@@ -8,11 +8,22 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/door.css">
   <link rel="stylesheet" href="css/characters.css">
+  <link rel="stylesheet" href="css/dialogue.css">
 </head>
 <body>
   <main class="app">
     <!-- The door scene is drawn into here by js/door.js -->
     <div id="stage" class="stage"></div>
+
+    <!-- The study screen: shown while a session runs -->
+    <section class="study" aria-label="Study session">
+      <div id="clock" class="clock" role="timer">0:00</div>
+      <p id="study-status" class="study-status" aria-live="polite"></p>
+      <div class="study-buttons">
+        <button id="break-btn" type="button" class="btn">Break</button>
+        <button id="end-btn" type="button" class="btn btn-quiet">End session</button>
+      </div>
+    </section>
   </main>
   <script type="module" src="js/main.js"></script>
 </body>

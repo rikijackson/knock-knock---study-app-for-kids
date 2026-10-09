@@ -25,3 +25,23 @@ export function play(characterEl, name) {
     characterEl.classList.add(className);
   });
 }
+
+// Pick one of a character's check-in animations, never the one played last time.
+export function pickCheckIn(names, last) {
+  const options = names.length > 1 ? names.filter(n => n !== last) : names;
+  return options[Math.floor(Math.random() * options.length)];
+}
+
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+// Lean out of the doorway and stay there (while asking questions).
+export async function stepOut(characterEl) {
+  characterEl.classList.add('is-out');
+  await wait(900);
+}
+
+// Go back behind the door.
+export async function stepIn(characterEl) {
+  characterEl.classList.remove('is-out');
+  await wait(600);
+}

@@ -12,6 +12,7 @@ const C = {
   apron: '#e6effb', apronShade: '#bfd0ea',
   skirt: '#24508f', skirtShade: '#1a3d72',
   legs: '#1c2d55', shoes: '#0f1a33',
+  spoon: '#b9c7dd', spoonShade: '#8fa1bf',
   eyeWhite: '#eef2f8', iris: '#8d92bd', pupil: '#14213d', lash: '#0f1730',
   lips: '#a23d63', lipsLight: '#c25a80', earring: '#4fc2d0',
 };
@@ -72,6 +73,12 @@ export function motherSvg() {
     <path d="M-61 -210 L-80 -214 Q-83 -204 -81 -192 Q-79 -184 -72 -184 Q-67 -185 -66 -190 L-64 -198 Q-58 -198 -57 -202 Q-58 -207 -61 -210 Z" fill="${C.skin}"/>
   </g>
   <g class="arm-r">
+    <!-- a ladle (blue-grey so it stays in the cool palette), hidden until she wags it -->
+    <g class="prop prop-spoon">
+      <path d="M68 -192 L75 -193 L81 -142 L75 -141 Z" fill="${C.spoon}"/>
+      <ellipse cx="79" cy="-128" rx="9" ry="14" fill="${C.spoon}"/>
+      <path d="M80 -142 Q90 -132 84 -116 Q82 -128 76 -140 Z" fill="${C.spoonShade}"/>
+    </g>
     <path d="M58 -332 Q44 -332 45 -316 L58 -212 Q70 -206 80 -214 L70 -318 Q68 -332 58 -332 Z" fill="${C.cardigan}"/>
     <path d="M58 -332 Q68 -332 70 -318 L80 -214 Q75 -210 70 -210 L60 -318 Q60 -328 58 -332 Z" fill="${C.cardiganShade}"/>
     <path d="M61 -210 L80 -214 Q83 -204 81 -192 Q79 -184 72 -184 Q67 -185 66 -190 L64 -198 Q58 -198 57 -202 Q58 -207 61 -210 Z" fill="${C.skin}"/>

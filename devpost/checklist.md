@@ -9,7 +9,7 @@ Build mode: learn
 
 ## Slices
 
-- [ ] **1. Look test: the mother peeks out from behind the door**
+- [x] **1. Look test: the mother peeks out from behind the door**
   Becomes usable: A running page with the big door in the center (light and dark colors). Clicking it makes the door creak open and the mother do her `look-around` check-in (lean out, eyes dart left and right, slow nod, sneak back), then the door shuts.
   Why now: The character popping out is the unique kernel, and the art style is the biggest unknown. The learner agreed in the spec to judge this look before anything else is built, so if the style is wrong we fix the style rules while it's cheap.
   PRD ref: `prd.md > Character Check-Ins`, `prd.md > Look and Feel`
@@ -61,7 +61,7 @@ Build mode: learn
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored — after slice 1 (the look test), before any other building
+- [x] Early usable behavior explored — after slice 1 (the look test), before any other building. Learner feedback reshaped the art: natural skin, curves not blocks, Carmen Sandiego–style face, 3D door swing, new look-around.
 - [ ] Final kick-the-tires exploration and feedback completed
 
 ## Final Review

@@ -9,7 +9,8 @@ export const CHARACTERS = [
     price: 0,
     free: true,
     svg: motherSvg,
-    checkIns: ['look-around'],
+    // look-around, peek and stare are shared; mother-spoon is hers alone.
+    checkIns: ['look-around', 'peek', 'stare', 'mother-spoon'],
   },
 ];
 

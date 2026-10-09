@@ -55,9 +55,9 @@ export function createDoor(container) {
     scene,
     characterEl: null,
 
-    // Put a character (SVG markup) behind the door.
+    // Put a character (SVG markup) behind the door, or nobody (null).
     setCharacter(markup) {
-      slot.innerHTML = markup;
+      slot.innerHTML = markup ?? '';
       door.characterEl = slot.firstElementChild;
     },
 
@@ -71,6 +71,16 @@ export function createDoor(container) {
     async close() {
       scene.classList.remove('door--crack', 'door--ajar');
       await waitForSwing(panel);
+    },
+
+    // Shut it hard: a fast swing and a shake.
+    async slam() {
+      scene.classList.add('door--slam');
+      scene.classList.remove('door--crack', 'door--ajar');
+      await waitForSwing(panel);
+      scene.classList.add('door--shake');
+      await new Promise(r => setTimeout(r, 350));
+      scene.classList.remove('door--slam', 'door--shake');
     },
 
     // Clicking or pressing Enter/Space on the door counts as a knock.

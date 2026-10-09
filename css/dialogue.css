@@ -1,0 +1,110 @@
+/* Speech bubbles: rounded, quiet, with a little tail pointing at the doorway. */
+.bubble {
+  position: absolute;
+  left: 76%;
+  top: 2%;
+  width: 250px;
+  padding: 13px 16px;
+  border-radius: 20px;
+  background: var(--bubble);
+  color: var(--bubble-ink);
+  border: 2.5px solid var(--bubble-line);
+  box-shadow: 0 8px 28px rgba(5, 10, 25, 0.35);
+  z-index: 5;
+  opacity: 0;
+  transform: scale(0.85);
+  transform-origin: 0 100%;   /* grows out of the tail */
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.25s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.bubble.is-open {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* The tail: a little triangle reaching down-left to the speaker's face. */
+.bubble-tail {
+  position: absolute;
+  left: -4px;
+  bottom: -19px;
+  width: 30px;
+  height: 22px;
+  overflow: visible;
+}
+
+.bubble-tail-fill { fill: var(--bubble); }
+.bubble-tail-line {
+  fill: none;
+  stroke: var(--bubble-line);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.bubble-text {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.bubble-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.choice {
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--bubble-accent);
+  background: transparent;
+  color: var(--bubble-accent);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.choice:hover,
+.choice:focus-visible {
+  background: var(--bubble-accent);
+  color: var(--bubble);
+  outline: none;
+}
+
+.choice-note {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+.choice.is-locked {
+  border-color: var(--locked);
+  color: var(--locked);
+  cursor: not-allowed;
+}
+
+.choice.is-locked:hover {
+  background: transparent;
+  color: var(--locked);
+}
+
+.bubble-number {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bubble-number input {
+  width: 5.5em;
+  font: inherit;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 2px solid var(--bubble-accent);
+  background: #fff;
+  color: var(--bubble-ink);
+}

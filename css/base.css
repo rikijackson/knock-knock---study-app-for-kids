@@ -6,6 +6,11 @@
   --blue: #2f6fdd;
   --pale: #dce8fa;
   --teal: #1b8a9a;
+  --bubble: #ffffff;
+  --bubble-ink: #14213d;
+  --bubble-line: #14213d;
+  --bubble-accent: #2f6fdd;
+  --locked: #9aa8c0;
 
   /* The door */
   --frame: #1f3a6b;
@@ -26,6 +31,9 @@
     --blue: #6a9df5;
     --pale: #1a2540;
     --teal: #4fc2d0;
+    --bubble: #f4f8fc;
+    --bubble-line: #f4f8fc;
+    --locked: #8a96ad;
 
     --frame: #22355e;
     --frame-shade: #1a2a4b;
@@ -45,6 +53,9 @@
   --blue: #6a9df5;
   --pale: #1a2540;
   --teal: #4fc2d0;
+  --bubble: #f4f8fc;
+  --bubble-line: #f4f8fc;
+  --locked: #8a96ad;
 
   --frame: #22355e;
   --frame-shade: #1a2a4b;
