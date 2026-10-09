@@ -1,0 +1,12 @@
+/* Page layout: on the door screen the door sits in the center. */
+.app {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.stage {
+  /* As big as fits: never taller than 88% of the window. */
+  width: min(90vw, 460px, calc(88vh * 500 / 720));
+}

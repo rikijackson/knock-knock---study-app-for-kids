@@ -1,0 +1,80 @@
+/* The door scene: a back layer (frame, dark doorway, character)
+   with the door on top as its own element so it can swing in 3D. */
+.door-scene {
+  position: relative;
+  aspect-ratio: 500 / 720;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  perspective: 1100px;
+}
+
+.door-scene:focus-visible .door-frame {
+  stroke: var(--teal);
+  stroke-width: 6;
+}
+
+.door-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.door-frame       { fill: var(--frame); }
+.door-frame-shade { fill: var(--frame-shade); }
+.doorway          { fill: var(--doorway); }
+.floor-shadow     { fill: var(--floor-shadow); }
+
+.door-body  { fill: var(--door); }
+.door-shade { fill: var(--door-shade); }
+.door-inset { fill: var(--door-inset); }
+.door-knob  { fill: var(--knob); }
+
+/* The door sits exactly over the doorway (x 110, y 80, 280 x 600 of 500 x 720)
+   and swings toward you on its left hinge. */
+.door-panel {
+  position: absolute;
+  left: 22%;
+  top: 11.111%;
+  width: 56%;
+  height: 83.333%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(0.3, 0.7, 0.35, 1);
+}
+
+.door-panel > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The door's thickness: a strip along its right edge, turned to face sideways. */
+.door-edge {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 5%;
+  height: 100%;
+  background: var(--door-edge);
+  transform-origin: left center;
+  transform: rotateY(-90deg);
+}
+
+/* As the door turns away from the light it gets a little darker. */
+.door-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  transition: opacity 0.9s;
+  pointer-events: none;
+}
+
+.door--crack .door-panel { transform: rotateY(-14deg); }
+.door--ajar  .door-panel { transform: rotateY(-40deg); }
+.door--crack .door-panel::after { opacity: 0.08; }
+.door--ajar  .door-panel::after { opacity: 0.2; }

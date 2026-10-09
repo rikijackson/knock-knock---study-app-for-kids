@@ -1,0 +1,72 @@
+/* Color variables: cool colors only (no yellow, orange or warm tones).
+   Light set first, then the dark set. */
+:root {
+  --bg: #f4f8fc;
+  --ink: #14213d;
+  --blue: #2f6fdd;
+  --pale: #dce8fa;
+  --teal: #1b8a9a;
+
+  /* The door */
+  --frame: #1f3a6b;
+  --frame-shade: #172d55;
+  --door: #4a78c2;
+  --door-shade: #3a63a6;
+  --door-inset: #3f6bb5;
+  --door-edge: #2a4d8a;
+  --knob: #dce8fa;
+  --doorway: #070b16;
+  --floor-shadow: rgba(20, 33, 61, 0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1424;
+    --ink: #e6edf8;
+    --blue: #6a9df5;
+    --pale: #1a2540;
+    --teal: #4fc2d0;
+
+    --frame: #22355e;
+    --frame-shade: #1a2a4b;
+    --door: #3a62a8;
+    --door-shade: #2d4f8c;
+    --door-inset: #33599b;
+    --door-edge: #213d70;
+    --knob: #b9cdee;
+    --doorway: #03060d;
+    --floor-shadow: rgba(0, 0, 0, 0.4);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0d1424;
+  --ink: #e6edf8;
+  --blue: #6a9df5;
+  --pale: #1a2540;
+  --teal: #4fc2d0;
+
+  --frame: #22355e;
+  --frame-shade: #1a2a4b;
+  --door: #3a62a8;
+  --door-shade: #2d4f8c;
+  --door-inset: #33599b;
+  --door-edge: #213d70;
+  --knob: #b9cdee;
+  --doorway: #03060d;
+  --floor-shadow: rgba(0, 0, 0, 0.4);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  transition: background 0.3s, color 0.3s;
+}

@@ -1,0 +1,90 @@
+/* Character animations. Every character shares the same named parts
+   (head, eye-l, eye-r, torso, arm-l, arm-r), so these moves work for all of them.
+   The character's own origin (0, 0) is between its feet. */
+
+.char {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+.char .head {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+.char .arm-l,
+.char .arm-r {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+
+/* ---- look-around: lean out, lean in toward you and look down at your desk,
+        sweep slowly from right to left (eyes lead, face follows),
+        back to you with a suspicious nod, sneak back ---- */
+.anim-look-around {
+  animation: look-around-body 6s ease-in-out both;
+}
+.anim-look-around .head {
+  animation: look-around-head 6s ease-in-out both;
+}
+.anim-look-around .features {
+  animation: look-around-face 6s ease-in-out both;
+}
+.anim-look-around .pupil {
+  animation: look-around-pupils 6s ease-in-out both;
+}
+.anim-look-around .arm-r {
+  animation: look-around-arm 6s ease-in-out both;
+}
+
+/* Whole body: out from behind the door, then a little closer to you
+   (slightly bigger = leaning toward the viewer). */
+@keyframes look-around-body {
+  0%       { transform: translateX(0) rotate(0deg) scale(1); }
+  12%      { transform: translateX(94px) rotate(15deg) scale(1); }    /* lean out */
+  16%      { transform: translateX(90px) rotate(13deg) scale(1); }    /* settle */
+  24%, 74% { transform: translateX(90px) rotate(13deg) scale(1.06); } /* lean in toward you */
+  80%      { transform: translateX(90px) rotate(13deg) scale(1); }
+  86%      { transform: translateX(96px) rotate(16deg) scale(1); }    /* wind-up... */
+  100%     { transform: translateX(0) rotate(0deg) scale(1); }        /* ...and sneak back */
+}
+
+/* Head: stays upright against the lean, tips down to look at your desk,
+   sways a little with the sweep, then a slow suspicious nod. */
+@keyframes look-around-head {
+  0%, 16%  { transform: rotate(-13deg); }
+  24%      { transform: rotate(-10deg) translateY(5px); }    /* look down, toward the right */
+  58%      { transform: rotate(-16deg) translateY(5px); }    /* ...slowly round to the left */
+  64%      { transform: rotate(-13deg) translateY(0); }      /* back up at you */
+  69%      { transform: rotate(-13deg) translateY(8px); }    /* slow nod down */
+  75%      { transform: rotate(-13deg) translateY(0); }      /* and up */
+  92%, 100% { transform: rotate(0deg); }
+}
+
+/* Face features shift sideways and down: the head "turns" to look across the room. */
+@keyframes look-around-face {
+  0%, 16%  { transform: translate(0, 0); }
+  26%      { transform: translate(5px, 3px); }    /* face turned right, looking down */
+  32%      { transform: translate(5px, 3px); }
+  56%      { transform: translate(-5px, 3px); }   /* slow sweep to the left */
+  62%      { transform: translate(-5px, 3px); }
+  68%, 80% { transform: translate(0, 0); }        /* back to you */
+  100%     { transform: translate(0, 0); }
+}
+
+/* Pupils lead every look: they get there first and go a bit further. */
+@keyframes look-around-pupils {
+  0%, 16%  { transform: translate(0, 0); }
+  21%      { transform: translate(5px, 2.5px); }  /* eyes snap right and down */
+  32%      { transform: translate(5px, 2.5px); }
+  48%      { transform: translate(-5px, 2.5px); } /* eyes reach the left before the face */
+  62%      { transform: translate(-5px, 2.5px); }
+  66%, 80% { transform: translate(0, 0); }        /* straight at you */
+  100%     { transform: translate(0, 0); }
+}
+
+@keyframes look-around-arm {
+  0%       { transform: rotate(0deg); }
+  12%, 80% { transform: rotate(14deg); }     /* arm tucks in close, sneaky */
+  100%     { transform: rotate(0deg); }
+}

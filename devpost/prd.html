@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study Check-In PRD</title>
+<style>
+  :root {
+    --bg: #f3f7fb; --card: #ffffff; --ink: #18233a; --muted: #5c6b84; --line: #dbe4ef;
+    --accent: #2f6fdd; --accent-soft: #e2ecfc; --teal: #1b8a9a; --teal-soft: #dcf1f4;
+    --violet: #6b5bd6; --violet-soft: #ebe8fb; --slate: #7a879b; --slate-soft: #eceff4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1522; --card: #172034; --ink: #e6edf8; --muted: #9babc4; --line: #2a3650;
+      --accent: #6a9df5; --accent-soft: #1c2c4c; --teal: #4fc2d0; --teal-soft: #15343a;
+      --violet: #9b8ef0; --violet-soft: #262245; --slate: #9aa6ba; --slate-soft: #232c3c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 16px 64px; }
+  .tag { display: inline-block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 3px 10px; border-radius: 99px; }
+  h1 { font-size: 32px; line-height: 1.2; margin: 14px 0 6px; }
+  .lede { color: var(--muted); font-size: 18px; margin: 0 0 26px; }
+  h2 { font-size: 20px; margin: 0 0 10px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; margin: 0 0 18px; }
+  .grew { border-left: 5px solid var(--accent); }
+  .grew .row { display: grid; grid-template-columns: 1fr auto 1.4fr; gap: 12px; align-items: center; margin: 10px 0; }
+  .grew .from { color: var(--muted); font-style: italic; }
+  .grew .arrow { color: var(--accent); font-weight: 700; }
+  @media (max-width: 640px) { .grew .row { grid-template-columns: 1fr; gap: 2px; } .grew .arrow { display: none; } }
+  svg { width: 100%; height: auto; display: block; }
+  .diagram text { fill: var(--ink); font: 12.5px system-ui, sans-serif; }
+  .diagram .sub { fill: var(--muted); font-size: 11px; }
+  .diagram .box { fill: var(--bg); stroke: var(--line); stroke-width: 1.5; }
+  .diagram .hero { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; }
+  .diagram .no { fill: var(--slate-soft); stroke: var(--slate); stroke-width: 1.2; }
+  .diagram .ln { stroke: var(--muted); stroke-width: 1.5; fill: none; marker-end: url(#ar); }
+  .diagram .dash { stroke: var(--accent); stroke-dasharray: 5 4; }
+  .stepper { display: flex; align-items: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .stepper button { font: inherit; background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 7px 14px; cursor: pointer; }
+  .stepper button:disabled { opacity: .35; cursor: default; }
+  .dots { display: flex; gap: 6px; }
+  .dots span { width: 9px; height: 9px; border-radius: 50%; background: var(--line); cursor: pointer; }
+  .dots span.on { background: var(--accent); }
+  .step-card { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin-top: 12px; min-height: 120px; }
+  .step-card h3 { margin: 0 0 6px; font-size: 17px; }
+  .step-card p { margin: 0; }
+  details { border: 1px solid var(--line); border-radius: 10px; margin: 10px 0; background: var(--bg); }
+  summary { cursor: pointer; padding: 12px 16px; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 10px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; margin-left: auto; color: var(--muted); font-size: 18px; }
+  details[open] summary::after { content: "–"; }
+  details .body { padding: 0 18px 14px; }
+  details ul { margin: 0; padding-left: 20px; }
+  details li { margin-bottom: 5px; }
+  .crit li { list-style: none; margin-left: -20px; }
+  .crit li::before { content: "☐ "; color: var(--teal); }
+  .pill { font-size: 12px; padding: 2px 9px; border-radius: 99px; font-weight: 600; }
+  .p-now { background: var(--teal-soft); color: var(--teal); }
+  .p-def { background: var(--violet-soft); color: var(--violet); }
+  .p-no { background: var(--slate-soft); color: var(--slate); }
+  .p-q { background: var(--accent-soft); color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 13px; }
+  .swatches { display: flex; gap: 8px; margin: 8px 0 12px; flex-wrap: wrap; }
+  .swatches span { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--line); }
+  .assume { font-size: 13px; color: var(--violet); font-weight: 600; }
+  footer { color: var(--muted); font-size: 13px; text-align: center; margin-top: 28px; }
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">PRD · approved</span>
+  <h1>Study Check-In <span style="color:var(--muted);font-weight:400;font-size:.6em">(working title)</span></h1>
+  <p class="lede">You knock on a door, pick who checks on you, and a funny animated character pops out to make sure you're studying.</p>
+
+  <section class="grew">
+    <h2>How the scope grew into a product</h2>
+    <div class="row"><span class="from">"Pick who checks on you"</span><span class="arrow">→</span><span>Knock on the door. A voice asks if you want to study, and your chosen character peeks out and asks the setup questions.</span></div>
+    <div class="row"><span class="from">"The character pops out"</span><span class="arrow">→</span><span>A door creak, then varied animations (eyes darting, slow nod, stare), never the same twice in a row.</span></div>
+    <div class="row"><span class="from">"The character reacts"</span><span class="arrow">→</span><span>A signature finale (mom's backflip!) plus a varied summary of check-ins, minutes and tasks.</span></div>
+    <div class="row"><span class="from">"Coins unlock characters"</span><span class="arrow">→</span><span>1 coin/minute, rising prices, and a demo coin stash so the soldier unlock happens on camera.</span></div>
+  </section>
+
+  <section>
+    <h2>The core journey</h2>
+    <svg class="diagram" viewBox="0 0 780 300" role="img" aria-label="Journey: first-visit intro, knock, start session yes or no, pick character, setup questions, studying with check-ins and breaks, end, finale, coins">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--muted)"/></marker></defs>
+      <rect class="box" x="10" y="20" width="130" height="64" rx="10"/><text x="75" y="47" text-anchor="middle" font-weight="600">Door intro</text><text x="75" y="65" text-anchor="middle" class="sub">first visit · 3 knocks</text>
+      <rect class="box" x="165" y="20" width="130" height="64" rx="10"/><text x="230" y="47" text-anchor="middle" font-weight="600">Knock</text><text x="230" y="65" text-anchor="middle" class="sub">"Start a session?"</text>
+      <rect class="no" x="165" y="120" width="130" height="48" rx="10"/><text x="230" y="149" text-anchor="middle">No → door slams</text>
+      <rect class="box" x="320" y="20" width="130" height="64" rx="10"/><text x="385" y="47" text-anchor="middle" font-weight="600">Pick character</text><text x="385" y="65" text-anchor="middle" class="sub">mother · soldier · 🔒</text>
+      <rect class="box" x="475" y="20" width="140" height="64" rx="10"/><text x="545" y="40" text-anchor="middle" font-weight="600">Character asks</text><text x="545" y="57" text-anchor="middle" class="sub">timer/stopwatch · frequency</text><text x="545" y="71" text-anchor="middle" class="sub">· tasks · sure?</text>
+      <rect class="hero" x="475" y="125" width="140" height="78" rx="12"/><text x="545" y="152" text-anchor="middle" font-weight="700">Studying</text><text x="545" y="170" text-anchor="middle" class="sub">big clock · creak →</text><text x="545" y="185" text-anchor="middle" class="sub">check-in animation</text>
+      <rect class="box" x="640" y="125" width="130" height="78" rx="10"/><text x="705" y="152" text-anchor="middle" font-weight="600">Break</text><text x="705" y="170" text-anchor="middle" class="sub">clock paused</text><text x="705" y="185" text-anchor="middle" class="sub">no check-ins</text>
+      <rect class="box" x="320" y="225" width="130" height="64" rx="10"/><text x="385" y="252" text-anchor="middle" font-weight="600">End</text><text x="385" y="270" text-anchor="middle" class="sub">which tasks done?</text>
+      <rect class="hero" x="165" y="225" width="130" height="64" rx="12"/><text x="230" y="252" text-anchor="middle" font-weight="700">Finale</text><text x="230" y="270" text-anchor="middle" class="sub">backflip + summary</text>
+      <rect class="box" x="10" y="225" width="130" height="64" rx="10"/><text x="75" y="252" text-anchor="middle" font-weight="600">+ Coins</text><text x="75" y="270" text-anchor="middle" class="sub">→ marketplace</text>
+      <path class="ln" d="M140,52 L162,52"/><path class="ln" d="M295,52 L317,52"/><path class="ln" d="M450,52 L472,52"/>
+      <path class="ln" d="M230,84 L230,117"/>
+      <path class="ln" d="M545,84 L545,122"/>
+      <path class="ln" d="M615,155 L637,155"/><path class="ln" d="M640,180 L618,180"/>
+      <path class="ln" d="M500,203 C480,240 470,257 453,257"/>
+      <path class="ln" d="M320,257 L298,257"/><path class="ln" d="M165,257 L143,257"/>
+      <path class="ln dash" d="M75,225 C75,180 200,160 222,87"/>
+      <text x="100" y="168" class="sub">next session</text>
+    </svg>
+
+    <div class="step-card" id="stepCard" aria-live="polite"></div>
+    <div class="stepper">
+      <button id="prev">← Back</button>
+      <div class="dots" id="dots"></div>
+      <button id="next">Next →</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Screens &amp; layout</h2>
+    <table>
+      <tr><th>Surface</th><th>What's there</th></tr>
+      <tr><td><strong>Door screen</strong></td><td>A giant centered door. On first visit, nothing else. After that, a column of buttons on the left: Stats, Tasks, Marketplace.</td></tr>
+      <tr><td><strong>Study screen</strong></td><td>The door on the left, a huge clock right-center, session tasks below it, and a break button.</td></tr>
+      <tr><td><strong>Stats pop-up</strong></td><td>A heat map of hours per day, plus a couple of simple numbers. Sample data is labeled.</td></tr>
+      <tr><td><strong>Tasks pop-up</strong></td><td>Your full to-do list. Add tasks anytime.</td></tr>
+      <tr><td><strong>Marketplace pop-up</strong></td><td>Characters and prices: owned, affordable, locked. Your coin balance.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Look &amp; feel</h2>
+    <div class="swatches" aria-label="Cool palette examples">
+      <span style="background:#ffffff"></span><span style="background:#dfeafa"></span><span style="background:#7fa8ea"></span><span style="background:#2f6fdd"></span><span style="background:#1b3a6b"></span><span style="background:#0f1522"></span>
+    </div>
+    <ul>
+      <li><strong>Cool colors only:</strong> blues and whites. No yellow, orange or warm tones.</li>
+      <li><strong>Light and dark mode.</strong> Dark mode is a must.</li>
+      <li><strong>Minimalistic but eye-catching.</strong> The door is the star.</li>
+      <li><strong>Art:</strong> inspired by Netflix's <em>Carmen Sandiego</em>, with animated, shaded cartoon style and bold clean shapes.</li>
+      <li><strong>Sound:</strong> knock (<em>tuk tuk</em>), door creak at check-ins, bang when the door slams. Dialogue stays in quiet speech bubbles.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Features &amp; what proves they work</h2>
+    <details><summary>Door intro (first visit)</summary><div class="body"><ul class="crit">
+      <li>Only the door is visible on first visit</li><li>Knocks 1–2: knock sound, door opens a crack and shuts</li><li>Knock 3: character peeks out, "Yo, why are you knocking on my door?", then a short chat</li><li>Then the side buttons appear</li></ul></div></details>
+    <details><summary>Starting a session</summary><div class="body"><ul class="crit">
+      <li>Knock → darkness → "Do you want to start a study session?" Yes/No</li><li>No → bang, door slams</li><li>Yes → character picker shows all 3, with locked ones visibly locked</li><li>The character asks: timer/stopwatch → frequency → tasks → "Are you sure?"</li></ul></div></details>
+    <details><summary>Check-in frequency</summary><div class="body"><ul class="crit">
+      <li>Fixed: choose minutes, with very short options for the demo</li><li>Random: irregular, surprising times (e.g. 15, 35, 60 min)</li></ul></div></details>
+    <details><summary>Study screen &amp; clock</summary><div class="body"><ul class="crit">
+      <li>The door slides left and shuts, and a huge clock appears right-center</li><li>Stopwatch counts up, timer counts down</li><li>Session tasks are listed under the clock</li></ul></div></details>
+    <details><summary>Breaks</summary><div class="body"><ul class="crit">
+      <li>Break pauses the clock and stops check-ins</li><li>Resume continues where you left off</li></ul></div></details>
+    <details><summary>Character check-ins ★</summary><div class="body"><ul class="crit">
+      <li>A creak plays, the door opens, the character appears</li><li>Several animations per character, never the same twice in a row</li><li>A varied speech line ("Are you sure you're studying?")</li><li>The character goes back in. No input needed.</li></ul></div></details>
+    <details><summary>Session end &amp; finale ★</summary><div class="body"><ul class="crit">
+      <li>Ends when the timer hits zero, or when you press end</li><li>You're asked which tasks are done, and they get checked off</li><li>Signature funny finale (mom: backflip / brings out a dish)</li><li>3+ tasks → a more enthusiastic finale</li><li>Varied summary: check-ins, minutes, tasks (the task line is skipped if 0)</li><li>Coins earned are shown and added</li></ul></div></details>
+    <details><summary>Tasks</summary><div class="body"><ul class="crit">
+      <li>Add tasks anytime in the Tasks panel</li><li>Choose tasks for each session</li><li>Completed tasks are marked done</li></ul></div></details>
+    <details><summary>Coins &amp; marketplace</summary><div class="body"><ul class="crit">
+      <li>1 coin per minute studied</li><li>Rising prices (100 → 200 → 300…)</li><li>Mother is free, soldier is unlockable, father is shown but stays locked</li><li>Start with 150 coins: soldier 100, father 200 (stays locked)</li><li>Can't buy what you can't afford</li></ul></div></details>
+    <details><summary>Stats &amp; heat map</summary><div class="body"><ul class="crit">
+      <li>A heat map of hours studied per day</li><li>Simple numbers: most-studied day, average</li><li>Sample past data, labeled as demo data, with real sessions added on top</li></ul></div></details>
+  </section>
+
+  <section>
+    <h2>Characters</h2>
+    <table>
+      <tr><th>Character</th><th>Status</th><th>Animations</th></tr>
+      <tr><td>Mother</td><td>Free, owned</td><td>Peek, several check-ins, signature + enthusiastic finale</td></tr>
+      <tr><td>Soldier</td><td>Unlocked in demo</td><td>Peek, several check-ins, signature + enthusiastic finale</td></tr>
+      <tr><td>Father</td><td>Locked (shown)</td><td>None this version</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>States &amp; edge cases</h2>
+    <details><summary>What-ifs</summary><div class="body"><ul>
+      <li><strong>No tasks:</strong> the session runs without them, and the finale skips the task line</li>
+      <li><strong>Can't afford:</strong> the price shows, and buying is blocked</li>
+      <li><strong>Locked character:</strong> visible but not selectable</li>
+      <li><strong>On break:</strong> the clock is paused, no check-ins</li>
+      <li><strong>Coming back later:</strong> coins, characters, to-dos and history are kept</li>
+      <li><strong>Closing mid-session:</strong> the session is lost and not counted</li>
+    </ul></div></details>
+  </section>
+
+  <section>
+    <h2>Building now · Deferred · Not doing</h2>
+    <details open><summary><span class="pill p-now">NOW</span> What we're building</summary><div class="body"><ul>
+      <li>Door intro, dialogue-driven session start, timer and stopwatch, fixed and random check-ins, breaks</li>
+      <li>Varied check-in animations, finale + summary, tasks</li>
+      <li>Coins and marketplace (soldier unlockable, father locked), stats with a demo-data heat map</li>
+      <li>2 fully animated characters, light and dark mode, door sounds</li></ul></div></details>
+    <details><summary><span class="pill p-def">DEFERRED</span> After the hackathon</summary><div class="body"><ul>
+      <li>Mood/streak reactions: motivational on good streaks, funny threats on bad ones, streak-based finales</li>
+      <li>Face getting sadder/angrier each day you skip</li>
+      <li>Father's animations and unlock, door accessories, more characters, timelapse</li></ul></div></details>
+    <details><summary><span class="pill p-no">NOT DOING</span> Non-goals</summary><div class="body"><ul>
+      <li>App blocking / strict modes: a website can't block other apps</li>
+      <li>Camera presence detection: too unreliable for this build</li>
+      <li>Accounts or logins, and detailed analytics</li></ul></div></details>
+  </section>
+
+  <section>
+    <h2>Open questions</h2>
+    <ul>
+      <li><span class="pill p-q">by ship</span> <strong>Project name:</strong> still a working title.</li>
+      <li><span class="pill p-q">during build</span> <strong>Soldier's signature finale move.</strong></li>
+    </ul>
+  </section>
+
+  <footer>Companion to <code>devpost/prd.md</code>, which is the source of truth.</footer>
+</main>
+<script>
+  const steps = [
+    ["1 · First visit", "Only a giant door. Click: tuk tuk, it opens a crack and shuts. Again. On the third knock someone peeks out: \"Yo, why are you knocking on my door?\""],
+    ["2 · Start a session?", "Knock. Darkness behind the door. A voice: \"Do you want to start a study session?\" No: the door slams with a bang. Yes: \"Who do you want to check up on you?\""],
+    ["3 · Pick a character", "Mother (free), soldier (unlockable), father (locked). Locked characters are visible but can't be picked."],
+    ["4 · The character sets you up", "They peek out and ask: timer or stopwatch? How often should I check on you (minutes or random)? Which tasks for this session? Are you sure you'd like to start?"],
+    ["5 · Studying", "The door slides left and shuts. A huge clock on the right, your tasks below. The break button pauses everything."],
+    ["6 · Check-in ★", "Creeeak. The character leans out, eyes darting left to right, gives a slow nod and sneaks back in. Or stares. A different animation each time, with a quiet speech bubble."],
+    ["7 · The end", "The timer hits zero, or you end the stopwatch. Which tasks did you finish?"],
+    ["8 · Finale ★", "The character comes fully out with their signature move (mom does a backflip!) and a varied summary: check-ins, minutes, tasks. 3+ tasks? An even bigger reaction."],
+    ["9 · Rewards & progress", "Coins added (1/minute). Unlock characters in the marketplace. See your heat map in Stats."]
+  ];
+  let i = 0;
+  const card = document.getElementById("stepCard"), dots = document.getElementById("dots");
+  const prev = document.getElementById("prev"), next = document.getElementById("next");
+  steps.forEach((_, n) => { const d = document.createElement("span"); d.title = "Step " + (n + 1); d.onclick = () => { i = n; render(); }; dots.appendChild(d); });
+  function render() {
+    card.innerHTML = "<h3>" + steps[i][0] + "</h3><p>" + steps[i][1] + "</p>";
+    [...dots.children].forEach((d, n) => d.classList.toggle("on", n === i));
+    prev.disabled = i === 0; next.disabled = i === steps.length - 1;
+  }
+  prev.onclick = () => { if (i > 0) { i--; render(); } };
+  next.onclick = () => { if (i < steps.length - 1) { i++; render(); } };
+  render();
+</script>
+</body>
+</html>

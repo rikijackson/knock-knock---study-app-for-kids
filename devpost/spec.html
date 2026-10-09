@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study Check-In Spec</title>
+<style>
+  :root {
+    --bg: #f3f7fb; --card: #ffffff; --ink: #18233a; --muted: #5c6b84; --line: #dbe4ef;
+    --accent: #2f6fdd; --accent-soft: #e2ecfc; --teal: #1b8a9a; --teal-soft: #dcf1f4;
+    --violet: #6b5bd6; --violet-soft: #ebe8fb; --slate: #7a879b; --slate-soft: #eceff4;
+    --code: #eef3f9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1522; --card: #172034; --ink: #e6edf8; --muted: #9babc4; --line: #2a3650;
+      --accent: #6a9df5; --accent-soft: #1c2c4c; --teal: #4fc2d0; --teal-soft: #15343a;
+      --violet: #9b8ef0; --violet-soft: #262245; --slate: #9aa6ba; --slate-soft: #232c3c;
+      --code: #111a2b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 880px; margin: 0 auto; padding: 40px 16px 64px; }
+  .tag { display: inline-block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 3px 10px; border-radius: 99px; }
+  h1 { font-size: 32px; line-height: 1.2; margin: 14px 0 6px; }
+  .lede { color: var(--muted); font-size: 18px; margin: 0 0 26px; }
+  h2 { font-size: 20px; margin: 0 0 10px; }
+  h3 { font-size: 16px; margin: 16px 0 6px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; margin: 0 0 18px; }
+  .plain { border-left: 5px solid var(--accent); }
+  .plain ul { padding-left: 20px; }
+  .plain li { margin-bottom: 8px; }
+  code, pre { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 13.5px; }
+  code { background: var(--code); padding: 1px 5px; border-radius: 5px; }
+  pre { background: var(--code); border: 1px solid var(--line); border-radius: 10px; padding: 14px; overflow-x: auto; line-height: 1.5; margin: 8px 0; }
+  svg { width: 100%; height: auto; display: block; }
+  .diagram text { fill: var(--ink); font: 12.5px system-ui, sans-serif; }
+  .diagram .sub { fill: var(--muted); font-size: 11px; }
+  .diagram .box { fill: var(--bg); stroke: var(--line); stroke-width: 1.5; }
+  .diagram .hero { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; }
+  .diagram .store { fill: var(--teal-soft); stroke: var(--teal); stroke-width: 1.5; }
+  .diagram .mem { fill: var(--violet-soft); stroke: var(--violet); stroke-width: 1.5; }
+  .diagram .ln { stroke: var(--muted); stroke-width: 1.4; fill: none; marker-end: url(#ar); }
+  .diagram .ln2 { stroke: var(--teal); stroke-width: 1.4; fill: none; marker-end: url(#ar2); stroke-dasharray: 4 3; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 8px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  .stepper { display: flex; align-items: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .stepper button { font: inherit; background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 7px 14px; cursor: pointer; }
+  .stepper button:disabled { opacity: .35; cursor: default; }
+  .dots { display: flex; gap: 6px; flex-wrap: wrap; }
+  .dots span { width: 9px; height: 9px; border-radius: 50%; background: var(--line); cursor: pointer; }
+  .dots span.on { background: var(--accent); }
+  .step-card { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin-top: 12px; min-height: 130px; }
+  .step-card h3 { margin: 0 0 6px; font-size: 17px; }
+  .step-card p { margin: 0 0 8px; }
+  .files { display: flex; flex-wrap: wrap; gap: 6px; }
+  .files code { background: var(--accent-soft); color: var(--accent); }
+  details { border: 1px solid var(--line); border-radius: 10px; margin: 10px 0; background: var(--bg); }
+  summary { cursor: pointer; padding: 12px 16px; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; margin-left: auto; color: var(--muted); font-size: 18px; }
+  details[open] summary::after { content: "–"; }
+  details .body { padding: 0 18px 14px; }
+  .ref { font-size: 12px; font-weight: 500; color: var(--teal); background: var(--teal-soft); padding: 1px 8px; border-radius: 99px; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 13px; }
+  .analogy { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px 14px; align-items: center; }
+  .analogy div { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .analogy .eq { color: var(--accent); font-weight: 700; background: none; border: 0; padding: 0; }
+  @media (max-width: 640px) { .analogy { grid-template-columns: 1fr; } .analogy .eq { display: none; } }
+  .swatches { display: flex; gap: 8px; margin: 8px 0 4px; flex-wrap: wrap; }
+  .swatches span { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); }
+  .swlabel { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+  .pill { font-size: 12px; padding: 2px 9px; border-radius: 99px; font-weight: 600; }
+  .p-l { background: var(--accent-soft); color: var(--accent); }
+  .p-d { background: var(--slate-soft); color: var(--slate); }
+  .p-q { background: var(--violet-soft); color: var(--violet); }
+  footer { color: var(--muted); font-size: 13px; text-align: center; margin-top: 28px; }
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">Spec · approved</span>
+  <h1>Study Check-In <span style="color:var(--muted);font-weight:400;font-size:.6em">(working title)</span></h1>
+  <p class="lede">The blueprint: plain HTML, CSS and JavaScript, characters drawn in code, everything saved in your browser.</p>
+
+  <section class="plain">
+    <h2>How this works, in plain language</h2>
+    <ul>
+      <li><strong>Plain files.</strong> HTML is what's on the page, CSS is how it looks and moves, JavaScript is what it does. No server, no account.</li>
+      <li><strong>Door and characters are SVG:</strong> pictures described as shapes. Each character has separate parts (head, eyes, body, arms) so each can move.</li>
+      <li><strong>Animations are CSS keyframes.</strong> JavaScript picks <em>which</em> animation and <em>when</em>, and CSS does the moving.</li>
+      <li><strong>The clock and check-ins are JavaScript timers</strong> that check every quarter-second: "is a check-in due?"</li>
+      <li><strong>Your stuff lives in localStorage</strong>, the browser's notepad for this site: coins, characters, tasks, history. A session in progress isn't saved.</li>
+      <li><strong>Sounds are short audio files</strong> you pick (knock, creak, bang).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Your question: how do the animations work?</h2>
+    <p>Not AI image generation. The characters are shapes written as code, and you already know the idea from Godot:</p>
+    <div class="analogy">
+      <div><strong>Godot</strong> scene tree of nodes</div><div class="eq">≈</div><div><strong>SVG</strong> character made of named parts: <code>head</code>, <code>eye-l</code>, <code>torso</code>…</div>
+      <div><strong>Godot</strong> AnimationPlayer track</div><div class="eq">≈</div><div><strong>CSS</strong> <code>@keyframes</code>: 0% upright → 50% leaning → 100% back</div>
+      <div><strong>Godot</strong> <code>animation_player.play("peek")</code></div><div class="eq">≈</div><div><strong>JS</strong> adds the class <code>peek</code>, waits for <code>animationend</code></div>
+      <div><strong>Godot</strong> Timer node</div><div class="eq">≈</div><div><strong>JS</strong> check every 250 ms: has study time passed the next check-in?</div>
+    </div>
+    <h3>A taste of what the code looks like</h3>
+<pre>/* characters.css: the eyes darting left, then right */
+@keyframes eyes-dart {
+  0%, 100% { transform: translateX(0); }
+  30%      { transform: translateX(-6px); }
+  70%      { transform: translateX(6px); }
+}
+.look-around .eye-l, .look-around .eye-r { animation: eyes-dart 1.6s ease-in-out; }</pre>
+    <p><strong>The art style</strong> is written down as rules (bold silhouettes, flat fills, hard two-tone shadows, angular proportions, cool colors only) and applied to every shape.</p>
+    <p><strong>First build step = look test:</strong> the door + mother + her <code>look-around</code> only. You judge it before anything else gets built.</p>
+  </section>
+
+  <section>
+    <h2>How the pieces connect</h2>
+    <svg class="diagram" viewBox="0 0 800 380" role="img" aria-label="Architecture: main.js loads the save from storage, then wires the door, dialogue, session, check-ins, animations, finale and panels; storage saves to localStorage">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--muted)"/></marker>
+        <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--teal)"/></marker>
+      </defs>
+      <rect class="box" x="330" y="10" width="140" height="48" rx="10"/><text x="400" y="32" text-anchor="middle" font-weight="600">main.js</text><text x="400" y="48" text-anchor="middle" class="sub">starts everything</text>
+
+      <rect class="box" x="20" y="100" width="130" height="58" rx="10"/><text x="85" y="124" text-anchor="middle" font-weight="600">door.js</text><text x="85" y="141" text-anchor="middle" class="sub">knocks · intro · slam</text>
+      <rect class="box" x="170" y="100" width="130" height="58" rx="10"/><text x="235" y="124" text-anchor="middle" font-weight="600">dialogue.js</text><text x="235" y="141" text-anchor="middle" class="sub">speech bubbles</text>
+      <rect class="mem" x="320" y="100" width="160" height="58" rx="10"/><text x="400" y="124" text-anchor="middle" font-weight="600">session.js</text><text x="400" y="141" text-anchor="middle" class="sub">clock · break · end</text>
+      <rect class="box" x="500" y="100" width="130" height="58" rx="10"/><text x="565" y="124" text-anchor="middle" font-weight="600">checkins.js</text><text x="565" y="141" text-anchor="middle" class="sub">fixed · random</text>
+      <rect class="box" x="650" y="100" width="130" height="58" rx="10"/><text x="715" y="124" text-anchor="middle" font-weight="600">panels</text><text x="715" y="141" text-anchor="middle" class="sub">tasks · market · stats</text>
+
+      <rect class="hero" x="440" y="200" width="190" height="64" rx="12"/><text x="535" y="226" text-anchor="middle" font-weight="700">animations.js ★</text><text x="535" y="244" text-anchor="middle" class="sub">characters/ · messages · sound</text>
+      <rect class="box" x="250" y="200" width="150" height="64" rx="10"/><text x="325" y="226" text-anchor="middle" font-weight="600">finale.js</text><text x="325" y="244" text-anchor="middle" class="sub">summary · coins · history</text>
+
+      <rect class="store" x="270" y="310" width="260" height="56" rx="10"/><text x="400" y="333" text-anchor="middle" font-weight="600">storage.js → localStorage</text><text x="400" y="351" text-anchor="middle" class="sub">coins · owned · tasks · history · demoHistory</text>
+
+      <path class="ln" d="M370,58 L95,97"/><path class="ln" d="M385,58 L240,97"/><path class="ln" d="M400,58 L400,97"/><path class="ln" d="M415,58 L560,97"/><path class="ln" d="M430,58 L705,97"/>
+      <path class="ln" d="M150,129 L167,129"/><path class="ln" d="M300,129 L317,129"/><path class="ln" d="M480,129 L497,129"/>
+      <path class="ln" d="M565,158 L545,197"/>
+      <path class="ln" d="M85,158 C85,230 300,180 455,205"/>
+      <path class="ln" d="M380,158 L340,197"/>
+      <path class="ln" d="M400,232 L437,232"/>
+      <path class="ln2" d="M325,264 L360,307"/>
+      <path class="ln2" d="M715,158 C715,300 600,330 533,335"/>
+      <path class="ln2" d="M270,338 C120,338 60,300 60,161"/>
+      <text x="40" y="290" class="sub" style="fill:var(--teal)">load on open</text>
+    </svg>
+    <div class="legend"><span><i style="background:var(--violet-soft);border:1px solid var(--violet)"></i>in memory only (lost on close)</span><span><i style="background:var(--teal-soft);border:1px solid var(--teal)"></i>saved in browser</span><span><i style="background:var(--accent-soft);border:1px solid var(--accent)"></i>the kernel</span></div>
+  </section>
+
+  <section>
+    <h2>Follow one session through the code</h2>
+    <div class="step-card" id="stepCard" aria-live="polite"></div>
+    <div class="stepper"><button id="prev">← Back</button><div class="dots" id="dots"></div><button id="next">Next →</button></div>
+  </section>
+
+  <section>
+    <h2>Components</h2>
+    <p style="color:var(--muted);margin-top:0">Each one is tied to the PRD behavior it builds and the files it lives in.</p>
+    <div id="comps"></div>
+  </section>
+
+  <section>
+    <h2>What gets saved</h2>
+<pre>// localStorage key "studyCheckIn.save": kept between visits
+{
+  introSeen: false,  theme: "auto",
+  coins: 150,        owned: ["mother"],
+  tasks:  [{ id: "t1", text: "Physics worksheet", done: false }],
+  history:     { "2026-10-09": 45 },   // your real minutes per day
+  demoHistory: { "2026-09-12": 90 }    // sample data, labeled in Stats
+}</pre>
+    <p style="margin-bottom:0">The <strong>session</strong> (character, mode, frequency, study time, check-in count) lives only in memory, so closing the page mid-session loses it, as you confirmed.</p>
+  </section>
+
+  <section>
+    <h2>Look &amp; feel → code</h2>
+    <p class="swlabel">Light</p>
+    <div class="swatches"><span style="background:#f4f8fc"></span><span style="background:#dce8fa"></span><span style="background:#2f6fdd"></span><span style="background:#1b8a9a"></span><span style="background:#14213d"></span></div>
+    <p class="swlabel">Dark</p>
+    <div class="swatches"><span style="background:#0d1424"></span><span style="background:#1a2540"></span><span style="background:#6a9df5"></span><span style="background:#4fc2d0"></span><span style="background:#e6edf8"></span></div>
+    <ul>
+      <li>Cool colors only, set once as CSS variables. No warm tones, even on the characters.</li>
+      <li>Dark mode follows your computer's setting, with a toggle in the corner.</li>
+      <li>Art rules: bold silhouettes, flat fills, <strong>hard two-tone shadows</strong>, angular proportions, no outlines.</li>
+      <li>A big bold clock with fixed-width digits. Spacious, with the door as the star.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Files</h2>
+<pre>my-hackathon-app/
+├── index.html            the single page
+├── css/  base · layout · door · characters · dialogue · panels
+├── js/
+│   ├── main.js  config.js  storage.js
+│   ├── door.js  dialogue.js  session.js  checkins.js
+│   ├── animations.js  finale.js  messages.js  sound.js  ui.js
+│   ├── tasks.js  marketplace.js  stats.js
+│   └── characters/  index · mother · soldier · father
+├── assets/sounds/        knock.mp3 · creak.mp3 · bang.mp3
+├── devpost/              planning docs
+└── README.md             how to run + sound credits</pre>
+  </section>
+
+  <section>
+    <h2>Run it &amp; share it</h2>
+<pre>npx serve .        → open http://localhost:3000</pre>
+    <ul>
+      <li><strong>Recording:</strong> set <code>DEMO_MODE = true</code> in <code>js/config.js</code>, so random check-ins come in seconds.</li>
+      <li><strong>Fresh demo:</strong> "Reset data" in Stats replays the door intro.</li>
+      <li><strong>Link for judges:</strong> GitHub Pages, set up in <code>6-ship</code>.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Where it could break</h2>
+    <table>
+      <tr><th>What breaks</th><th>What you see instead</th></tr>
+      <tr><td>Background tab slows timers</td><td>The clock uses real timestamps, so it's always right. A due check-in plays when you come back.</td></tr>
+      <tr><td>Sound file missing</td><td>Silence. The animation still plays.</td></tr>
+      <tr><td>Save cleared or broken</td><td>A fresh start: 150 coins, mother, demo history.</td></tr>
+      <tr><td>Opening index.html by double-click</td><td>A blank page, so the README says to use <code>npx serve .</code></td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Simplified on purpose</h2>
+    <ul>
+      <li><strong>Simplified Carmen Sandiego look</strong>: flat shapes + hard shadows, not full illustrations</li>
+      <li><strong>Shared rig</strong>: mother and soldier share a skeleton and general moves, each with their own signature check-in and finales</li>
+      <li><strong>Father</strong>: a locked silhouette only</li>
+      <li><strong>Demo history</strong> in the heat map, labeled</li>
+      <li><strong>DEMO_MODE</strong>: random gaps in seconds for recording only</li>
+      <li><strong>Scripted lines</strong> picked at random. No accounts, no server.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Decisions &amp; open issues</h2>
+    <ul>
+      <li><span class="pill p-l">your choice</span> Plain HTML/CSS/JS, no framework</li>
+      <li><span class="pill p-l">your choice</span> SVG characters + CSS animation (option 1)</li>
+      <li><span class="pill p-l">your choice</span> GitHub Pages link</li>
+      <li><span class="pill p-l">your choice</span> Real sound effects</li>
+      <li><span class="pill p-d">derived</span> Modules + <code>npx serve</code>, timestamps, check-ins in study time, one save key, DEMO_MODE</li>
+      <li><span class="pill p-q">open</span> Soldier's signature finale (decide during build) · project name (by ship) · your 3 sound clips + licenses</li>
+    </ul>
+  </section>
+
+  <footer>Companion to <code>devpost/spec.md</code>, which is the source of truth.</footer>
+</main>
+<script>
+  const steps = [
+    ["1 · Open the page", "main.js asks storage.js for your save. Nothing saved yet? It makes one: 150 coins, mother owned, demo history.", ["main.js", "storage.js"]],
+    ["2 · First-visit intro", "introSeen is false, so door.js shows only the door. Knocks 1–2 crack it open, and knock 3 makes someone peek out. dialogue.js shows the chat. Then introSeen = true is saved.", ["door.js", "dialogue.js", "sound.js"]],
+    ["3 · Knock to start", "\"Start a study session?\" No: slam + bang. Yes: a character picker built from characters/index.js, with locked ones greyed out using your owned list.", ["dialogue.js", "characters/index.js"]],
+    ["4 · Setup questions", "The chosen character peeks out and asks: timer/stopwatch, frequency, tasks, sure? The answers become the session object, in memory only.", ["dialogue.js", "session.js", "tasks.js"]],
+    ["5 · Studying", "A CSS class slides the door left and shows the big clock. Every 250 ms session.js updates study time from real timestamps: up for stopwatch, down for timer.", ["session.js", "layout.css"]],
+    ["6 · Check-in ★", "When study time passes nextCheckInAt, checkins.js calls animations.js: creak, a check-in animation (never the same twice), a random line. Then it schedules the next one.", ["checkins.js", "animations.js", "messages.js", "characters.css"]],
+    ["7 · Break", "Break stops study time from growing. Check-ins are measured in study time, so none can happen on a break. Resume continues.", ["session.js"]],
+    ["8 · End + finale", "Timer hits 0 or you press End. Which tasks are done? finale.js picks finale or finale-big (3+ tasks) and writes the summary.", ["finale.js", "tasks.js", "animations.js"]],
+    ["9 · Rewards saved", "Coins (1 per whole minute) and today's minutes are added, then storage.js saves. The door slides back to center.", ["finale.js", "storage.js"]]
+  ];
+  const comps = [
+    ["Storage", "Loads and saves your data. Makes the default save with 150 coins + demo history.", "States and Boundaries · Coins and Marketplace", "js/storage.js"],
+    ["Door and Intro", "The door SVG, knock counting, first-visit intro, slam on No, slide left/back.", "Door Intro · Starting a Session", "js/door.js, css/door.css"],
+    ["Dialogue", "Speech bubble + answer buttons → returns the answer. Used for every question.", "Starting a Session · Session End and Finale", "js/dialogue.js, css/dialogue.css"],
+    ["Characters", "The character list (id, name, price, SVG, animations). Mother and soldier share one rig. Father is a silhouette.", "Characters · Character Check-Ins", "js/characters/*"],
+    ["Animations ★", "Adds a CSS class to play a named animation, waits for it to finish, and avoids repeats. Shared: peek, look-around, stare. Per character: signature, finale, finale-big.", "Character Check-Ins · Session End and Finale", "js/animations.js, css/characters.css"],
+    ["Session and Clock", "The in-memory session, timestamp-based study time, the big clock, Break/Resume/End, and auto-end at 0.", "Study Screen and Clock · Breaks", "js/session.js, css/layout.css"],
+    ["Check-In Scheduler", "Fixed (1/15/30/50 or custom minutes) or random (10–40 min, or 15–60 s in demo mode), measured in study time.", "Check-In Frequency · Character Check-Ins", "js/checkins.js"],
+    ["Messages", "Lines for check-ins, summaries and praise, picked at random.", "Character Check-Ins · Session End and Finale", "js/messages.js"],
+    ["Finale", "Normal or big finale, varied summary (skips tasks if 0), coins, history.", "Session End and Finale", "js/finale.js"],
+    ["Tasks Panel", "Add tasks anytime, and pick tasks for a session.", "Tasks", "js/tasks.js"],
+    ["Marketplace Panel", "Prices and owned/buy/can't afford/locked states, coin balance, buying.", "Coins and Marketplace", "js/marketplace.js"],
+    ["Stats + Heat Map", "A 12-week grid shaded by minutes, most-studied day, daily average, a demo-data note, and Reset.", "Stats and Heat Map", "js/stats.js, css/panels.css"],
+    ["Sound", "Plays knock/creak/bang, silent if a file is missing.", "Look and Feel", "js/sound.js, assets/sounds/"],
+    ["Panels and Theme", "Opens/closes pop-ups, side buttons, light/dark toggle.", "Screens and Layout", "js/ui.js"]
+  ];
+  const host = document.getElementById("comps");
+  comps.forEach(([name, what, prd, files]) => {
+    const d = document.createElement("details");
+    d.innerHTML = `<summary>${name} <span class="ref">prd › ${prd}</span></summary><div class="body"><p style="margin:0 0 8px">${what}</p><div class="files">${files.split(", ").map(f => `<code>${f}</code>`).join("")}</div></div>`;
+    host.appendChild(d);
+  });
+  let i = 0;
+  const card = document.getElementById("stepCard"), dots = document.getElementById("dots");
+  const prev = document.getElementById("prev"), next = document.getElementById("next");
+  steps.forEach((_, n) => { const s = document.createElement("span"); s.title = "Step " + (n + 1); s.onclick = () => { i = n; render(); }; dots.appendChild(s); });
+  function render() {
+    const [t, p, f] = steps[i];
+    card.innerHTML = `<h3>${t}</h3><p>${p}</p><div class="files">${f.map(x => `<code>${x}</code>`).join("")}</div>`;
+    [...dots.children].forEach((d, n) => d.classList.toggle("on", n === i));
+    prev.disabled = i === 0; next.disabled = i === steps.length - 1;
+  }
+  prev.onclick = () => { if (i > 0) { i--; render(); } };
+  next.onclick = () => { if (i < steps.length - 1) { i++; render(); } };
+  render();
+</script>
+</body>
+</html>
