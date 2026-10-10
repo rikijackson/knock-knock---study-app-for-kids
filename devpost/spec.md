@@ -101,7 +101,7 @@ Planned animations:
 PRD ref: `prd.md > Character Check-Ins`, `prd.md > Session End and Finale`.
 
 ### Session and Clock
-`js/session.js`, `css/layout.css`. Holds the in-memory session object. Counts study time using real timestamps, so it stays accurate even if the browser slows down background tabs. Shows the big clock (stopwatch up, timer down), the session tasks underneath, and the Break/Resume and End buttons. Ends automatically when the timer reaches 0.
+`js/session.js`, `css/layout.css`. Holds the in-memory session object. Counts study time using real timestamps, so it stays accurate even if the browser slows down background tabs. Shows the big clock (stopwatch up, timer down), the session tasks underneath (each with a tickbox that marks it done immediately), and the Break/Resume and End buttons. Ends automatically when the timer reaches 0.
 PRD ref: `prd.md > Study Screen and Clock`, `prd.md > Breaks`.
 
 ### Check-In Scheduler

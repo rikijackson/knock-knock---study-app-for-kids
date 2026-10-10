@@ -17,11 +17,14 @@
   transform-origin: 50% 50%;
 }
 
+/* Arms pivot exactly at the shoulder (in the character's own coordinates),
+   so props in the hand can't shift the pivot and pull the arm off. */
 .char .arm-l,
 .char .arm-r {
-  transform-box: fill-box;
-  transform-origin: 50% 0;
+  transform-box: view-box;
 }
+.char .arm-l { transform-origin: -56px -321px; }
+.char .arm-r { transform-origin: 56px -321px; }
 
 /* Props (like the mother's spoon) only show during their own move. */
 .char .prop {
@@ -287,4 +290,153 @@
   0%   { opacity: 0; }
   40%  { opacity: 1; }
   84%  { opacity: 0; }
+}
+
+/* ---- Finales: she comes all the way out of the door ----
+   The body's transform always has the same shape so keyframes blend:
+   translate(x, y) rotate(r) translate(0, 240px) scale(sx, sy)
+   which spins her around the middle of her body (240 units above her feet).
+   y = -240px means "standing on the floor". */
+
+.char .prop-lid {
+  transform-box: fill-box;
+  transform-origin: 100% 100%;
+}
+
+/* finale (mother): step out, crouch, BACKFLIP, ta-da! */
+.anim-finale {
+  animation: finale-body 4.4s ease-in-out both;
+}
+.anim-finale .arm-l {
+  animation: finale-arm-l 4.4s ease-in-out both;
+}
+.anim-finale .arm-r {
+  animation: finale-arm-r 4.4s ease-in-out both;
+}
+.anim-finale .head {
+  animation: finale-head 4.4s ease-in-out both;
+}
+
+@keyframes finale-body {
+  0%        { transform: translate(0px, -240px) rotate(0deg) translate(0px, 240px) scale(1, 1); }
+  16%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }   /* step out */
+  28%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.22, 1); }      /* crouch */
+  40%       { transform: translate(40px, -430px) rotate(-180deg) translate(0px, 240px) scale(1.08, 1.18); } /* upside down in the air */
+  52%       { transform: translate(40px, -240px) rotate(-360deg) translate(0px, 240px) scale(1.12, 1.12); }
+  58%       { transform: translate(40px, -240px) rotate(-360deg) translate(0px, 240px) scale(1.22, 1.02); } /* land */
+  66%, 100% { transform: translate(40px, -240px) rotate(-360deg) translate(0px, 240px) scale(1.12, 1.12); } /* ta-da */
+}
+
+@keyframes finale-arm-l {
+  0%, 22%   { transform: rotate(0deg); }
+  30%, 52%  { transform: rotate(165deg); }   /* arms tucked up for the flip */
+  58%       { transform: rotate(40deg); }
+  68%, 100% { transform: rotate(135deg); }   /* ta-da! */
+}
+
+@keyframes finale-arm-r {
+  0%, 22%   { transform: rotate(0deg); }
+  30%, 52%  { transform: rotate(-165deg); }
+  58%       { transform: rotate(-40deg); }
+  68%, 100% { transform: rotate(-135deg); }
+}
+
+@keyframes finale-head {
+  0%, 60%   { transform: rotate(0deg); }
+  70%, 100% { transform: rotate(7deg); }     /* proud little head tilt */
+}
+
+/* finale-big (mother, 3+ tasks): out she comes with a pie, lifts the lid,
+   sets it down, then a DOUBLE backflip */
+.anim-finale-big {
+  animation: finale-big-body 7.2s ease-in-out both;
+}
+.anim-finale-big .arm-l {
+  animation: finale-big-arm-l 7.2s ease-in-out both;
+}
+.anim-finale-big .arm-r {
+  animation: finale-big-arm-r 7.2s ease-in-out both;
+}
+.anim-finale-big .head {
+  animation: finale-big-head 7.2s ease-in-out both;
+}
+.anim-finale-big .prop-dish {
+  animation: finale-big-dish 7.2s ease-in-out both;
+}
+.anim-finale-big .prop-lid {
+  animation: finale-big-lid 7.2s ease-in-out both;
+}
+
+@keyframes finale-big-body {
+  0%        { transform: translate(0px, -240px) rotate(0deg) translate(0px, 240px) scale(1, 1); }
+  10%, 42%  { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); } /* presenting the pie */
+  50%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.22, 1); }    /* crouch */
+  58%       { transform: translate(40px, -400px) rotate(-240deg) translate(0px, 240px) scale(1.08, 1.18); }
+  66%       { transform: translate(40px, -470px) rotate(-480deg) translate(0px, 240px) scale(1.08, 1.18); } /* higher! */
+  74%       { transform: translate(40px, -240px) rotate(-720deg) translate(0px, 240px) scale(1.12, 1.12); }
+  79%       { transform: translate(40px, -240px) rotate(-720deg) translate(0px, 240px) scale(1.24, 1); }    /* land */
+  86%, 100% { transform: translate(40px, -240px) rotate(-720deg) translate(0px, 240px) scale(1.12, 1.12); }
+}
+
+@keyframes finale-big-dish {
+  0%        { opacity: 0; transform: translateY(0) scale(1); }
+  4%        { opacity: 1; transform: translateY(0) scale(1); }
+  18%, 36%  { opacity: 1; transform: translateY(-14px) scale(1); }    /* lifts it up proudly */
+  44%       { opacity: 1; transform: translateY(170px) scale(0.9); }  /* sets it down */
+  47%, 100% { opacity: 0; transform: translateY(170px) scale(0.9); }
+}
+
+@keyframes finale-big-lid {
+  0%, 18%   { transform: translate(0, 0) rotate(0deg); }
+  24%, 34%  { transform: translate(18px, -30px) rotate(24deg); }   /* ta-da: pie! */
+  40%, 100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes finale-big-arm-l {
+  0%, 46%   { transform: rotate(0deg); }
+  52%, 74%  { transform: rotate(165deg); }
+  80%       { transform: rotate(40deg); }
+  88%, 100% { transform: rotate(135deg); }
+}
+
+@keyframes finale-big-arm-r {
+  0%, 18%   { transform: rotate(0deg); }
+  23%, 34%  { transform: rotate(-35deg); }   /* lifting the lid */
+  40%, 46%  { transform: rotate(0deg); }
+  52%, 74%  { transform: rotate(-165deg); }
+  80%       { transform: rotate(-40deg); }
+  88%, 100% { transform: rotate(-135deg); }
+}
+
+@keyframes finale-big-head {
+  0%, 18%   { transform: rotate(0deg); }
+  24%, 36%  { transform: rotate(-8deg); }    /* "look what I made" */
+  42%, 82%  { transform: rotate(0deg); }
+  90%, 100% { transform: rotate(7deg); }
+}
+
+/* finale-exit: from the ta-da pose back behind the door */
+.anim-finale-exit {
+  animation: finale-exit-body 1.3s ease-in-out both;
+}
+.anim-finale-exit .arm-l {
+  animation: finale-exit-arm-l 1.3s ease-in-out both;
+}
+.anim-finale-exit .arm-r {
+  animation: finale-exit-arm-r 1.3s ease-in-out both;
+}
+
+@keyframes finale-exit-body {
+  0%   { transform: translate(40px, -240px) rotate(-360deg) translate(0px, 240px) scale(1.12, 1.12); }
+  100% { transform: translate(0px, -240px) rotate(-360deg) translate(0px, 240px) scale(1, 1); }
+}
+
+@keyframes finale-exit-arm-l {
+  0%        { transform: rotate(135deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes finale-exit-arm-r {
+  0%        { transform: rotate(-135deg); }
+  60%, 100% { transform: rotate(0deg); }
 }

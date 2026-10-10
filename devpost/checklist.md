@@ -19,7 +19,7 @@ Build mode: learn
   Learner check: Run `npx serve .`, open the address it prints, click the door a few times, switch your computer to dark mode, and tell me whether the mother and the door feel like the style you pictured.
   Commit: `Add door and mother look-test animation`
 
-- [ ] **2. Knock to start a session, study with a clock, and get checked on**
+- [x] **2. Knock to start a session, study with a clock, and get checked on**
   Becomes usable: Knock → "Do you want to start a study session?" No slams the door with a bang; Yes lets you pick the mother, who asks timer or stopwatch (and length), how often to check on you (1/15/30/50 min, your own number, or random), and "Are you sure?" The door slides left, the huge clock runs, check-ins happen with a creak, a varied animation (never the same twice in a row) and a speech line. Break/Resume pauses everything; End (or the timer hitting 0) brings the door back.
   Why now: This turns the look test into the actual core loop, so the kernel works end to end before any rewards or panels exist.
   PRD ref: `prd.md > Starting a Session`, `prd.md > Check-In Frequency`, `prd.md > Study Screen and Clock`, `prd.md > Breaks`, `prd.md > Character Check-Ins`
@@ -29,7 +29,7 @@ Build mode: learn
   Learner check: Knock, say No once, then start a 2-minute timer with 1-minute check-ins. Watch the mother check on you, press Break and Resume, and let the timer end. Tell me what felt funny and what felt off.
   Commit: `Add session setup dialogue, clock, breaks and check-ins`
 
-- [ ] **3. Tasks, the finale, coins, and remembering your stuff**
+- [x] **3. Tasks, the finale, coins, and remembering your stuff**
   Becomes usable: A Tasks panel to add to-dos; the setup asks which tasks to work on; tasks show under the clock. At the end you tick off what you finished, the mother comes fully out for her backflip (dish + backflip for 3+ tasks), says a varied summary, and you earn 1 coin per minute. Coins, tasks and history are saved and come back after a reload.
   Why now: Completes the core journey (steps 6–8) and introduces saving, the first place the data model could be wrong.
   PRD ref: `prd.md > Tasks`, `prd.md > Session End and Finale`, `prd.md > States and Boundaries`
@@ -86,3 +86,6 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - Characters drawn with curves and Carmen Sandiego–style faces (almond eyes, flicked lashes, angular brows, pointed chin) instead of angular blocks — the learner found the first version too blocky and shared a reference image.
 - The door became a separate 3D layer that swings toward you (`perspective` + `rotateY`) instead of an SVG squash — the look test showed the squash didn't read as a door opening.
 - `look-around` now leans in toward you, looks down at your desk and sweeps right to left with the eyes leading and the face following, instead of just darting the pupils — learner direction at the look test (an eye-pop version was tried and rejected).
+- Menu buttons moved from a column on the left to big square buttons in the top-left corner, next to the coin balance — learner feedback in slice 3 (the Tasks button was too small). The Marketplace (slice 4) and Stats (slice 5) buttons join the same corner.
+- Session tasks under the clock can be ticked off while studying, and the end-of-session question pre-ticks them — the learner asked for it during the slice 3 check. PRD and spec updated.
+- Finale moved onto a layer in front of the door, and the door now opens fully (edge-on) — the learner saw an arm vanish behind the door during the flip. Arms now pivot at fixed shoulder points with shoulder caps — they were detaching on big swings.

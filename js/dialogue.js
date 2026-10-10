@@ -127,3 +127,95 @@ function askNumber(row, { min = 1, max = 600, unit = 'min' }, finish) {
   position();
   form.querySelector('input').focus();
 }
+
+// Ask with a checklist: tick any of `items` ({ id, text, checked? }).
+// options: { allowAdd, confirmLabel, skipLabel, emptyText }
+// Resolves with { ids: [...ticked ids], added: [...new texts] }.
+export function askChecklist(text, items, options = {}) {
+  const {
+    allowAdd = false,
+    confirmLabel = 'OK',
+    skipLabel = null,
+    emptyText = '',
+  } = options;
+  show(text);
+
+  return new Promise(resolve => {
+    const box = document.createElement('div');
+    box.className = 'bubble-checklist';
+    box.addEventListener('click', e => e.stopPropagation());
+
+    const list = document.createElement('ul');
+    const added = [];
+
+    const addRow = (id, label, checked) => {
+      const li = document.createElement('li');
+      li.innerHTML = '<label><input type="checkbox"><span></span></label>';
+      const input = li.querySelector('input');
+      input.value = id;
+      input.checked = checked;
+      li.querySelector('span').textContent = label;
+      list.append(li);
+    };
+
+    for (const item of items) addRow(item.id, item.text, Boolean(item.checked));
+    if (!items.length && emptyText) {
+      const p = document.createElement('p');
+      p.className = 'bubble-empty';
+      p.textContent = emptyText;
+      box.append(p);
+    }
+    box.append(list);
+
+    if (allowAdd) {
+      const form = document.createElement('form');
+      form.className = 'bubble-add';
+      form.innerHTML = `
+        <input type="text" maxlength="80" placeholder="Add a task…" aria-label="New task">
+        <button type="submit" class="choice">Add</button>`;
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const input = form.querySelector('input');
+        const value = input.value.trim();
+        if (!value) return;
+        added.push(value);
+        addRow(`new:${added.length - 1}`, value, true);
+        input.value = '';
+        input.focus();
+        position();
+      });
+      box.append(form);
+    }
+
+    const row = document.createElement('div');
+    row.className = 'bubble-choices';
+    const finish = skip => {
+      hideBubble();
+      if (skip) return resolve({ ids: [], added: [] });
+      const ticked = [...list.querySelectorAll('input:checked')].map(i => i.value);
+      resolve({
+        ids: ticked.filter(v => !v.startsWith('new:')),
+        added: ticked.filter(v => v.startsWith('new:')).map(v => added[Number(v.slice(4))]),
+      });
+    };
+    const ok = document.createElement('button');
+    ok.type = 'button';
+    ok.className = 'choice';
+    ok.textContent = confirmLabel;
+    ok.addEventListener('click', e => { e.stopPropagation(); finish(false); });
+    row.append(ok);
+    if (skipLabel) {
+      const skip = document.createElement('button');
+      skip.type = 'button';
+      skip.className = 'choice';
+      skip.textContent = skipLabel;
+      skip.addEventListener('click', e => { e.stopPropagation(); finish(true); });
+      row.append(skip);
+    }
+    box.append(row);
+
+    bubble.append(box);
+    position();
+    (box.querySelector('input') ?? ok).focus();
+  });
+}

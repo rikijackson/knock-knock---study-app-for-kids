@@ -13,6 +13,8 @@ const C = {
   skirt: '#24508f', skirtShade: '#1a3d72',
   legs: '#1c2d55', shoes: '#0f1a33',
   spoon: '#b9c7dd', spoonShade: '#8fa1bf',
+  plate: '#e6effb', plateShade: '#bfd0ea', lid: '#b9c7dd', lidShade: '#8fa1bf',
+  crust: '#d5deec', berry: '#4b4a9c',
   eyeWhite: '#eef2f8', iris: '#8d92bd', pupil: '#14213d', lash: '#0f1730',
   lips: '#a23d63', lipsLight: '#c25a80', earring: '#4fc2d0',
 };
@@ -83,6 +85,26 @@ export function motherSvg() {
     <path d="M58 -332 Q68 -332 70 -318 L80 -214 Q75 -210 70 -210 L60 -318 Q60 -328 58 -332 Z" fill="${C.cardiganShade}"/>
     <path d="M61 -210 L80 -214 Q83 -204 81 -192 Q79 -184 72 -184 Q67 -185 66 -190 L64 -198 Q58 -198 57 -202 Q58 -207 61 -210 Z" fill="${C.skin}"/>
     <path d="M74 -212 L80 -214 Q83 -204 81 -192 Q79 -184 72 -184 Q78 -194 74 -212 Z" fill="${C.skinShade}"/>
+  </g>
+
+  <!-- shoulder caps: cover the joint so the arms stay attached however they swing -->
+  <circle cx="-56" cy="-321" r="14" fill="${C.cardigan}"/>
+  <circle cx="56" cy="-321" r="14" fill="${C.cardiganShade}"/>
+  <path d="M46 -331 A14 14 0 0 0 46 -311 Q52 -321 46 -331 Z" fill="${C.cardigan}"/>
+
+  <!-- a blueberry pie she's been making, hidden until the big finale -->
+  <g class="prop prop-dish">
+    <ellipse cx="0" cy="-226" rx="52" ry="11" fill="${C.plate}"/>
+    <path d="M16 -236 Q48 -236 52 -226 Q48 -218 16 -216 Z" fill="${C.plateShade}"/>
+    <ellipse cx="0" cy="-234" rx="40" ry="11" fill="${C.crust}"/>
+    <ellipse cx="0" cy="-236" rx="32" ry="7" fill="${C.berry}"/>
+    <path d="M-22 -240 L-14 -231 M-6 -242 L4 -230 M10 -242 L20 -231" stroke="${C.crust}" stroke-width="3" stroke-linecap="round"/>
+    <g class="prop-lid">
+      <path d="M-45 -232 Q-45 -286 0 -288 Q45 -286 45 -232 Z" fill="${C.lid}"/>
+      <path d="M14 -286 Q45 -282 45 -232 L22 -232 Q28 -262 14 -286 Z" fill="${C.lidShade}"/>
+      <path d="M-30 -262 Q-24 -276 -10 -280" stroke="#ffffff" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.7"/>
+      <circle cx="0" cy="-292" r="7" fill="${C.lidShade}"/>
+    </g>
   </g>
 
   <!-- neck: long and slim, with a hard shadow under the chin -->

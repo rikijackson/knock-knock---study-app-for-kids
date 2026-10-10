@@ -67,7 +67,7 @@ There is one main page, plus pop-up panels that open inside the page.
 ### Study Screen and Clock
 - [ ] When the session starts, the door slides left and shuts, and a huge clock appears right-center.
 - [ ] Stopwatch counts **up** from 0:00. Timer counts **down** from the chosen length.
-- [ ] The tasks chosen for this session are listed below the clock.
+- [ ] The tasks chosen for this session are listed below the clock, each with a tickbox. Ticking one marks it done right away. *(Added during the build at the learner's request.)*
 
 ### Breaks
 Source: `scope.md > The POC Boundary`.
@@ -82,7 +82,7 @@ Source: `scope.md > The POC Boundary`.
 
 ### Session End and Finale
 - [ ] The session ends when the timer reaches zero, or when you press end (stopwatch).
-- [ ] You're asked which session tasks you completed. Completed ones are checked off in your to-do list.
+- [ ] You're asked which session tasks you completed, with any already ticked during the session pre-ticked. Completed ones are checked off in your to-do list.
 - [ ] The character comes fully out of the door and does their **signature funny animation** (e.g. mom does a backflip or brings out a dish).
 - [ ] With **3+ tasks** completed, a more enthusiastic version plays.
 - [ ] The summary speech bubble shows the number of check-ins, minutes studied, and tasks completed. The task line is skipped if none were completed. The wording varies between sessions.

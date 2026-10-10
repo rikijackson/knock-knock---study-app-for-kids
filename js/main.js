@@ -3,14 +3,19 @@
 import { createDoor } from './door.js';
 import { CHARACTERS, getCharacter } from './characters/index.js';
 import { stepOut, stepIn } from './animations.js';
-import { initDialogue, ask, say, hideBubble } from './dialogue.js';
-import { runSession, minutesStudied } from './session.js';
+import { initDialogue, ask, askChecklist, say, hideBubble } from './dialogue.js';
+import { runSession } from './session.js';
 import { runCheckIn } from './checkins.js';
-import { DOOR_LINES, LINES, pick, fill, plural } from './messages.js';
+import { runFinale } from './finale.js';
+import { addTask, getTask, openTasks, setDone } from './tasks.js';
+import { getSave } from './storage.js';
+import { closePanels } from './ui.js';
+import { DOOR_LINES, LINES, pick } from './messages.js';
 import { playSound } from './sound.js';
 import { TIMER_LENGTHS, FIXED_INTERVALS } from './config.js';
 
 const app = document.querySelector('.app');
+const sessionTasksEl = document.getElementById('session-tasks');
 const stage = document.getElementById('stage');
 const door = createDoor(stage);
 initDialogue(stage, speakerPoint);
@@ -30,9 +35,6 @@ function speakerPoint() {
   return { x: pt.x, y: pt.y };
 }
 
-// Characters you own. (Buying more comes with the marketplace.)
-const owned = ['mother'];
-
 let busy = false;
 door.onKnock(async () => {
   if (busy) return;
@@ -45,6 +47,7 @@ door.onKnock(async () => {
 });
 
 async function knock() {
+  closePanels();
   playSound('knock');
   door.setCharacter(null);   // just darkness behind the door
   await door.open('ajar');
@@ -59,6 +62,7 @@ async function knock() {
     return;
   }
 
+  const owned = getSave().owned;
   const characterId = await ask(DOOR_LINES.pick, CHARACTERS.map(c => ({
     label: c.name,
     value: c.id,
@@ -105,6 +109,14 @@ async function setUp(character) {
     { label: 'Other…', input: { min: 1, max: 240 } },
   ]);
 
+  const open = openTasks();
+  const picked = await askChecklist(open.length ? lines.tasks : lines.noTasksYet, open, {
+    allowAdd: true,
+    confirmLabel: 'These ones',
+    skipLabel: 'No tasks',
+  });
+  const taskIds = [...picked.ids, ...picked.added.map(text => addTask(text).id)];
+
   const sure = await ask(lines.confirm, [
     { label: 'Yes, let\'s go', value: true },
     { label: 'Wait, no', value: false },
@@ -123,27 +135,54 @@ async function setUp(character) {
     lengthMin,
     // A typed-in number comes back as just the minutes.
     frequency: typeof frequency === 'number' ? { type: 'fixed', minutes: frequency } : frequency,
+    taskIds,
   };
 }
 
 async function study(character, settings) {
+  showSessionTasks(settings.taskIds);
   app.classList.add('is-studying');     // door slides left, the clock appears
-  await wait(800);
-
+  // The clock starts right away, so Break and End work from the first second.
   const session = await runSession(settings, s => runCheckIn(door, character, s));
 
-  // Wrap up. (Tasks, the finale and coins come in the next step.)
   app.classList.remove('is-studying');
   document.body.classList.remove('is-on-break');
   await wait(800);
-  playSound('creak');
-  await door.open('ajar');
-  await stepOut(door.characterEl);
-  const minutes = minutesStudied(session);
-  await ask(fill(pick(LINES[character.id].done), {
-    minutes: plural(minutes, 'minute'),
-    checkIns: plural(session.checkInCount, 'time'),
-  }), [{ label: 'Thanks!', value: true }]);
-  await stepIn(door.characterEl);
-  await door.close();
+
+  // Which tasks got done?
+  let doneCount = 0;
+  const tasks = session.taskIds.map(getTask).filter(Boolean);
+  if (tasks.length) {
+    playSound('creak');
+    await door.open('ajar');
+    await stepOut(door.characterEl);
+    // Tasks you ticked off while studying come pre-ticked; untick to undo.
+    const answer = await askChecklist(LINES[character.id].finished,
+      tasks.map(t => ({ ...t, checked: t.done })), { confirmLabel: 'Done' });
+    for (const task of tasks) setDone(task.id, answer.ids.includes(task.id));
+    doneCount = answer.ids.length;
+    await stepIn(door.characterEl);
+  }
+
+  await runFinale(door, character, session, doneCount);
+  showSessionTasks([]);
+}
+
+// The session's tasks, listed under the clock. Tick one off the moment
+// you finish it; it's saved as done straight away.
+function showSessionTasks(ids) {
+  sessionTasksEl.innerHTML = '';
+  for (const task of ids.map(getTask).filter(Boolean)) {
+    const li = document.createElement('li');
+    li.className = task.done ? 'is-done' : '';
+    li.innerHTML = '<label><input type="checkbox"><span></span></label>';
+    const box = li.querySelector('input');
+    box.checked = task.done;
+    li.querySelector('span').textContent = task.text;
+    box.addEventListener('change', () => {
+      setDone(task.id, box.checked);
+      li.className = box.checked ? 'is-done' : '';
+    });
+    sessionTasksEl.append(li);
+  }
 }

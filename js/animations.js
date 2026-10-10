@@ -1,14 +1,15 @@
 // Plays a named animation on a character by adding a CSS class,
 // then waits for it to finish and removes the class.
+// With { keep: true } the class stays on, holding the final pose.
 
-export function play(characterEl, name) {
+export function play(characterEl, name, { keep = false } = {}) {
   const className = `anim-${name}`;
 
   return new Promise(resolve => {
     const finish = () => {
       clearTimeout(timer);
       characterEl.removeEventListener('animationend', onEnd);
-      characterEl.classList.remove(className);
+      if (!keep) characterEl.classList.remove(className);
       resolve();
     };
 
@@ -19,7 +20,7 @@ export function play(characterEl, name) {
     };
 
     // Safety net in case the animation never reports that it ended.
-    const timer = setTimeout(finish, 10000);
+    const timer = setTimeout(finish, 12000);
 
     characterEl.addEventListener('animationend', onEnd);
     characterEl.classList.add(className);

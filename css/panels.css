@@ -1,0 +1,299 @@
+/* Side buttons, coin balance, and the pop-up panels. */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* ---- Side column ---- */
+.side {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+/* Hidden while studying, so the screen stays calm. */
+body:has(.is-studying) .side {
+  opacity: 0;
+  transform: translateY(-16px);
+  pointer-events: none;
+}
+
+/* Big square buttons: icon on top, label underneath. */
+.side-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 84px;
+  height: 84px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 20px;
+  border: none;
+  background: var(--pale);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.15s, background 0.2s;
+}
+
+.side-btn:hover { transform: translateY(-2px); }
+.side-btn:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+
+.side-btn svg {
+  width: 36px;
+  height: 36px;
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---- Coins (a blue coin, to stay in the cool palette) ---- */
+.coin-badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-weight: 800;
+  font-size: 1.3rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.coin-icon { width: 28px; height: 28px; }
+.coin-icon circle { fill: var(--blue); }
+.coin-icon .coin-inner { fill: none; stroke: var(--pale); stroke-width: 1.6; }
+
+.coin-pop {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  font-weight: 800;
+  color: var(--teal);
+  animation: coin-pop 1.8s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes coin-pop {
+  0%   { opacity: 0; transform: translateY(6px); }
+  15%  { opacity: 1; transform: translateY(0); }
+  70%  { opacity: 1; transform: translateY(-14px); }
+  100% { opacity: 0; transform: translateY(-24px); }
+}
+
+/* ---- Pop-up panels ---- */
+.panel-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 10, 25, 0.45);
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.has-panel .panel-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(440px, calc(100vw - 32px));
+  max-height: 80vh;
+  overflow: auto;
+  padding: 20px 22px 24px;
+  border-radius: 20px;
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: 0 20px 60px rgba(5, 10, 25, 0.4);
+  z-index: 21;
+}
+
+.panel[hidden] { display: none; }
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.panel-head h2 { margin: 0; font-size: 1.3rem; }
+
+.panel-close {
+  font-size: 1.6rem;
+  line-height: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--pale);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.panel-empty {
+  color: var(--locked);
+  margin: 8px 0;
+}
+
+/* ---- Tasks ---- */
+.task-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.task-form input {
+  flex: 1;
+  font: inherit;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--pale);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.task-form input:focus { outline: none; border-color: var(--blue); }
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--pale);
+}
+
+.task label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.task input { width: 18px; height: 18px; accent-color: var(--blue); }
+
+.task.is-done span {
+  text-decoration: line-through;
+  color: var(--locked);
+}
+
+.task-delete {
+  border: none;
+  background: none;
+  color: var(--locked);
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0 6px;
+}
+
+.task-delete:hover { color: var(--ink); }
+
+/* ---- Session tasks under the clock ---- */
+.session-tasks {
+  list-style: none;
+  margin: 28px auto 0;
+  padding: 0;
+  max-width: 360px;
+  text-align: left;
+}
+
+.session-tasks li {
+  margin-bottom: 6px;
+  border-radius: 10px;
+  background: var(--pale);
+  transition: opacity 0.3s;
+}
+
+.session-tasks label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  cursor: pointer;
+}
+
+.session-tasks input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--blue);
+}
+
+.session-tasks li.is-done {
+  opacity: 0.6;
+}
+
+.session-tasks li.is-done span {
+  text-decoration: line-through;
+}
+
+/* ---- Checklists inside speech bubbles ---- */
+.bubble-checklist ul {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  max-height: 160px;
+  overflow: auto;
+}
+
+.bubble-checklist li label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.bubble-checklist input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--bubble-accent);
+}
+
+.bubble-empty {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.bubble-add {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.bubble-add input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 2px solid var(--bubble-accent);
+  background: #fff;
+  color: var(--bubble-ink);
+}

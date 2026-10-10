@@ -38,10 +38,23 @@ export const LINES = {
         'Back to work, young one!',
       ],
     },
-    done: [
-      'Time\'s up! You studied {minutes} and I checked on you {checkIns}.',
-      'That\'s it for today: {minutes} of studying, and I checked on you {checkIns}.',
+    tasks: 'Would you like to choose any tasks for this session?',
+    noTasksYet: 'Your to-do list is empty. Add some here, or skip.',
+    finished: 'Which tasks did you finish?',
+    // The summary after the finale. {tasks} is empty when you finished none,
+    // and then {praise} praises your focus instead.
+    summary: [
+      'I checked on you {checkIns}, you studied {minutes}{tasks}. {praise}',
+      '{minutes} of studying, and I popped in {checkIns}{tasks}. {praise}',
+      'Well! You studied {minutes} and I checked on you {checkIns}{tasks}. {praise}',
     ],
+    summaryBig: [
+      "{taskCount} TASKS?! You studied {minutes} and I checked on you {checkIns}. That's my kid!",
+      'Look at you! {minutes} of studying, {taskCount} tasks done, and I checked on you {checkIns}. I made pie for this!',
+    ],
+    praise: ['Not bad at all.', "I'm proud of you.", 'Keep it up, sweetie.'],
+    focusPraise: ['No tasks done, but what focus!', 'Nothing ticked off, but you sat and focused. That counts.'],
+    thanks: 'Thanks, Mom!',
   },
 };
 

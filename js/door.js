@@ -4,7 +4,8 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 
 // The scene is a 500 x 720 box. The doorway is x 110–390, y 80–680.
 // Back layer (one SVG): floor shadow, frame, dark doorway, character slot.
-// Front layer: the door itself, a separate element so it can swing in 3D.
+// Middle: the door itself, a separate element so it can swing in 3D.
+// Front layer: a second character slot, in front of the door.
 const DOOR_HTML = `
 <div class="door-scene" role="button" tabindex="0" aria-label="The door. Click to knock.">
   <svg class="door-back" viewBox="0 0 500 720" xmlns="${SVG_NS}">
@@ -29,6 +30,11 @@ const DOOR_HTML = `
     </svg>
     <div class="door-edge"></div>
   </div>
+
+  <!-- In front of the door: where a character stands once fully out (finale). -->
+  <svg class="door-front" viewBox="0 0 500 720" xmlns="${SVG_NS}">
+    <g class="char-slot-front" transform="translate(210 680)"></g>
+  </svg>
 </div>`;
 
 // Wait for the door's swing to finish (with a safety timeout).
@@ -50,6 +56,7 @@ export function createDoor(container) {
   const scene = container.querySelector('.door-scene');
   const panel = scene.querySelector('.door-panel');
   const slot = scene.querySelector('.char-slot');
+  const frontSlot = scene.querySelector('.char-slot-front');
 
   const door = {
     scene,
@@ -57,26 +64,36 @@ export function createDoor(container) {
 
     // Put a character (SVG markup) behind the door, or nobody (null).
     setCharacter(markup) {
+      frontSlot.innerHTML = '';
       slot.innerHTML = markup ?? '';
       door.characterEl = slot.firstElementChild;
     },
 
-    // amount: 'crack' (just a little) or 'ajar' (wide enough to peek out)
+    // Step in front of the door (out into the room), or back behind it.
+    bringToFront() {
+      if (door.characterEl) frontSlot.append(door.characterEl);
+    },
+    sendBack() {
+      if (door.characterEl) slot.append(door.characterEl);
+    },
+
+    // amount: 'crack' (just a little), 'ajar' (wide enough to peek out)
+    // or 'wide' (all the way, for the finale)
     async open(amount = 'ajar') {
-      scene.classList.remove('door--crack', 'door--ajar');
+      scene.classList.remove('door--crack', 'door--ajar', 'door--wide');
       scene.classList.add(`door--${amount}`);
       await waitForSwing(panel);
     },
 
     async close() {
-      scene.classList.remove('door--crack', 'door--ajar');
+      scene.classList.remove('door--crack', 'door--ajar', 'door--wide');
       await waitForSwing(panel);
     },
 
     // Shut it hard: a fast swing and a shake.
     async slam() {
       scene.classList.add('door--slam');
-      scene.classList.remove('door--crack', 'door--ajar');
+      scene.classList.remove('door--crack', 'door--ajar', 'door--wide');
       await waitForSwing(panel);
       scene.classList.add('door--shake');
       await new Promise(r => setTimeout(r, 350));
