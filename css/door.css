@@ -113,3 +113,13 @@
   72% { transform: translate(3px, -1px); }
   86% { transform: translate(-1px, 0); }
 }
+
+/* A layer in front of the door, for when a character comes all the way out. */
+.door-front {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
