@@ -38,6 +38,16 @@
   transition: opacity 0.6s 0.4s, visibility 0s;
 }
 
+/* Small break timer above the big clock (only shows during a break). */
+.break-clock {
+  min-height: 1.6em;
+  margin-bottom: 6px;
+  font-size: clamp(16px, 1.6vw, 22px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--teal);
+}
+
 .clock {
   font-size: clamp(72px, 11vw, 200px);
   font-weight: 800;

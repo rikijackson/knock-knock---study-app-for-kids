@@ -27,7 +27,7 @@
 /* The tail: a little triangle reaching down-left to the speaker's face. */
 .bubble-tail {
   position: absolute;
-  left: -4px;
+  left: var(--tail-x, -4px);
   bottom: -19px;
   width: 30px;
   height: 22px;
@@ -35,6 +35,14 @@
 }
 
 .bubble-tail-fill { fill: var(--bubble); }
+
+/* No room above the speaker: the bubble sits below, tail pointing up. */
+.bubble.is-below { transform-origin: 0 0; }
+.bubble.is-below .bubble-tail {
+  bottom: auto;
+  top: -19px;
+  transform: scaleY(-1);
+}
 .bubble-tail-line {
   fill: none;
   stroke: var(--bubble-line);
@@ -106,5 +114,17 @@
   border-radius: 10px;
   border: 2px solid var(--bubble-accent);
   background: #fff;
+  color: var(--bubble-ink);
+}
+
+/* "← Back": quieter than the real answers. */
+.choice-back {
+  border-color: transparent;
+  color: var(--locked);
+}
+
+.choice-back:hover,
+.choice-back:focus-visible {
+  background: var(--pale);
   color: var(--bubble-ink);
 }

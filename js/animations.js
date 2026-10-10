@@ -33,6 +33,18 @@ export function pickCheckIn(names, last) {
   return options[Math.floor(Math.random() * options.length)];
 }
 
+const MOODS = [
+  'mood-pleased', 'mood-delighted', 'mood-ecstatic',
+  'mood-annoyed', 'mood-angry', 'mood-furious',
+];
+
+// Set her face: 'suspicious' (default), 'pleased', 'delighted', 'ecstatic',
+// or (during a long break) 'annoyed', 'angry', 'furious'.
+export function setMood(characterEl, mood) {
+  characterEl.classList.remove(...MOODS);
+  if (mood !== 'suspicious') characterEl.classList.add(`mood-${mood}`);
+}
+
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
 // Lean out of the doorway and stay there (while asking questions).
@@ -42,7 +54,11 @@ export async function stepOut(characterEl) {
 }
 
 // Go back behind the door.
+// If a looping animation was just removed, the browser must first settle on
+// her plain "out" pose; otherwise it skips the glide and she just vanishes.
 export async function stepIn(characterEl) {
+  getComputedStyle(characterEl).transform;   // settle the current pose
+  await wait(40);
   characterEl.classList.remove('is-out');
-  await wait(600);
+  await wait(850);   // the glide back takes 0.8s; let it finish before the door shuts
 }

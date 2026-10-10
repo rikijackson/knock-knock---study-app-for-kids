@@ -26,6 +26,59 @@
 .char .arm-l { transform-origin: -56px -321px; }
 .char .arm-r { transform-origin: 56px -321px; }
 
+/* ---- Moods: her face gets happier the longer you study ----
+   suspicious (default) → pleased → delighted → over-the-moon */
+.char .brows-soft,
+.char .mouth-smile,
+.char .mouth-grin,
+.char .happy-lid,
+.char .blush { display: none; }
+
+.char.mood-pleased .brows-suspicious,
+.char.mood-pleased .mouth-neutral,
+.char.mood-delighted .brows-suspicious,
+.char.mood-delighted .mouth-neutral,
+.char.mood-ecstatic .brows-suspicious,
+.char.mood-ecstatic .mouth-neutral { display: none; }
+
+.char.mood-pleased .brows-soft,
+.char.mood-pleased .mouth-smile { display: inline; }
+
+.char.mood-delighted .brows-soft,
+.char.mood-delighted .mouth-grin,
+.char.mood-delighted .happy-lid,
+.char.mood-ecstatic .brows-soft,
+.char.mood-ecstatic .mouth-grin,
+.char.mood-ecstatic .happy-lid,
+.char.mood-ecstatic .blush { display: inline; }
+
+/* Angry moods (only during a long break): annoyed → angry → furious */
+.char .brows-flat,
+.char .brows-angry,
+.char .mouth-flat,
+.char .mouth-frown,
+.char .mouth-grit,
+.char .flush { display: none; }
+
+.char.mood-annoyed .brows-suspicious,
+.char.mood-annoyed .mouth-neutral,
+.char.mood-angry .brows-suspicious,
+.char.mood-angry .mouth-neutral,
+.char.mood-furious .brows-suspicious,
+.char.mood-furious .mouth-neutral { display: none; }
+
+.char.mood-annoyed .brows-flat,
+.char.mood-annoyed .mouth-flat,
+.char.mood-angry .brows-angry,
+.char.mood-angry .mouth-frown,
+.char.mood-furious .brows-angry,
+.char.mood-furious .mouth-grit,
+.char.mood-furious .flush { display: inline; }
+
+/* Delighted brows sit a little higher. */
+.char.mood-delighted .brows-soft,
+.char.mood-ecstatic .brows-soft { transform: translateY(-4px); }
+
 /* Props (like the mother's spoon) only show during their own move. */
 .char .prop {
   opacity: 0;
@@ -49,19 +102,19 @@
         sweep slowly from right to left (eyes lead, face follows),
         back to you with a suspicious nod, sneak back ---- */
 .anim-look-around {
-  animation: look-around-body 6s ease-in-out both;
+  animation: look-around-body 8s ease-in-out both;
 }
 .anim-look-around .head {
-  animation: look-around-head 6s ease-in-out both;
+  animation: look-around-head 8s ease-in-out both;
 }
 .anim-look-around .features {
-  animation: look-around-face 6s ease-in-out both;
+  animation: look-around-face 8s ease-in-out both;
 }
 .anim-look-around .pupil {
-  animation: look-around-pupils 6s ease-in-out both;
+  animation: look-around-pupils 8s ease-in-out both;
 }
 .anim-look-around .arm-r {
-  animation: look-around-arm 6s ease-in-out both;
+  animation: look-around-arm 8s ease-in-out both;
 }
 
 /* Whole body: out from behind the door, then a little closer to you
@@ -119,16 +172,16 @@
 /* ---- peek: lean out, quick scan left and right, then settle on you
         ("I see you. Keep going.") ---- */
 .anim-peek {
-  animation: peek-body 4s ease-in-out both;
+  animation: peek-body 5.4s ease-in-out both;
 }
 .anim-peek .head {
-  animation: peek-head 4s ease-in-out both;
+  animation: peek-head 5.4s ease-in-out both;
 }
 .anim-peek .features {
-  animation: peek-face 4s ease-in-out both;
+  animation: peek-face 5.4s ease-in-out both;
 }
 .anim-peek .pupil {
-  animation: peek-pupils 4s ease-in-out both;
+  animation: peek-pupils 5.4s ease-in-out both;
 }
 
 @keyframes peek-body {
@@ -166,19 +219,19 @@
 /* ---- stare: lean out, peer down at your desk, then look up into a long,
         slow-blinking, deadpan stare while creeping closer ---- */
 .anim-stare {
-  animation: stare-body 5.4s ease-in-out both;
+  animation: stare-body 7.2s ease-in-out both;
 }
 .anim-stare .head {
-  animation: stare-head 5.4s ease-in-out both;
+  animation: stare-head 7.2s ease-in-out both;
 }
 .anim-stare .eye {
-  animation: stare-blink 5.4s linear both;
+  animation: stare-blink 7.2s linear both;
 }
 .anim-stare .features {
-  animation: stare-face 5.4s ease-in-out both;
+  animation: stare-face 7.2s ease-in-out both;
 }
 .anim-stare .pupil {
-  animation: stare-pupils 5.4s ease-in-out both;
+  animation: stare-pupils 7.2s ease-in-out both;
 }
 
 @keyframes stare-body {
@@ -225,22 +278,22 @@
 /* ---- mother-spoon (mother's signature): scan the room, find you,
         then wag a ladle at you ---- */
 .anim-mother-spoon {
-  animation: spoon-body 5.6s ease-in-out both;
+  animation: spoon-body 7.4s ease-in-out both;
 }
 .anim-mother-spoon .head {
-  animation: spoon-head 5.6s ease-in-out both;
+  animation: spoon-head 7.4s ease-in-out both;
 }
 .anim-mother-spoon .features {
-  animation: spoon-face 5.6s ease-in-out both;
+  animation: spoon-face 7.4s ease-in-out both;
 }
 .anim-mother-spoon .pupil {
-  animation: spoon-pupils 5.6s ease-in-out both;
+  animation: spoon-pupils 7.4s ease-in-out both;
 }
 .anim-mother-spoon .arm-r {
-  animation: spoon-arm 5.6s ease-in-out both;
+  animation: spoon-arm 7.4s ease-in-out both;
 }
 .anim-mother-spoon .prop-spoon {
-  animation: spoon-show 5.6s step-end both;
+  animation: spoon-show 7.4s step-end both;
 }
 
 @keyframes spoon-body {
@@ -292,143 +345,414 @@
   84%  { opacity: 0; }
 }
 
-/* ---- Finales: she comes all the way out of the door ----
-   The body's transform always has the same shape so keyframes blend:
+/* ---- wait (loops during a break): out of the doorway, looking around the
+        room and whistling, with one quick glance at her watch per round ---- */
+.char .whistle,
+.char .prop-notes { opacity: 0; }
+
+.char .note {
+  transform-box: fill-box;
+  transform-origin: 0 100%;
+}
+
+.char.anim-wait              { animation: wait-body 18s ease-in-out infinite; }
+.char.anim-wait .head        { animation: wait-head 18s ease-in-out infinite; }
+.char.anim-wait .arm-l       { animation: wait-arm 18s ease-in-out infinite; }
+.char.anim-wait .features    { animation: wait-face 18s ease-in-out infinite; }
+.char.anim-wait .pupil       { animation: wait-pupils 18s ease-in-out infinite; }
+.char.anim-wait .mouth       { animation: wait-mouth 18s linear infinite; }
+.char.anim-wait .whistle,
+.char.anim-wait .prop-notes  { animation: wait-whistle 18s linear infinite; }
+.char.anim-wait .note        { animation: note-float 2.2s ease-out infinite; }
+.char.anim-wait .note + .note { animation-delay: 1.1s; }
+
+@keyframes wait-body {
+  0%, 100% { transform: translateX(90px) rotate(13deg); }
+  25%      { transform: translateX(90px) rotate(14.5deg); }   /* idle sway */
+  50%      { transform: translateX(90px) rotate(12.5deg); }
+  75%      { transform: translateX(90px) rotate(14deg); }
+}
+
+@keyframes wait-face {
+  0%, 100%  { transform: translate(0, 0); }
+  6%, 18%   { transform: translate(-4px, 0); }     /* looking left... */
+  24%, 36%  { transform: translate(4px, 0); }      /* ...and right */
+  42%, 48%  { transform: translate(0, 0); }
+  52%, 59%  { transform: translate(2px, 3px); }    /* quick watch check */
+  66%, 78%  { transform: translate(0, -2px); }     /* gazing at the ceiling */
+  84%, 94%  { transform: translate(0, 0); }        /* ...back at you */
+}
+
+@keyframes wait-pupils {
+  0%, 100%  { transform: translate(0, 0); }
+  5%, 18%   { transform: translate(-5px, 0); }
+  23%, 36%  { transform: translate(5px, 0); }
+  41%, 48%  { transform: translate(0, 0); }
+  51%, 59%  { transform: translate(2px, 4px); }
+  65%, 78%  { transform: translate(1px, -4px); }
+  83%, 94%  { transform: translate(0, 0); }
+}
+
+@keyframes wait-head {
+  0%, 48%, 64%, 100% { transform: rotate(-13deg) translateY(0); }
+  52%, 59%           { transform: rotate(-7deg) translateY(4px); }    /* looks down at her watch */
+  68%, 78%           { transform: rotate(-16deg) translateY(-2px); }  /* head tipped back, idly */
+}
+
+@keyframes wait-arm {
+  0%, 48%, 63%, 100% { transform: rotate(0deg); }
+  52%, 59%           { transform: rotate(-35deg); }                   /* wrist up in front of her */
+}
+
+/* Whistling while looking around (4–38%) and at the ceiling (64–80%). */
+@keyframes wait-mouth {
+  0%, 3%, 39%, 63%, 81%, 100% { opacity: 1; }
+  4%, 38%, 64%, 80%           { opacity: 0; }
+}
+
+@keyframes wait-whistle {
+  0%, 3%, 39%, 63%, 81%, 100% { opacity: 0; }
+  4%, 38%, 64%, 80%           { opacity: 1; }
+}
+
+@keyframes note-float {
+  0%   { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+  15%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(14px, -28px) rotate(12deg); }
+}
+
+/* Once she's annoyed, the whistling stops. */
+.char.anim-wait:is(.mood-annoyed, .mood-angry, .mood-furious) .whistle,
+.char.anim-wait:is(.mood-annoyed, .mood-angry, .mood-furious) .prop-notes {
+  animation: none;
+  opacity: 0;
+}
+.char.anim-wait:is(.mood-annoyed, .mood-angry, .mood-furious) .mouth {
+  animation: none;
+  opacity: 1;
+}
+
+/* Angry: hands out, staring straight at you, tapping impatiently. */
+.char.anim-wait.mood-angry           { animation: wait-angry-body 1.6s ease-in-out infinite; }
+.char.anim-wait.mood-angry .head     { animation: wait-angry-head 1.6s ease-in-out infinite; }
+.char.anim-wait:is(.mood-angry, .mood-furious) .features,
+.char.anim-wait:is(.mood-angry, .mood-furious) .pupil { animation: none; }
+.char.anim-wait:is(.mood-angry, .mood-furious) .arm-l { animation: none; transform: rotate(22deg); }
+.char.anim-wait:is(.mood-angry, .mood-furious) .arm-r { animation: none; transform: rotate(-22deg); }
+
+@keyframes wait-angry-body {
+  0%, 100% { transform: translateX(90px) rotate(13deg); }
+  50%      { transform: translateX(90px) rotate(14deg) translateY(-3px); }   /* tap... tap... */
+}
+
+@keyframes wait-angry-head {
+  0%, 100% { transform: rotate(-13deg) translateY(0); }
+  50%      { transform: rotate(-13deg) translateY(2px); }
+}
+
+/* Furious: shaking with rage. */
+.char.anim-wait.mood-furious       { animation: wait-furious-body 0.16s linear infinite; }
+.char.anim-wait.mood-furious .head { animation: none; transform: rotate(-13deg); }
+
+@keyframes wait-furious-body {
+  0%, 100% { transform: translateX(90px) rotate(13deg); }
+  25%      { transform: translateX(91.5px) rotate(13.4deg); }
+  75%      { transform: translateX(88.5px) rotate(12.6deg); }
+}
+
+/* ---- Finales: she comes all the way out, in front of the open door ----
+   Most finales give the body's transform the same shape so keyframes blend:
    translate(x, y) rotate(r) translate(0, 240px) scale(sx, sy)
-   which spins her around the middle of her body (240 units above her feet).
-   y = -240px means "standing on the floor". */
+   which spins her around the middle of her body (240 units above her feet)
+   and squashes/stretches her from her feet. y = -240px means "on the floor".
+   Every finale ends either in the ta-da pose (finale-exit) or holding the
+   plate (finale-exit-hold). */
+
+.char .prop-dish {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
 
 .char .prop-lid {
   transform-box: fill-box;
-  transform-origin: 100% 100%;
+  transform-origin: 50% 100%;
 }
 
-/* finale (mother): step out, crouch, BACKFLIP, ta-da! */
-.anim-finale {
-  animation: finale-body 4.4s ease-in-out both;
-}
-.anim-finale .arm-l {
-  animation: finale-arm-l 4.4s ease-in-out both;
-}
-.anim-finale .arm-r {
-  animation: finale-arm-r 4.4s ease-in-out both;
-}
-.anim-finale .head {
-  animation: finale-head 4.4s ease-in-out both;
+/* Only the chosen food shows under the lid. */
+.char .food { display: none; }
+.char[data-food="pie"] .food-pie,
+.char[data-food="cake"] .food-cake,
+.char[data-food="cookies"] .food-cookies { display: inline; }
+
+.char .flame {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
 }
 
-@keyframes finale-body {
+/* ===== Under 15 min: finale-meh — steps out, hands out at her sides,
+         a slow disappointed head shake ===== */
+.anim-finale-meh           { animation: meh-body 3.6s ease-in-out both; }
+.anim-finale-meh .arm-l    { animation: meh-arm-l 3.6s ease-in-out both; }
+.anim-finale-meh .arm-r    { animation: meh-arm-r 3.6s ease-in-out both; }
+.anim-finale-meh .head     { animation: meh-head 3.6s ease-in-out both; }
+.anim-finale-meh .pupil    { animation: meh-pupils 3.6s ease-in-out both; }
+
+@keyframes meh-body {
   0%        { transform: translate(0px, -240px) rotate(0deg) translate(0px, 240px) scale(1, 1); }
-  16%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }   /* step out */
-  28%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.22, 1); }      /* crouch */
-  40%       { transform: translate(40px, -430px) rotate(-180deg) translate(0px, 240px) scale(1.08, 1.18); } /* upside down in the air */
+  26%, 100% { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
+}
+
+@keyframes meh-arm-l {
+  0%, 24%   { transform: rotate(0deg); }
+  36%, 100% { transform: rotate(22deg); }    /* hands out: "really?" */
+}
+
+@keyframes meh-arm-r {
+  0%, 24%   { transform: rotate(0deg); }
+  36%, 100% { transform: rotate(-22deg); }
+}
+
+@keyframes meh-head {
+  0%, 34%   { transform: rotate(0deg); }
+  44%       { transform: rotate(-8deg); }    /* tsk... */
+  56%       { transform: rotate(8deg); }     /* ...tsk */
+  68%       { transform: rotate(-6deg); }
+  78%, 100% { transform: rotate(3deg); }
+}
+
+@keyframes meh-pupils {
+  0%, 30%   { transform: translate(0, 0); }
+  38%, 74%  { transform: translate(0, 2px); }   /* eyes down, unimpressed */
+  82%, 100% { transform: translate(0, 0); }
+}
+
+/* finale-exit-meh: back inside from the hands-out pose */
+.anim-finale-exit-meh          { animation: finale-exit-body 1.3s ease-in-out both; }
+.anim-finale-exit-meh .arm-l   { animation: exit-meh-arm-l 1.3s ease-in-out both; }
+.anim-finale-exit-meh .arm-r   { animation: exit-meh-arm-r 1.3s ease-in-out both; }
+
+@keyframes exit-meh-arm-l {
+  0%        { transform: rotate(22deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes exit-meh-arm-r {
+  0%        { transform: rotate(-22deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+
+/* ===== 15–40 min: finale-proud — step out, a happy hop, ta-da ===== */
+.anim-finale-proud            { animation: proud-body 3.6s ease-in-out both; }
+.anim-finale-proud .arm-l     { animation: proud-arm-l 3.6s ease-in-out both; }
+.anim-finale-proud .arm-r     { animation: proud-arm-r 3.6s ease-in-out both; }
+.anim-finale-proud .head      { animation: tada-head 3.6s ease-in-out both; }
+
+@keyframes proud-body {
+  0%        { transform: translate(0px, -240px) rotate(0deg) translate(0px, 240px) scale(1, 1); }
+  22%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
+  34%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.2, 1.02); }   /* crouch */
+  46%       { transform: translate(40px, -300px) rotate(0deg) translate(0px, 240px) scale(1.06, 1.2); }   /* hop! */
+  58%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.2, 1.02); }   /* land */
+  68%, 100% { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
+}
+
+@keyframes proud-arm-l {
+  0%, 52%   { transform: rotate(0deg); }
+  68%, 100% { transform: rotate(135deg); }
+}
+
+@keyframes proud-arm-r {
+  0%, 52%   { transform: rotate(0deg); }
+  68%, 100% { transform: rotate(-135deg); }
+}
+
+@keyframes tada-head {
+  0%, 62%   { transform: rotate(0deg); }
+  72%, 100% { transform: rotate(7deg); }   /* proud little head tilt */
+}
+
+/* ===== 40 min – 2 h: finale-dish — out with a covered dish,
+         lift the lid, offer you the food ===== */
+.anim-finale-dish             { animation: dish-body 6.4s ease-in-out both; }
+.anim-finale-dish .arm-l      { animation: dish-arm-l 6.4s ease-in-out both; }
+.anim-finale-dish .arm-r      { animation: dish-arm-r 6.4s ease-in-out both; }
+.anim-finale-dish .head       { animation: dish-head 6.4s ease-in-out both; }
+.anim-finale-dish .prop-dish  { animation: dish-plate 6.4s ease-in-out both; }
+.anim-finale-dish .prop-lid   { animation: dish-lid 6.4s ease-in-out both; }
+
+@keyframes dish-body {
+  0%        { transform: translate(0px, -240px) rotate(0deg) translate(0px, 240px) scale(1, 1); }
+  16%, 100% { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
+}
+
+@keyframes dish-plate {
+  0%        { opacity: 0; transform: translateY(0) scale(1); }
+  4%, 50%   { opacity: 1; transform: translateY(0) scale(1); }
+  60%, 100% { opacity: 1; transform: translateY(16px) scale(1.18); }   /* "here, for you" */
+}
+
+@keyframes dish-lid {
+  0%, 26%   { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+  34%       { opacity: 1; transform: translate(8px, -36px) rotate(14deg); }    /* lift... */
+  44%, 100% { opacity: 0; transform: translate(70px, -150px) rotate(50deg); }  /* ...and away */
+}
+
+@keyframes dish-arm-l {
+  0%, 10%   { transform: rotate(0deg); }
+  18%, 100% { transform: rotate(-16deg); }   /* holding the plate */
+}
+
+@keyframes dish-arm-r {
+  0%, 10%   { transform: rotate(0deg); }
+  18%, 26%  { transform: rotate(16deg); }
+  33%, 38%  { transform: rotate(-32deg); }   /* lifting the lid */
+  46%, 100% { transform: rotate(16deg); }
+}
+
+@keyframes dish-head {
+  0%, 30%   { transform: rotate(0deg); }
+  36%, 46%  { transform: rotate(-8deg); }    /* "look what I made" */
+  56%, 100% { transform: rotate(5deg); }
+}
+
+/* finale-exit-hold: back inside, still holding the plate */
+.anim-finale-exit-hold            { animation: exit-hold-body 1.3s ease-in-out both; }
+.anim-finale-exit-hold .arm-l     { animation: exit-hold-arm-l 1.3s ease-in-out both; }
+.anim-finale-exit-hold .arm-r     { animation: exit-hold-arm-r 1.3s ease-in-out both; }
+.anim-finale-exit-hold .prop-dish { animation: exit-hold-plate 1.3s ease-in-out both; }
+.anim-finale-exit-hold .prop-lid  { opacity: 0; }
+
+@keyframes exit-hold-body {
+  0%   { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
+  100% { transform: translate(0px, -240px) rotate(0deg) translate(0px, 240px) scale(1, 1); }
+}
+
+@keyframes exit-hold-arm-l {
+  0%   { transform: rotate(-16deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes exit-hold-arm-r {
+  0%   { transform: rotate(16deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes exit-hold-plate {
+  0%, 100% { opacity: 1; transform: translateY(16px) scale(1.18); }
+}
+
+/* ===== 2 h or more: stunts ===== */
+
+/* stunt-cartwheel: crouch, spin all the way round in the air, ta-da */
+.anim-stunt-cartwheel         { animation: cartwheel-body 4.4s ease-in-out both; }
+.anim-stunt-cartwheel .arm-l  { animation: stunt-arm-l 4.4s ease-in-out both; }
+.anim-stunt-cartwheel .arm-r  { animation: stunt-arm-r 4.4s ease-in-out both; }
+.anim-stunt-cartwheel .head   { animation: tada-head 4.4s ease-in-out both; }
+
+@keyframes cartwheel-body {
+  0%        { transform: translate(0px, -240px) rotate(0deg) translate(0px, 240px) scale(1, 1); }
+  16%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
+  28%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.22, 1); }       /* crouch */
+  40%       { transform: translate(40px, -430px) rotate(-180deg) translate(0px, 240px) scale(1.08, 1.18); } /* upside down */
   52%       { transform: translate(40px, -240px) rotate(-360deg) translate(0px, 240px) scale(1.12, 1.12); }
   58%       { transform: translate(40px, -240px) rotate(-360deg) translate(0px, 240px) scale(1.22, 1.02); } /* land */
-  66%, 100% { transform: translate(40px, -240px) rotate(-360deg) translate(0px, 240px) scale(1.12, 1.12); } /* ta-da */
+  66%, 100% { transform: translate(40px, -240px) rotate(-360deg) translate(0px, 240px) scale(1.12, 1.12); }
 }
 
-@keyframes finale-arm-l {
+/* Shared arm timing for the cartwheel and backflip: tucked up in the air, then ta-da. */
+@keyframes stunt-arm-l {
   0%, 22%   { transform: rotate(0deg); }
-  30%, 52%  { transform: rotate(165deg); }   /* arms tucked up for the flip */
+  30%, 52%  { transform: rotate(165deg); }
   58%       { transform: rotate(40deg); }
-  68%, 100% { transform: rotate(135deg); }   /* ta-da! */
+  68%, 100% { transform: rotate(135deg); }
 }
 
-@keyframes finale-arm-r {
+@keyframes stunt-arm-r {
   0%, 22%   { transform: rotate(0deg); }
   30%, 52%  { transform: rotate(-165deg); }
   58%       { transform: rotate(-40deg); }
   68%, 100% { transform: rotate(-135deg); }
 }
 
-@keyframes finale-head {
-  0%, 60%   { transform: rotate(0deg); }
-  70%, 100% { transform: rotate(7deg); }     /* proud little head tilt */
+/* stunt-backflip: jumps and flips over top-to-bottom (squashing to a sliver
+   and back, so it reads as turning over), then lands. This one scales around
+   the middle of her body: translate(x, y) rotate(r) scale(sx, sy) translate(0, 240px),
+   and y = -240 × sy keeps her feet on the floor. */
+.anim-stunt-backflip          { animation: backflip-body 4.4s ease-in-out both; }
+.anim-stunt-backflip .arm-l   { animation: stunt-arm-l 4.4s ease-in-out both; }
+.anim-stunt-backflip .arm-r   { animation: stunt-arm-r 4.4s ease-in-out both; }
+.anim-stunt-backflip .head    { animation: tada-head 4.4s ease-in-out both; }
+
+@keyframes backflip-body {
+  0%        { transform: translate(0px, -240px) rotate(0deg) scale(1, 1) translate(0px, 240px); }
+  16%       { transform: translate(40px, -269px) rotate(0deg) scale(1.12, 1.12) translate(0px, 240px); }
+  26%       { transform: translate(40px, -228px) rotate(0deg) scale(1.2, 0.95) translate(0px, 240px); }   /* crouch */
+  34%       { transform: translate(40px, -440px) rotate(0deg) scale(1.08, 0.4) translate(0px, 240px); }   /* turning over... */
+  42%       { transform: translate(40px, -480px) rotate(0deg) scale(1.1, -1.1) translate(0px, 240px); }   /* upside down */
+  50%       { transform: translate(40px, -410px) rotate(0deg) scale(1.08, 0.4) translate(0px, 240px); }   /* ...and back */
+  58%       { transform: translate(40px, -269px) rotate(0deg) scale(1.12, 1.12) translate(0px, 240px); }
+  62%       { transform: translate(40px, -240px) rotate(0deg) scale(1.22, 1) translate(0px, 240px); }     /* land */
+  68%, 100% { transform: translate(40px, -269px) rotate(0deg) scale(1.12, 1.12) translate(0px, 240px); }
 }
 
-/* finale-big (mother, 3+ tasks): out she comes with a pie, lifts the lid,
-   sets it down, then a DOUBLE backflip */
-.anim-finale-big {
-  animation: finale-big-body 7.2s ease-in-out both;
-}
-.anim-finale-big .arm-l {
-  animation: finale-big-arm-l 7.2s ease-in-out both;
-}
-.anim-finale-big .arm-r {
-  animation: finale-big-arm-r 7.2s ease-in-out both;
-}
-.anim-finale-big .head {
-  animation: finale-big-head 7.2s ease-in-out both;
-}
-.anim-finale-big .prop-dish {
-  animation: finale-big-dish 7.2s ease-in-out both;
-}
-.anim-finale-big .prop-lid {
-  animation: finale-big-lid 7.2s ease-in-out both;
-}
+/* stunt-rocket: crouch, rumble, BLAST OFF on blue flames, out of sight,
+   then drop back in and land */
+.anim-stunt-rocket              { animation: rocket-body 7s ease-in both; }
+.anim-stunt-rocket .arm-l       { animation: rocket-arm-l 7s ease-in-out both; }
+.anim-stunt-rocket .arm-r       { animation: rocket-arm-r 7s ease-in-out both; }
+.anim-stunt-rocket .head        { animation: tada-head 7s ease-in-out both; }
+.anim-stunt-rocket .prop-rocket { animation: rocket-flames 7s linear both; }
+.anim-stunt-rocket .flame       { animation: flame-flicker 0.14s ease-in-out infinite alternate; }
 
-@keyframes finale-big-body {
+@keyframes rocket-body {
   0%        { transform: translate(0px, -240px) rotate(0deg) translate(0px, 240px) scale(1, 1); }
-  10%, 42%  { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); } /* presenting the pie */
-  50%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.22, 1); }    /* crouch */
-  58%       { transform: translate(40px, -400px) rotate(-240deg) translate(0px, 240px) scale(1.08, 1.18); }
-  66%       { transform: translate(40px, -470px) rotate(-480deg) translate(0px, 240px) scale(1.08, 1.18); } /* higher! */
-  74%       { transform: translate(40px, -240px) rotate(-720deg) translate(0px, 240px) scale(1.12, 1.12); }
-  79%       { transform: translate(40px, -240px) rotate(-720deg) translate(0px, 240px) scale(1.24, 1); }    /* land */
-  86%, 100% { transform: translate(40px, -240px) rotate(-720deg) translate(0px, 240px) scale(1.12, 1.12); }
+  12%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
+  22%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.26, 0.94); }  /* crouch */
+  25%       { transform: translate(36px, -240px) rotate(0deg) translate(0px, 240px) scale(1.26, 0.94); }  /* rumble */
+  28%       { transform: translate(44px, -240px) rotate(0deg) translate(0px, 240px) scale(1.26, 0.94); }
+  31%       { transform: translate(38px, -240px) rotate(0deg) translate(0px, 240px) scale(1.26, 0.94); }
+  34%       { transform: translate(40px, -250px) rotate(0deg) translate(0px, 240px) scale(1.2, 1); }
+  44%       { transform: translate(40px, -1500px) rotate(0deg) translate(0px, 240px) scale(0.92, 1.32); } /* gone! */
+  62%       { transform: translate(40px, -1500px) rotate(0deg) translate(0px, 240px) scale(0.92, 1.32); }
+  74%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(0.94, 1.26); }  /* drops back in */
+  78%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.32, 0.84); }  /* SQUASH */
+  84%       { transform: translate(40px, -262px) rotate(0deg) translate(0px, 240px) scale(1.06, 1.18); }
+  90%, 100% { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
 }
 
-@keyframes finale-big-dish {
-  0%        { opacity: 0; transform: translateY(0) scale(1); }
-  4%        { opacity: 1; transform: translateY(0) scale(1); }
-  18%, 36%  { opacity: 1; transform: translateY(-14px) scale(1); }    /* lifts it up proudly */
-  44%       { opacity: 1; transform: translateY(170px) scale(0.9); }  /* sets it down */
-  47%, 100% { opacity: 0; transform: translateY(170px) scale(0.9); }
+@keyframes rocket-flames {
+  0%, 21%   { opacity: 0; }
+  22%, 58%  { opacity: 1; }
+  60%, 100% { opacity: 0; }
 }
 
-@keyframes finale-big-lid {
-  0%, 18%   { transform: translate(0, 0) rotate(0deg); }
-  24%, 34%  { transform: translate(18px, -30px) rotate(24deg); }   /* ta-da: pie! */
-  40%, 100% { transform: translate(0, 0) rotate(0deg); }
+@keyframes flame-flicker {
+  from { transform: scaleY(0.75); }
+  to   { transform: scaleY(1.15); }
 }
 
-@keyframes finale-big-arm-l {
-  0%, 46%   { transform: rotate(0deg); }
-  52%, 74%  { transform: rotate(165deg); }
+@keyframes rocket-arm-l {
+  0%, 30%   { transform: rotate(0deg); }
+  34%, 72%  { transform: rotate(-12deg); }   /* arms stiff at her sides */
   80%       { transform: rotate(40deg); }
-  88%, 100% { transform: rotate(135deg); }
+  90%, 100% { transform: rotate(135deg); }
 }
 
-@keyframes finale-big-arm-r {
-  0%, 18%   { transform: rotate(0deg); }
-  23%, 34%  { transform: rotate(-35deg); }   /* lifting the lid */
-  40%, 46%  { transform: rotate(0deg); }
-  52%, 74%  { transform: rotate(-165deg); }
+@keyframes rocket-arm-r {
+  0%, 30%   { transform: rotate(0deg); }
+  34%, 72%  { transform: rotate(-172deg); }  /* one fist up, superhero-style */
   80%       { transform: rotate(-40deg); }
-  88%, 100% { transform: rotate(-135deg); }
-}
-
-@keyframes finale-big-head {
-  0%, 18%   { transform: rotate(0deg); }
-  24%, 36%  { transform: rotate(-8deg); }    /* "look what I made" */
-  42%, 82%  { transform: rotate(0deg); }
-  90%, 100% { transform: rotate(7deg); }
+  90%, 100% { transform: rotate(-135deg); }
 }
 
 /* finale-exit: from the ta-da pose back behind the door */
-.anim-finale-exit {
-  animation: finale-exit-body 1.3s ease-in-out both;
-}
-.anim-finale-exit .arm-l {
-  animation: finale-exit-arm-l 1.3s ease-in-out both;
-}
-.anim-finale-exit .arm-r {
-  animation: finale-exit-arm-r 1.3s ease-in-out both;
-}
+.anim-finale-exit         { animation: finale-exit-body 1.3s ease-in-out both; }
+.anim-finale-exit .arm-l  { animation: finale-exit-arm-l 1.3s ease-in-out both; }
+.anim-finale-exit .arm-r  { animation: finale-exit-arm-r 1.3s ease-in-out both; }
 
 @keyframes finale-exit-body {
-  0%   { transform: translate(40px, -240px) rotate(-360deg) translate(0px, 240px) scale(1.12, 1.12); }
-  100% { transform: translate(0px, -240px) rotate(-360deg) translate(0px, 240px) scale(1, 1); }
+  0%   { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
+  100% { transform: translate(0px, -240px) rotate(0deg) translate(0px, 240px) scale(1, 1); }
 }
 
 @keyframes finale-exit-arm-l {

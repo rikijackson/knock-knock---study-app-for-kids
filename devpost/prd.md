@@ -23,7 +23,7 @@ Source: `scope.md > The Core Loop`, `scope.md > What "Working" Looks Like`.
 4. **Studying:** the door slides to the left and shuts. A huge clock fills the right-center of the screen, with your session's tasks below it.
 5. **Check-ins:** when a check-in is due, the door **creaks** open and the character comes out with one of several animations, never the same one twice in a row. For example, they lean forward with their eyes darting left and right, give a slow nod, and sneak back in. Or they lean out and stare at you. A speech bubble says something like "Are you sure you're studying?" Then they go back inside.
 6. **Ending:** the timer hits zero, or you end the stopwatch session. You're asked which of your session's tasks you finished.
-7. **The finale:** the door opens and the character comes **fully out** with their signature funny move, like mom doing a backflip or bringing out a dish she's been making in the kitchen. They give a short, varied summary: "I checked on you 3 times, you studied 45 minutes, you finished 2 tasks." If you finished no tasks, the task line is skipped and they praise your focus instead. 3+ tasks finished gets a more enthusiastic version.
+7. **The finale:** the door opens and the character comes **fully out** with their signature funny move, like mom doing a backflip or bringing out a dish she's been making in the kitchen. They give a short, varied summary: "I checked on you 3 times, you studied 45 minutes, you finished 2 tasks." If you finished no tasks, the task line is skipped and they praise your focus instead. **How big the finale is depends on how long you studied** *(changed during the build)*: under 40 minutes, a short proud moment; 40 minutes to 2 hours, she brings out a dish (a different one each time); 2 hours or more, a stunt (a different one each time).
 8. **Rewards:** you earn coins (1 per minute studied). Spend them in the marketplace to unlock characters.
 9. **Progress:** the stats panel shows a heat map of hours studied per day, plus simple numbers.
 
@@ -38,7 +38,7 @@ There is one main page, plus pop-up panels that open inside the page.
 - **Speech bubbles** carry all character dialogue and questions, with buttons for answers (Yes/No, character choice, etc.).
 
 ## Look and Feel
-- **Colors:** cool only, meaning blues and whites. **No yellow, orange or warm colors.**
+- **Colors:** the overall theme is cool, dark blue, meaning blues and whites, with **no yellow, orange or warm colors in the interface**. Things in the scene can use natural colors: skin, food, a wooden spoon. *(Clarified by the learner during the build.)*
 - **Modes:** light and dark mode (dark mode is a must).
 - **Style:** minimalistic, but interactive and eye-catching. Very little on screen at once, and the door is the star.
 - **Art reference:** the Netflix show *Carmen Sandiego*. Animated, shaded cartoon style with bold, clean shapes. Characters and the door should take inspiration from that look, in cool colors.
@@ -59,6 +59,7 @@ There is one main page, plus pop-up panels that open inside the page.
 - [ ] **Yes** asks who should check on you and shows **all three characters**. Locked ones are visibly locked and can't be chosen.
 - [ ] The chosen character peeks out and asks, in order: timer or stopwatch; check-in frequency; which tasks for this session; then "Are you sure you'd like to start?"
 - [ ] Timer mode lets you set a session length.
+- [ ] Every setup question after the first has a **← Back** button that returns to the previous question, keeping your answers. *(Added during the build at the learner's request.)*
 
 ### Check-In Frequency
 - [ ] **Fixed:** choose a number of minutes between check-ins. Very short options exist so it can be shown in the demo.
@@ -69,22 +70,32 @@ There is one main page, plus pop-up panels that open inside the page.
 - [ ] Stopwatch counts **up** from 0:00. Timer counts **down** from the chosen length.
 - [ ] The tasks chosen for this session are listed below the clock, each with a tickbox. Ticking one marks it done right away. *(Added during the build at the learner's request.)*
 
+### Door Pranks
+- [ ] Clicking the door while studying makes it creak open onto darkness (nobody there), then slam shut with a bang. It never interrupts a check-in. *(Added during the build at the learner's request.)*
+
+### Settings and Sounds
+- [ ] A settings button in the top-right corner opens a panel with a **sound effects on/off** switch, remembered between visits. *(Added during the build at the learner's request.)*
+- [ ] Buttons make a soft click sound (made in the browser, no file needed). *(Added during the build.)*
+
 ### Breaks
 Source: `scope.md > The POC Boundary`.
 - [ ] A break button pauses the session so you can get water or food. The clock stops and no check-ins happen during a break.
 - [ ] Resuming continues the clock where it left off.
+- [ ] **During a break she comes out and waits** *(added during the build at the learner's request)*: she looks around and whistles, with a quick glance at her watch now and then. As the break goes on she gets **annoyed** (at 25% of the break limit), **angry** (50%) and **furious** (80%), with nagging lines. At the **break limit** (Settings, default 1 hour) she storms in, **slams the door and ends the session**: no finale, but studied minutes still earn coins. A small **break timer** above the clock shows how long the break has been, against the limit.
+- [ ] Settings also has **Longest break** (15 min – 2 hours).
 
 ### Character Check-Ins
 - [ ] At each check-in, a door creak plays, the door opens, and the character appears.
 - [ ] Each character has **several** check-in animations (e.g. peek-and-retreat; lean, eyes darting, slow nod, sneak back; lean and stare). The same one never plays twice in a row.
 - [ ] A short speech bubble line appears (e.g. "Are you sure you're studying?") and varies between check-ins.
+- [ ] **The longer you study, the happier she is** *(added during the build)*: suspicious at first, pleased after 20 minutes (a smile, warmer lines), delighted after 1 hour (a big grin). At the finale she's pleased (proud hop), delighted (dish) or over the moon (stunt).
 - [ ] The character returns behind the door and the session continues. No input is needed from the student.
 
 ### Session End and Finale
 - [ ] The session ends when the timer reaches zero, or when you press end (stopwatch).
 - [ ] You're asked which session tasks you completed, with any already ticked during the session pre-ticked. Completed ones are checked off in your to-do list.
-- [ ] The character comes fully out of the door and does their **signature funny animation** (e.g. mom does a backflip or brings out a dish).
-- [ ] With **3+ tasks** completed, a more enthusiastic version plays.
+- [ ] The character comes fully out of the door, with the door fully open.
+- [ ] The finale depends on study time: **under 15 min** she's unimpressed (head shake, no praise, "let's aim for longer next time"); **15–40 min** a short proud moment; **40 min – 2 h** a dish (mother: blueberry pie, cake or cookies, picked at random); **2 h or more** a stunt (mother: cartwheel, backflip or rocket, picked at random). Demo mode shrinks these thresholds so they fit in a short video. *(Changed during the build, replacing the 3+ tasks rule: the learner wants the reward tied to time studied.)*
 - [ ] The summary speech bubble shows the number of check-ins, minutes studied, and tasks completed. The task line is skipped if none were completed. The wording varies between sessions.
 - [ ] Coins earned are shown and added to your balance.
 
@@ -109,8 +120,8 @@ Source: `scope.md > The POC Boundary`.
 ## Characters
 | Character | Status in this version | Animations needed |
 |---|---|---|
-| Mother | Free, owned from start | Peek, several check-ins, signature finale + enthusiastic finale |
-| Soldier | Unlockable, unlocked in the demo | Peek, several check-ins, signature finale + enthusiastic finale |
+| Mother | Free, owned from start | Peek, several check-ins, three finale tiers (proud moment, 3 dishes, 3 stunts) |
+| Soldier | Unlockable, unlocked in the demo | Peek, several check-ins, three finale tiers (his versions decided in the build) |
 | Father | Shown, locked | None. Never unlocked in this version. |
 
 ## States and Boundaries

@@ -11,9 +11,14 @@ export const CHARACTERS = [
     svg: motherSvg,
     // look-around, peek and stare are shared; mother-spoon is hers alone.
     checkIns: ['look-around', 'peek', 'stare', 'mother-spoon'],
-    // Signature finale: a backflip. With 3+ tasks done: a pie first, then a double.
-    finale: 'finale',
-    finaleBig: 'finale-big',
+    // Finales by study time: a proud moment, a dish, or a stunt.
+    finales: {
+      meh: 'finale-meh',
+      proud: 'finale-proud',
+      dish: 'finale-dish',
+      foods: ['pie', 'cake', 'cookies'],
+      stunts: ['stunt-cartwheel', 'stunt-backflip', 'stunt-rocket'],
+    },
   },
 ];
 

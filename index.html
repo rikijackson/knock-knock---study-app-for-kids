@@ -29,12 +29,21 @@
     </div>
   </nav>
 
+  <!-- Settings, top-right corner -->
+  <button type="button" class="settings-btn" data-panel="settings-panel" aria-label="Settings">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="3.2"/>
+      <path d="M12 2.8l1.6 2.3 2.7-.6.7 2.7 2.6 1-.9 2.6 1.9 2-1.9 2 .9 2.6-2.6 1-.7 2.7-2.7-.6L12 21.2l-1.6-2.3-2.7.6-.7-2.7-2.6-1 .9-2.6-1.9-2 1.9-2-.9-2.6 2.6-1 .7-2.7 2.7.6z"/>
+    </svg>
+  </button>
+
   <main class="app">
     <!-- The door scene is drawn into here by js/door.js -->
     <div id="stage" class="stage"></div>
 
     <!-- The study screen: shown while a session runs -->
     <section class="study" aria-label="Study session">
+      <div id="break-clock" class="break-clock" aria-live="off"></div>
       <div id="clock" class="clock" role="timer">0:00</div>
       <p id="study-status" class="study-status" aria-live="polite"></p>
       <div class="study-buttons">
@@ -59,6 +68,27 @@
     </form>
     <p id="task-empty" class="panel-empty">Nothing here yet. Add your first task above.</p>
     <ul id="task-list" class="task-list"></ul>
+  </section>
+
+  <section id="settings-panel" class="panel" role="dialog" aria-labelledby="settings-title" hidden>
+    <header class="panel-head">
+      <h2 id="settings-title">Settings</h2>
+      <button type="button" class="panel-close" aria-label="Close">×</button>
+    </header>
+    <label class="setting">
+      <span>
+        <strong>Sound effects</strong>
+        <small>Knocks, creaks, slams and button clicks</small>
+      </span>
+      <input type="checkbox" id="sound-toggle" class="switch" role="switch">
+    </label>
+    <label class="setting">
+      <span>
+        <strong>Longest break</strong>
+        <small>Mom gets crosser as a break goes on, and ends the session at this point</small>
+      </span>
+      <select id="break-limit" class="setting-select"></select>
+    </label>
   </section>
 
   <script type="module" src="js/main.js"></script>

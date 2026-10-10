@@ -1,6 +1,6 @@
 // Loads and saves everything you keep between visits, in the browser's
 // localStorage under one key. A session in progress is never saved.
-import { STARTING_COINS } from './config.js';
+import { STARTING_COINS, DEFAULT_BREAK_LIMIT_MIN } from './config.js';
 
 const KEY = 'studyCheckIn.save';
 
@@ -8,6 +8,8 @@ function defaultSave() {
   return {
     introSeen: false,
     theme: 'auto',
+    soundOn: true,
+    breakLimitMin: DEFAULT_BREAK_LIMIT_MIN,
     coins: STARTING_COINS,
     owned: ['mother'],
     tasks: [],

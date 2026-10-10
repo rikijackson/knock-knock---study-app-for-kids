@@ -23,16 +23,37 @@ const TAIL = `<svg class="bubble-tail" viewBox="0 0 30 22" aria-hidden="true">
   <path class="bubble-tail-line" d="M28 1 L2 21 L9 1"/>
 </svg>`;
 
-// Put the bubble so its tail tip lands on the anchor point.
+// Put the bubble so its tail tip lands on the anchor point, but always
+// inside the window: if there's no room above, it flips below the speaker,
+// and if it would run off an edge it slides back in (the tail slides too,
+// so it still points at the speaker).
+const MARGIN = 10;
 function position() {
   const tip = getAnchor();
   if (!tip) return;
   const box = stage.getBoundingClientRect();
   const scale = box.width / stage.offsetWidth;   // the stage shrinks while studying
-  const x = (tip.x - box.left) / scale;
-  const y = (tip.y - box.top) / scale;
-  bubble.style.left = `${x + 2}px`;
-  bubble.style.top = `${y - bubble.offsetHeight - 18}px`;
+  const w = bubble.offsetWidth * scale;
+  const h = bubble.offsetHeight * scale;
+
+  // Work in window pixels first.
+  let left = tip.x + 2 * scale;
+  let top = tip.y - h - 18 * scale;
+  const below = top < MARGIN;
+  if (below) top = tip.y + 18 * scale;
+  left = Math.min(left, window.innerWidth - w - MARGIN);
+  left = Math.max(left, MARGIN);
+  top = Math.min(top, window.innerHeight - h - MARGIN);
+
+  // The tail's tip sits 2px left of the tail box; keep it on the bubble's edge.
+  const tailX = (tip.x - left) / scale - 2;
+  const maxTail = bubble.offsetWidth - 34;
+  bubble.style.setProperty('--tail-x', `${Math.min(Math.max(tailX, -4), maxTail)}px`);
+  bubble.classList.toggle('is-below', below);
+
+  // Then into the stage's own (possibly shrunk) coordinates.
+  bubble.style.left = `${(left - box.left) / scale}px`;
+  bubble.style.top = `${(top - box.top) / scale}px`;
 }
 
 function follow() {
@@ -65,10 +86,23 @@ export function hideBubble() {
   following = false;
 }
 
+// What a question resolves with when "← Back" is pressed.
+export const BACK = Symbol('back');
+
+function backButton(onBack) {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'choice choice-back';
+  btn.textContent = '← Back';
+  btn.addEventListener('click', e => { e.stopPropagation(); onBack(); });
+  return btn;
+}
+
 // Ask a question. Each choice is { label, value, disabled?, note?, input? }.
 // A choice with `input: { min, max, unit }` asks for a number instead,
-// and resolves with that number.
-export function ask(text, choices) {
+// and resolves with that number. With { back: true } there's a "← Back"
+// button, which resolves with BACK.
+export function ask(text, choices, { back = false } = {}) {
   show(text);
   return new Promise(resolve => {
     const row = document.createElement('div');
@@ -79,37 +113,43 @@ export function ask(text, choices) {
       resolve(value);
     };
 
-    for (const choice of choices) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'choice';
-      btn.textContent = choice.label;
-      if (choice.note) {
-        const note = document.createElement('span');
-        note.className = 'choice-note';
-        note.textContent = choice.note;
-        btn.append(note);
+    // Draw the answer buttons (again, when coming back from a number box).
+    const showChoices = () => {
+      row.innerHTML = '';
+      for (const choice of choices) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'choice';
+        btn.textContent = choice.label;
+        if (choice.note) {
+          const note = document.createElement('span');
+          note.className = 'choice-note';
+          note.textContent = choice.note;
+          btn.append(note);
+        }
+        if (choice.disabled) {
+          btn.disabled = true;
+          btn.classList.add('is-locked');
+        }
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          if (choice.input) askNumber(row, choice.input, finish, showChoices);
+          else finish(choice.value);
+        });
+        row.append(btn);
       }
-      if (choice.disabled) {
-        btn.disabled = true;
-        btn.classList.add('is-locked');
-      }
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        if (choice.input) askNumber(row, choice.input, finish);
-        else finish(choice.value);
-      });
-      row.append(btn);
-    }
+      if (back) row.append(backButton(() => finish(BACK)));
+      position();
+      row.querySelector('button:not(:disabled)')?.focus();
+    };
 
     bubble.append(row);
-    position();
-    row.querySelector('button:not(:disabled)')?.focus();
+    showChoices();
   });
 }
 
-// Swap the buttons for a number box + OK.
-function askNumber(row, { min = 1, max = 600, unit = 'min' }, finish) {
+// Swap the buttons for a number box + OK; "← Back" returns to the buttons.
+function askNumber(row, { min = 1, max = 600, unit = 'min' }, finish, showChoices) {
   row.innerHTML = '';
   const form = document.createElement('form');
   form.className = 'bubble-number';
@@ -124,19 +164,21 @@ function askNumber(row, { min = 1, max = 600, unit = 'min' }, finish) {
     if (value >= min && value <= max) finish(value);
   });
   row.append(form);
+  row.append(backButton(showChoices));
   position();
   form.querySelector('input').focus();
 }
 
 // Ask with a checklist: tick any of `items` ({ id, text, checked? }).
-// options: { allowAdd, confirmLabel, skipLabel, emptyText }
-// Resolves with { ids: [...ticked ids], added: [...new texts] }.
+// options: { allowAdd, confirmLabel, skipLabel, emptyText, back }
+// Resolves with { ids: [...ticked ids], added: [...new texts] }, or BACK.
 export function askChecklist(text, items, options = {}) {
   const {
     allowAdd = false,
     confirmLabel = 'OK',
     skipLabel = null,
     emptyText = '',
+    back = false,
   } = options;
   show(text);
 
@@ -212,6 +254,7 @@ export function askChecklist(text, items, options = {}) {
       skip.addEventListener('click', e => { e.stopPropagation(); finish(true); });
       row.append(skip);
     }
+    if (back) row.append(backButton(() => { hideBubble(); resolve(BACK); }));
     box.append(row);
 
     bubble.append(box);

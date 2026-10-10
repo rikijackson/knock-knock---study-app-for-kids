@@ -27,7 +27,7 @@ PRD ref: `prd.md > The Core Journey`.
 6. **Check-in.** When study time passes that value, `checkins.js` asks `animations.js` to play a check-in. It picks one of the character's check-in animations (never the same one twice in a row), plays the creak, shows a random line from `messages.js`, then schedules the next check-in (fixed gap, or a new random gap).
 7. **Break.** Pressing Break stops counting study time. Because check-ins are scheduled by *study* time, none can happen during a break. Resume carries on.
 8. **End.** The timer reaches 0, or you press End. `dialogue.js` asks which tasks you finished. `tasks.js` marks them done.
-9. **Finale.** `finale.js` picks the normal or enthusiastic (3+ tasks) finale animation and builds a varied summary from the check-in count, minutes and tasks.
+9. **Finale.** `finale.js` picks the finale tier from minutes studied (under 15 min: unimpressed; 15–40 min: proud; 40 min–2 h: a random dish; 2 h+: a random stunt), moves the character in front of the fully open door, and builds a varied summary from the check-in count, minutes and tasks.
 10. **Rewards and history.** Coins (1 per whole minute studied) are added. Today's minutes are added to the history. Everything is saved. The door comes back to the center.
 11. **Panels.** Stats, Tasks and Marketplace open as pop-ups on the same page, reading from and writing to the same save.
 
@@ -59,7 +59,7 @@ PRD ref: `prd.md > The Core Journey`.
 ## Look and Feel
 Carries forward `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
 
-- **Palette:** cool colors only. Defined once as CSS variables in `base.css`, with a light set and a dark set. **No yellow, orange or warm tones**, with one exception chosen by the learner during the look test: **character skin uses natural skin tones**, not blue. Clothes and hair stay cool.
+- **Palette:** the overall theme is cool, dark blue: the page, door, panels, buttons and the characters' clothes and hair, defined once as CSS variables in `base.css`, with a light set and a dark set. **Things inside the scene can use their natural colors** (learner clarification during the build): skin tones, food, a wooden spoon. No warm colors in the interface itself.
   - Light: near-white background `#f4f8fc`, ink `#14213d`, primary blue `#2f6fdd`, pale blue `#dce8fa`, teal accent `#1b8a9a`.
   - Dark: deep navy background `#0d1424`, ink `#e6edf8`, blue `#6a9df5`, slate `#1a2540`, teal `#4fc2d0`.
   - Heat-map scale: 5 steps from pale to deep blue.
@@ -86,7 +86,7 @@ PRD ref: `prd.md > Starting a Session`, `prd.md > Session End and Finale`.
 
 ### Characters
 `js/characters/index.js` holds the list of characters, each with an `id`, name, price, whether it's free, its SVG and its animation names. One file per character draws its SVG:
-- `mother.js`: free. Signature finale: backflip. Enthusiastic finale: comes out with a dish, then backflips.
+- `mother.js`: free. Finales: a proud moment; a covered dish revealing blueberry pie, cake or cookies; a stunt: cartwheel, backflip or rocket.
 - `soldier.js`: price 100. Signature finale decided during the build (open question carried from the PRD).
 - `father.js`: price 200. Only a dark locked silhouette in this version, with no animations.
 
@@ -97,7 +97,8 @@ PRD ref: `prd.md > Characters`, `prd.md > Character Check-Ins`.
 `js/animations.js`, `css/characters.css`. Plays a named animation on a character by adding a CSS class, waits for it to finish (`animationend`), then removes it. Remembers the last check-in played so it never repeats twice in a row.
 Planned animations:
 - **Shared check-ins:** `peek` (peek and retreat), `look-around` (lean, eyes dart left and right, slow nod, sneak back), `stare` (lean out and hold a stare).
-- **Per character:** one signature check-in, `finale`, `finale-big`.
+- **Per character:** one signature check-in, plus finales in three tiers by study time (proud / dish / stunt).
+- **Moods:** CSS classes on the character (`mood-pleased`, `mood-delighted`, `mood-ecstatic`) swap the brows, mouth, a happy lower-eyelid squint and blush. Check-ins pick the mood from study time so far (thresholds in `config.js`); finales pick it from the tier.
 PRD ref: `prd.md > Character Check-Ins`, `prd.md > Session End and Finale`.
 
 ### Session and Clock
@@ -113,7 +114,7 @@ PRD ref: `prd.md > Check-In Frequency`, `prd.md > Character Check-Ins`.
 PRD ref: `prd.md > Character Check-Ins`, `prd.md > Session End and Finale`.
 
 ### Finale
-`js/finale.js`. After the task question, it picks `finale` or `finale-big` (3+ tasks), builds the summary text ("I checked on you 3 times, you studied 45 minutes, you finished 2 tasks," skipping the task part if 0), awards coins and records history.
+`js/finale.js`. After the task question, it picks a finale by minutes studied (thresholds in `config.js`, shrunk in demo mode), builds the summary text ("I checked on you 3 times, you studied 45 minutes, you finished 2 tasks," skipping the task part if 0), awards coins and records history.
 PRD ref: `prd.md > Session End and Finale`.
 
 ### Tasks Panel

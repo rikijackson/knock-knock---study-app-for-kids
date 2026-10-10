@@ -2,10 +2,13 @@
 // Break/Resume and End. Nothing here is saved, so closing the page
 // mid-session loses it (on purpose).
 import { nextGapMs } from './checkins.js';
+import { getSave } from './storage.js';
+import { BREAK_UNIT_MS } from './config.js';
 
 const MINUTE = 60 * 1000;
 
 const clockEl = document.getElementById('clock');
+const breakClockEl = document.getElementById('break-clock');
 const statusEl = document.getElementById('study-status');
 const breakBtn = document.getElementById('break-btn');
 const endBtn = document.getElementById('end-btn');
@@ -19,9 +22,10 @@ function format(ms) {
 }
 
 // settings: { characterId, mode, lengthMin, frequency }
-// onCheckIn(session) is awaited; returns a promise that resolves with the
-// finished session when the timer runs out or End is pressed.
-export function runSession(settings, onCheckIn) {
+// onCheckIn(session) is awaited; onBreak(true/false) is called when a break
+// starts or ends. Returns a promise that resolves with the finished session
+// when the timer runs out or End is pressed.
+export function runSession(settings, onCheckIn, onBreak = () => {}) {
   const session = {
     ...settings,
     studiedMs: 0,              // study time banked before the current stretch
@@ -40,19 +44,26 @@ export function runSession(settings, onCheckIn) {
   let ended = false;
 
   return new Promise(resolve => {
+    let breakStartedAt = null;
+
     const render = () => {
       const ms = session.mode === 'timer' ? session.lengthMin * MINUTE - studied() : studied();
       clockEl.textContent = format(ms);
+      // The small break timer above the big clock, with your break limit.
+      breakClockEl.textContent = breakStartedAt
+        ? `Break ${format(Date.now() - breakStartedAt)} / ${format(getSave().breakLimitMin * BREAK_UNIT_MS)}`
+        : '';
     };
 
     const finish = () => {
       if (ended) return;
       ended = true;
       clearInterval(ticker);
-      breakBtn.removeEventListener('click', onBreak);
+      breakBtn.removeEventListener('click', onBreakClick);
       endBtn.removeEventListener('click', onEnd);
       session.studiedMs = studied();
       session.runningSince = null;
+      breakStartedAt = null;
       if (session.mode === 'timer') {
         session.studiedMs = Math.min(session.studiedMs, session.lengthMin * MINUTE);
       }
@@ -72,24 +83,33 @@ export function runSession(settings, onCheckIn) {
         session.checkInCount += 1;
         checkIn = onCheckIn(session);
         await checkIn;
-        // Schedule from when this one finished, so they never pile up.
-        session.nextCheckInAtMs = studied() + nextGapMs(session.frequency);
+        // Schedule from when this one was due, so "every 1 min" lands on
+        // 1:00, 2:00, 3:00... (never sooner than a few seconds from now,
+        // so check-ins can't pile up back to back).
+        session.nextCheckInAtMs = Math.max(
+          session.nextCheckInAtMs + nextGapMs(session.frequency),
+          studied() + 5000,
+        );
         checkIn = null;
       }
     };
 
-    const onBreak = () => {
+    const onBreakClick = () => {
       if (session.runningSince) {
         session.studiedMs = studied();
         session.runningSince = null;
+        breakStartedAt = Date.now();
         breakBtn.textContent = 'Resume';
         statusEl.textContent = 'On a break. No check-ins.';
         document.body.classList.add('is-on-break');
+        onBreak(true);
       } else {
         session.runningSince = Date.now();
+        breakStartedAt = null;
         breakBtn.textContent = 'Break';
         statusEl.textContent = '';
         document.body.classList.remove('is-on-break');
+        onBreak(false);
       }
       render();
     };
@@ -99,7 +119,7 @@ export function runSession(settings, onCheckIn) {
     breakBtn.textContent = 'Break';
     statusEl.textContent = '';
     document.body.classList.remove('is-on-break');
-    breakBtn.addEventListener('click', onBreak);
+    breakBtn.addEventListener('click', onBreakClick);
     endBtn.addEventListener('click', onEnd);
     const ticker = setInterval(tick, 250);
     render();
@@ -107,3 +127,7 @@ export function runSession(settings, onCheckIn) {
 }
 
 export const minutesStudied = session => Math.floor(session.studiedMs / MINUTE);
+
+// Study time so far, including the stretch that's running right now.
+export const studiedNowMs = session =>
+  session.studiedMs + (session.runningSince ? Date.now() - session.runningSince : 0);

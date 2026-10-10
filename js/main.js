@@ -2,17 +2,17 @@
 // knock → start? → pick a character → setup questions → study → end.
 import { createDoor } from './door.js';
 import { CHARACTERS, getCharacter } from './characters/index.js';
-import { stepOut, stepIn } from './animations.js';
-import { initDialogue, ask, askChecklist, say, hideBubble } from './dialogue.js';
+import { stepOut, stepIn, setMood } from './animations.js';
+import { initDialogue, ask, askChecklist, say, hideBubble, BACK } from './dialogue.js';
 import { runSession } from './session.js';
 import { runCheckIn } from './checkins.js';
-import { runFinale } from './finale.js';
+import { runFinale, recordSession } from './finale.js';
 import { addTask, getTask, openTasks, setDone } from './tasks.js';
 import { getSave } from './storage.js';
 import { closePanels } from './ui.js';
 import { DOOR_LINES, LINES, pick } from './messages.js';
 import { playSound } from './sound.js';
-import { TIMER_LENGTHS, FIXED_INTERVALS } from './config.js';
+import { TIMER_LENGTHS, FIXED_INTERVALS, BREAK_UNIT_MS, ANGER_STAGES } from './config.js';
 
 const app = document.querySelector('.app');
 const sessionTasksEl = document.getElementById('session-tasks');
@@ -37,6 +37,11 @@ function speakerPoint() {
 
 let busy = false;
 door.onKnock(async () => {
+  // Clicking the door while studying: it creaks open onto darkness... BANG.
+  if (app.classList.contains('is-studying')) {
+    if (!doorAction && !onBreak) useDoor(darkPeek);
+    return;
+  }
   if (busy) return;
   busy = true;
   try {
@@ -46,10 +51,117 @@ door.onKnock(async () => {
   }
 });
 
+// Only one thing uses the door at a time while studying (a check-in or the
+// dark peek); whatever comes next waits its turn.
+let doorAction = null;
+async function useDoor(action) {
+  while (doorAction) await doorAction;
+  doorAction = action();
+  try {
+    await doorAction;
+  } finally {
+    doorAction = null;
+  }
+}
+
+// Breaks: she steps out and waits (looking around, whistling, glancing at
+// her watch). The longer the break, the crosser she gets; at the limit you
+// set in Settings she slams the door and ends the session. Resume sends her
+// back in.
+let onBreak = false;
+let breakTimer = null;
+let slammedShut = false;   // the session was ended by her, mid-break
+
+function startBreak(character) {
+  onBreak = true;
+  const lines = LINES[character.id];
+  const startedAt = Date.now();
+  const limitMs = getSave().breakLimitMin * BREAK_UNIT_MS;
+  const nagEveryMs = limitMs / 12;   // e.g. every 5 minutes with a 1-hour limit
+  let stage = 'calm';
+  let lastNagAt = 0;
+
+  breakTimer = setInterval(() => {
+    const elapsed = Date.now() - startedAt;
+    if (elapsed >= limitMs) {
+      clearInterval(breakTimer);
+      slamAndEnd(character);
+      return;
+    }
+    const current = ANGER_STAGES.find(s => elapsed >= s.from * limitMs)?.mood ?? 'calm';
+    if (current === 'calm') return;
+    if (current !== stage || Date.now() - lastNagAt >= nagEveryMs) {
+      if (current !== stage && door.characterEl) setMood(door.characterEl, current);
+      stage = current;
+      lastNagAt = Date.now();
+      say(pick(lines.breakNag[current]));
+      setTimeout(hideBubble, 4000);
+    }
+  }, 1000);
+
+  return useDoor(async () => {
+    const el = door.characterEl;
+    playSound('creak');
+    await door.open('ajar');
+    await stepOut(el);
+    el.classList.add('anim-wait');
+    say(pick(lines.breakStart));
+    await wait(2600);
+    hideBubble();
+  });
+}
+
+function endBreak(character, { sessionOver = false } = {}) {
+  onBreak = false;
+  clearInterval(breakTimer);
+  return useDoor(async () => {
+    const el = door.characterEl;
+    el.classList.remove('anim-wait');   // back to her plain "out" pose first...
+    setMood(el, 'suspicious');
+    const lines = LINES[character.id];
+    say(pick(sessionOver ? lines.breakOver : lines.breakEnd));
+    await wait(1500);
+    hideBubble();
+    await stepIn(el);                   // ...then glide back in
+    await door.close();
+  });
+}
+
+// The break went on too long: she storms back in, SLAMS the door,
+// and the session is over.
+async function slamAndEnd(character) {
+  onBreak = false;
+  slammedShut = true;
+  await useDoor(async () => {
+    const el = door.characterEl;
+    say(pick(LINES[character.id].breakLimit));
+    await wait(2400);
+    hideBubble();
+    el.classList.remove('anim-wait');   // stops shaking, and glares...
+    await wait(500);
+    await stepIn(el);                   // ...storms back in...
+    await door.slam({ angry: true });   // ...SLAM, and the whole screen shakes.
+    setMood(el, 'suspicious');
+  });
+  document.getElementById('end-btn').click();   // ends the session
+}
+
+async function darkPeek() {
+  const el = door.characterEl;
+  if (el) el.style.visibility = 'hidden';   // nobody there... apparently
+  playSound('creak');
+  await door.open('ajar');
+  await wait(1100);
+  await door.slam();
+  if (el) el.style.visibility = '';
+}
+
 async function knock() {
   closePanels();
   playSound('knock');
   door.setCharacter(null);   // just darkness behind the door
+  await wait(1000);          // let the knock finish, then...
+  playSound('creak');
   await door.open('ajar');
 
   const start = await ask(DOOR_LINES.start, [
@@ -57,7 +169,6 @@ async function knock() {
     { label: 'No', value: false },
   ]);
   if (!start) {
-    playSound('bang');
     await door.slam();
     return;
   }
@@ -90,37 +201,28 @@ async function setUp(character) {
   say(pick(lines.hello));
   await wait(1600);
 
-  const mode = await ask(lines.mode, [
-    { label: 'Timer', note: 'counts down', value: 'timer' },
-    { label: 'Stopwatch', note: 'counts up', value: 'stopwatch' },
-  ]);
-
-  let lengthMin = null;
-  if (mode === 'timer') {
-    lengthMin = await ask(lines.length, [
-      ...TIMER_LENGTHS.map(m => ({ label: `${m} min`, value: m })),
-      { label: 'Other…', input: { min: 1, max: 600 } },
-    ]);
+  // The questions, in order. "← Back" returns to the one before, keeping
+  // your earlier answers; the timer-length question only applies to timers.
+  const steps = ['mode', 'length', 'frequency', 'tasks', 'confirm'];
+  const answers = { tasks: [] };   // task ids picked for this session
+  const applies = step => step !== 'length' || answers.mode === 'timer';
+  let i = 0;
+  while (i < steps.length) {
+    const step = steps[i];
+    if (!applies(step)) { i += 1; continue; }
+    const answer = await askStep(step, lines, answers, { back: i > 0 });
+    if (answer === BACK) {
+      do { i -= 1; } while (i > 0 && !applies(steps[i]));
+      continue;
+    }
+    answers[step] = answer;
+    i += 1;
   }
 
-  const frequency = await ask(lines.frequency, [
-    ...FIXED_INTERVALS.map(m => ({ label: `Every ${m} min`, value: { type: 'fixed', minutes: m } })),
-    { label: 'Random', note: 'surprise!', value: { type: 'random' } },
-    { label: 'Other…', input: { min: 1, max: 240 } },
-  ]);
-
-  const open = openTasks();
-  const picked = await askChecklist(open.length ? lines.tasks : lines.noTasksYet, open, {
-    allowAdd: true,
-    confirmLabel: 'These ones',
-    skipLabel: 'No tasks',
-  });
-  const taskIds = [...picked.ids, ...picked.added.map(text => addTask(text).id)];
-
-  const sure = await ask(lines.confirm, [
-    { label: 'Yes, let\'s go', value: true },
-    { label: 'Wait, no', value: false },
-  ]);
+  const { mode, frequency } = answers;
+  const taskIds = answers.tasks;
+  const lengthMin = mode === 'timer' ? answers.length : null;
+  const sure = answers.confirm;
 
   say(pick(sure ? lines.go : lines.cancel));
   await wait(1400);
@@ -139,15 +241,70 @@ async function setUp(character) {
   };
 }
 
+// One setup question. Returns the answer, or BACK.
+async function askStep(step, lines, answers, { back }) {
+  if (step === 'mode') {
+    return ask(lines.mode, [
+      { label: 'Timer', note: 'counts down', value: 'timer' },
+      { label: 'Stopwatch', note: 'counts up', value: 'stopwatch' },
+    ], { back });
+  }
+  if (step === 'length') {
+    return ask(lines.length, [
+      ...TIMER_LENGTHS.map(m => ({ label: `${m} min`, value: m })),
+      { label: 'Other…', input: { min: 1, max: 600 } },
+    ], { back });
+  }
+  if (step === 'frequency') {
+    return ask(lines.frequency, [
+      ...FIXED_INTERVALS.map(m => ({ label: `Every ${m} min`, value: { type: 'fixed', minutes: m } })),
+      { label: 'Random', note: 'surprise!', value: { type: 'random' } },
+      { label: 'Other…', input: { min: 1, max: 240 } },
+    ], { back });
+  }
+  if (step === 'tasks') {
+    // Tasks you picked before going back come back ticked.
+    const open = openTasks().map(t => ({ ...t, checked: answers.tasks.includes(t.id) }));
+    const picked = await askChecklist(open.length ? lines.tasks : lines.noTasksYet, open, {
+      allowAdd: true,
+      confirmLabel: 'These ones',
+      skipLabel: 'No tasks',
+      back,
+    });
+    if (picked === BACK) return BACK;
+    return [...picked.ids, ...picked.added.map(text => addTask(text).id)];
+  }
+  // confirm
+  return ask(lines.confirm, [
+    { label: "Yes, let's go", value: true },
+    { label: 'Wait, no', value: false },
+  ], { back });
+}
+
 async function study(character, settings) {
   showSessionTasks(settings.taskIds);
   app.classList.add('is-studying');     // door slides left, the clock appears
   // The clock starts right away, so Break and End work from the first second.
-  const session = await runSession(settings, s => runCheckIn(door, character, s));
+  const session = await runSession(
+    settings,
+    s => useDoor(() => runCheckIn(door, character, s)),
+    isOn => (isOn ? startBreak(character) : endBreak(character)),
+  );
+  if (onBreak) await endBreak(character, { sessionOver: true });   // ended mid-break
+  while (doorAction) await doorAction;   // let a dark peek finish slamming
 
   app.classList.remove('is-studying');
   document.body.classList.remove('is-on-break');
   await wait(800);
+
+  // She ended it herself (break too long): no task question, no finale.
+  // The minutes you did study still count.
+  if (slammedShut) {
+    slammedShut = false;
+    recordSession(session);
+    showSessionTasks([]);
+    return;
+  }
 
   // Which tasks got done?
   let doneCount = 0;

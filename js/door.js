@@ -1,5 +1,7 @@
 // The door: draws the door scene and opens/closes it.
 
+import { playSound } from './sound.js';
+
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 // The scene is a 500 x 720 box. The doorway is x 110–390, y 80–680.
@@ -40,7 +42,7 @@ const DOOR_HTML = `
 // Wait for the door's swing to finish (with a safety timeout).
 function waitForSwing(panel) {
   return new Promise(resolve => {
-    const timer = setTimeout(resolve, 1400);
+    const timer = setTimeout(resolve, 2400);
     const onEnd = e => {
       if (e.target !== panel || e.propertyName !== 'transform') return;
       clearTimeout(timer);
@@ -85,19 +87,31 @@ export function createDoor(container) {
       await waitForSwing(panel);
     },
 
+    // A normal close: the bang plays softly the moment it meets the frame.
     async close() {
+      const wasOpen = door.isOpen();
       scene.classList.remove('door--crack', 'door--ajar', 'door--wide');
       await waitForSwing(panel);
+      if (wasOpen) playSound('bang', { volume: 0.45 });
     },
 
-    // Shut it hard: a fast swing and a shake.
-    async slam() {
+    isOpen() {
+      return ['door--crack', 'door--ajar', 'door--wide'].some(c => scene.classList.contains(c));
+    },
+
+    // Shut it hard: a fast swing and a full-volume BANG.
+    // { angry: true } also shakes the whole screen.
+    async slam({ angry = false } = {}) {
       scene.classList.add('door--slam');
       scene.classList.remove('door--crack', 'door--ajar', 'door--wide');
       await waitForSwing(panel);
-      scene.classList.add('door--shake');
-      await new Promise(r => setTimeout(r, 350));
-      scene.classList.remove('door--slam', 'door--shake');
+      playSound('bang');
+      if (angry) {
+        document.body.classList.add('screen-shake');
+        await new Promise(r => setTimeout(r, 600));
+        document.body.classList.remove('screen-shake');
+      }
+      scene.classList.remove('door--slam');
     },
 
     // Clicking or pressing Enter/Space on the door counts as a knock.

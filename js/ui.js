@@ -1,5 +1,7 @@
 // The side buttons, the pop-up panels, and the coin balance.
-import { getSave } from './storage.js';
+import { getSave, update } from './storage.js';
+import { playClick } from './sound.js';
+import { BREAK_LIMIT_CHOICES, DEFAULT_BREAK_LIMIT_MIN } from './config.js';
 
 const panels = document.querySelectorAll('.panel');
 
@@ -26,6 +28,25 @@ for (const btn of document.querySelectorAll('.panel-close, .panel-backdrop')) {
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closePanels();
+});
+
+// Settings: sound effects on/off, remembered in the save.
+const soundToggle = document.getElementById('sound-toggle');
+soundToggle.checked = getSave().soundOn !== false;
+soundToggle.addEventListener('change', () => {
+  update(s => { s.soundOn = soundToggle.checked; });
+  playClick();   // only heard when switching sound back on
+});
+
+// Settings: the longest break before Mom ends the session.
+const breakLimit = document.getElementById('break-limit');
+for (const min of BREAK_LIMIT_CHOICES) {
+  const label = min < 60 ? `${min} min` : min === 60 ? '1 hour' : `${min / 60} hours`;
+  breakLimit.add(new Option(label, String(min)));
+}
+breakLimit.value = String(getSave().breakLimitMin ?? DEFAULT_BREAK_LIMIT_MIN);
+breakLimit.addEventListener('change', () => {
+  update(s => { s.breakLimitMin = Number(breakLimit.value); });
 });
 
 export function renderCoins() {
