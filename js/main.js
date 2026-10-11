@@ -12,6 +12,7 @@ import { getSave, update } from './storage.js';
 import { closePanels } from './ui.js';
 import './marketplace.js';
 import './stats.js';
+import { applyDecor } from './decor.js';
 import { throwPie, fireBullets } from './effects.js';
 import { DOOR_LINES, LINES, pick } from './messages.js';
 import { playSound } from './sound.js';
@@ -22,6 +23,7 @@ const sessionTasksEl = document.getElementById('session-tasks');
 const stage = document.getElementById('stage');
 const door = createDoor(stage);
 initDialogue(stage, speakerPoint);
+applyDecor();
 
 const wait = ms => new Promise(r => setTimeout(r, ms));
 

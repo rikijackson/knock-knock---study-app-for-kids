@@ -15,6 +15,21 @@ const DOOR_HTML = `
     <rect class="door-frame" x="88" y="58" width="324" height="632"/>
     <polygon class="door-frame-shade" points="390,80 412,58 412,690 390,690"/>
     <rect class="doorway" x="110" y="80" width="280" height="600"/>
+    <!-- Halloween (bought in the Store): a cobweb in the corner, bats, a pumpkin -->
+    <g class="decor decor-halloween">
+      <g stroke="rgba(230, 236, 245, 0.75)" stroke-width="2" fill="none">
+        <path d="M88 58 L190 58 M88 58 L88 160 M88 58 L168 138 M88 58 L140 150 M88 58 L180 100"/>
+        <path d="M118 58 Q112 76 88 84 M150 58 Q140 92 88 112 M180 58 Q168 110 88 140"/>
+      </g>
+      <g class="bat" fill="#1a1420"><path d="M440 70 Q452 58 462 70 Q470 62 478 70 Q468 72 462 80 Q456 72 440 70 Z"/></g>
+      <g class="bat bat-2" fill="#1a1420"><path d="M20 120 Q30 110 38 120 Q45 113 52 120 Q44 122 38 128 Q32 122 20 120 Z"/></g>
+      <ellipse cx="458" cy="684" rx="34" ry="8" fill="rgba(0,0,0,0.25)"/>
+      <ellipse cx="458" cy="662" rx="32" ry="26" fill="#e07a2f"/>
+      <path d="M440 662 Q458 640 476 662" fill="none" stroke="#b85f1f" stroke-width="3"/>
+      <path d="M455 636 Q458 624 466 622" stroke="#4a6e3a" stroke-width="5" fill="none"/>
+      <path d="M445 656 L452 648 L456 657 Z M461 656 L466 648 L472 657 Z M444 668 Q458 680 472 668 L466 671 L460 667 L455 671 Z" fill="#ffd45a"/>
+    </g>
+
     <!-- The character stands here, between the feet at (210, 680). -->
     <g class="char-slot" transform="translate(210 680)"></g>
   </svg>
@@ -29,6 +44,21 @@ const DOOR_HTML = `
       <polygon class="door-shade" points="190,310 244,310 244,560 220,560"/>
       <circle class="door-knob" cx="246" cy="300" r="11"/>
       <circle class="door-shade" cx="249" cy="303" r="5"/>
+
+      <!-- decorations on the door itself (bought in the Store) -->
+      <g class="decor decor-nameplate">
+        <rect x="62" y="276" width="156" height="40" rx="8" fill="#c9a85a"/>
+        <rect x="68" y="282" width="144" height="28" rx="5" fill="none" stroke="#9c7d3c" stroke-width="2"/>
+        <text class="nameplate-text" x="140" y="303" text-anchor="middle" font-size="19" font-weight="700"
+              font-family="Georgia, 'Times New Roman', serif" fill="#3a2a10">Your name</text>
+      </g>
+      <g class="decor decor-christmas">
+        <circle cx="140" cy="155" r="58" fill="none" stroke="#2f6b3a" stroke-width="26"/>
+        <circle cx="140" cy="155" r="58" fill="none" stroke="#3d8a4a" stroke-width="12" stroke-dasharray="10 14"/>
+        ${[0, 50, 100, 150, 200, 250, 300].map(a => `<circle cx="${140 + Math.cos(a * Math.PI / 180) * 58}" cy="${155 + Math.sin(a * Math.PI / 180) * 58}" r="5.5" fill="#d63c3c"/>`).join('')}
+        <path d="M140 205 L112 228 L118 196 Z M140 205 L168 228 L162 196 Z" fill="#d63c3c"/>
+        <circle cx="140" cy="203" r="10" fill="#b52e2e"/>
+      </g>
     </svg>
     <div class="door-edge"></div>
   </div>

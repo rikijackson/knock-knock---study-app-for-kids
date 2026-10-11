@@ -116,6 +116,20 @@ Source: `scope.md > The POC Boundary`.
 - [ ] Buying a character deducts the coins and makes them choosable right away.
 - [ ] You can't buy a character you can't afford, and the panel makes that clear.
 
+### Door & Room Store
+*(Added during the build by the learner, after the core plan was finished. Rule: the more interactive an item, the more it costs, so people have something to work toward.)*
+- [ ] A "Door & Room" tab in the Store. Items can be switched on and off; backgrounds and holiday decor are one at a time.
+- [ ] **Color themes (free):** Ocean, Forest, Lavender, Rose, Sunset, Slate, each in light and dark. They re-color the app and the door, never the characters.
+- [ ] **Backgrounds (150 each):** kitchen, barracks, bedroom.
+- [ ] **Holiday decor (175 each):** a Christmas wreath, or Halloween pumpkin, bats and cobweb.
+- [ ] **Nameplate (300):** your name on a plaque on the door.
+- [ ] **Fairy lights (350):** light up bulb by bulb as a session goes on.
+- [ ] **Sticky-note tasks (350):** the session's tasks as notes on the door; tear one off to tick it.
+- [ ] **Doorbell (500):** a bell beside the door; clicking it or the door rings a ding-dong instead of a knock.
+- [ ] **Study plant (700):** grows with your streak of study days; wilts slowly when you miss days.
+- [ ] **Cat flap (1100):** a cat pokes out during sessions and reacts when clicked.
+- [ ] In demo mode, every second studied earns a coin, so purchases can be shown in the video.
+
 ### Stats and Heat Map
 - [ ] The Stats panel shows a heat map of hours studied per day.
 - [ ] A few simple numbers are shown (e.g. most-studied day, average study time).
@@ -155,7 +169,6 @@ Everything under *Features and Behavior*: the door intro, starting a session thr
 - **Mood/streak-based reactions:** motivational messages on a good streak, funny threats ("you better study… or else") on a bad one, and different finales by streak. These need real multi-day history.
 - **Character's face getting sadder/angrier each day you skip.** Same reason.
 - **Father's animations and unlock.**
-- **Marketplace door accessories.**
 
 ## Possible Later Enhancements
 - More characters, each with their own personality and signature finale.

@@ -59,6 +59,36 @@ Build mode: learn
   Learner check: Click Reset data, then go through the door intro as a first-time visitor. Open Stats and look at the heat map, and flip the theme toggle.
   Commit: `Add door intro, stats heat map and theme toggle`
 
+- [x] **6. Door & Room store: color themes, backgrounds, holiday decor, nameplate**
+  Becomes usable: The Store has a "Door & Room" tab. Free color themes (Ocean, Forest, Lavender, Rose, Sunset, Slate, each in light and dark) re-color the app and the door but never the characters. You can buy a room background (kitchen, barracks, bedroom: 150 each), holiday decor (Christmas wreath or Halloween: 175 each) and a nameplate with your name (300), and switch them on and off. In demo mode every second studied earns a coin, so purchases can be shown on camera.
+  Why now: Added by the learner after the core plan was finished. The simple, look-only items come first because they set up owning, switching on and saving decorations, which slices 7 and 8 build on.
+  PRD ref: `prd.md > Door & Room Store`
+  Spec ref: `spec.md > Door & Room Store`
+  Build: `js/decor.js` (catalog, palettes, applying decorations), a tab in the Store panel, background scenes behind the app, wreath and nameplate on the door panel, Halloween pumpkin, bats and cobweb around the frame, `decor` in the save, demo-mode coins.
+  Verify (mechanical): `node --check`; in the browser pane switch every color theme in light and dark and confirm the door and UI change while characters don't; buy each item with enough coins, confirm "can't afford" without; switch items on and off and confirm they persist after reload; edit the nameplate text.
+  Learner check: Open the Store's Door & Room tab, try every color theme, buy a background, a holiday decoration and the nameplate, type your name, and reload to check they stay.
+  Commit: `Add door and room decorations with color themes`
+
+- [ ] **7. Fairy lights, sticky-note tasks, doorbell**
+  Becomes usable: Fairy lights (350) around the frame light up bulb by bulb as a session goes on. Sticky-note tasks (350) put the session's tasks on the door as notes you tear off to tick. The doorbell (500) adds a bell; clicking the bell or the door rings a ding-dong instead of knocking, and whoever's inside reacts.
+  Why now: The middle tier of interactive items, built on slice 6's decoration system.
+  PRD ref: `prd.md > Door & Room Store`
+  Spec ref: `spec.md > Door & Room Store`
+  Build: lights on the frame tied to session progress, sticky notes on the door panel linked to tasks, a doorbell with a generated ding-dong replacing the knock.
+  Verify (mechanical): `node --check`; in the browser pane run a demo session and confirm bulbs light in order, notes tear off and tick their tasks, and the bell rings instead of the knock from both the bell and the door.
+  Learner check: Buy all three, start a session with tasks, watch the lights, tear off a note, and ring the bell.
+  Commit: `Add fairy lights, sticky-note tasks and doorbell`
+
+- [ ] **8. Study plant and cat flap**
+  Becomes usable: The study plant (700) grows with your streak of study days, from sprout to flowers, and slowly wilts when you miss days. The cat flap (1100) has a cat that pokes out during sessions and reacts when clicked or petted.
+  Why now: The two most interactive (and most expensive) items, last so the simpler ones are finished first.
+  PRD ref: `prd.md > Door & Room Store`
+  Spec ref: `spec.md > Door & Room Store`
+  Build: streak calculation from real study history, plant growth and wilt stages, a cat flap in the door with a cat that appears at random and reacts to clicks.
+  Verify (mechanical): `node --check`; in the browser pane fake different study histories and confirm the plant's stage for streaks and missed days; run a session and confirm the cat appears and reacts.
+  Learner check: Buy both, check the plant matches your streak, and play with the cat during a session.
+  Commit: `Add study plant and cat flap`
+
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — after slice 1 (the look test), before any other building. Learner feedback reshaped the art: natural skin, curves not blocks, Carmen Sandiego–style face, 3D door swing, new look-around.
@@ -111,3 +141,4 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - Knocking once mid-study: the character now peeks out very slightly (one eye) before the slam, instead of an empty dark doorway — learner request, for both characters.
 - Slice 5: the theme toggle is a sun/moon button beside the settings gear (top-right) rather than a separate corner; Stats joins Tasks and Store in the top-left. Sample heat-map data is generated once for existing saves too (`demoSeeded`).
 - Intro knocks open the door wider (a new 'gap' and 'intro' opening) — learner feedback.
+- Slices 6–8 added after the core plan was complete: a Door & Room store (free color themes; backgrounds 50, holiday decor 75, nameplate 100, fairy lights 250, sticky notes 250, doorbell 400, study plant 600, cat flap 1000; later raised by the learner to 150, 175, 300, 350, 350, 500, 700, 1100). The learner set the rule that the more interactive an item is, the more it costs. Demo mode earns a coin per second so purchases can be shown on camera.

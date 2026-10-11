@@ -2,6 +2,7 @@
 import { getSave, update } from './storage.js';
 import { playClick } from './sound.js';
 import { BREAK_LIMIT_CHOICES, DEFAULT_BREAK_LIMIT_MIN } from './config.js';
+import { applyPalette } from './decor.js';
 
 const panels = document.querySelectorAll('.panel');
 
@@ -45,6 +46,7 @@ function applyTheme() {
   if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
   else delete document.documentElement.dataset.theme;
   const dark = effectiveTheme() === 'dark';
+  applyPalette(dark ? 'dark' : 'light');   // your color theme, in light or dark
   themeBtn.classList.toggle('is-dark', dark);
   themeBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
 }
@@ -55,6 +57,7 @@ themeBtn.addEventListener('click', () => {
   applyTheme();
 });
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+document.addEventListener('palettechange', applyTheme);
 applyTheme();
 
 // Settings: sound effects on/off, remembered in the save.

@@ -10,7 +10,7 @@ import { update, todayKey } from './storage.js';
 import { renderCoins, showCoinGain } from './ui.js';
 import { playSound } from './sound.js';
 import { confetti, throwConfettiBomb } from './effects.js';
-import { FINALE_PROUD_MIN, FINALE_DISH_MIN, FINALE_STUNT_MIN } from './config.js';
+import { FINALE_PROUD_MIN, FINALE_DISH_MIN, FINALE_STUNT_MIN, DEMO_MODE } from './config.js';
 
 function summary(lines, minutes, checkIns, doneCount, tier) {
   // A short session gets a nudge to go longer, not praise.
@@ -49,14 +49,16 @@ function runEffect(name, el) {
 }
 
 // 1 coin per whole minute studied, and today's minutes into the history.
+// In demo mode every second counts as a coin, so purchases fit in a video.
 export function recordSession(session) {
   const minutes = minutesStudied(session);
+  const coins = DEMO_MODE ? Math.floor(session.studiedMs / 1000) : minutes;
   update(s => {
-    s.coins += minutes;
+    s.coins += coins;
     if (minutes > 0) s.history[todayKey()] = (s.history[todayKey()] ?? 0) + minutes;
   });
   renderCoins();
-  if (minutes > 0) showCoinGain(minutes);
+  if (coins > 0) showCoinGain(coins);
   return minutes;
 }
 

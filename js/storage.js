@@ -32,7 +32,14 @@ function defaultSave() {
     history: {},
     demoHistory: makeDemoHistory(),
     demoSeeded: true,
+    decor: defaultDecor(),
   };
+}
+
+// Door & Room decorations: what you own, what's switched on, your color
+// theme and the name on your nameplate.
+function defaultDecor() {
+  return { owned: [], active: { background: null, holiday: null }, palette: 'ocean', name: '' };
 }
 
 let save = load();
@@ -53,6 +60,7 @@ function load() {
       tasks: Array.isArray(data.tasks) ? data.tasks : fresh.tasks,
       history: data.history && typeof data.history === 'object' ? data.history : {},
       demoHistory: data.demoHistory && typeof data.demoHistory === 'object' ? data.demoHistory : {},
+      decor: { ...defaultDecor(), ...(data.decor ?? {}), active: { ...defaultDecor().active, ...(data.decor?.active ?? {}) } },
       // Saves from before the heat map existed get their sample data now.
       ...(data.demoSeeded ? {} : { demoHistory: makeDemoHistory(), demoSeeded: true }),
     };

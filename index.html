@@ -12,8 +12,12 @@
   <link rel="stylesheet" href="css/panels.css">
   <link rel="stylesheet" href="css/soldier.css">
   <link rel="stylesheet" href="css/effects.css">
+  <link rel="stylesheet" href="css/decor.css">
 </head>
 <body>
+  <!-- A room behind the door (a bought background) -->
+  <div class="room" aria-hidden="true"></div>
+
   <!-- Corner buttons and coins (door screen only) -->
   <nav class="side" aria-label="Menu">
     <button type="button" class="side-btn" data-panel="tasks-panel">
@@ -104,8 +108,25 @@
       </div>
       <button type="button" class="panel-close" aria-label="Close">×</button>
     </header>
-    <p class="store-intro">Earn 1 coin for every minute you study. Spend them on new people to check on you.</p>
-    <ul id="store-list" class="store-list"></ul>
+    <div class="store-tabs" role="tablist">
+      <button type="button" class="store-tab is-active" data-tab="characters" role="tab">Characters</button>
+      <button type="button" class="store-tab" data-tab="decor" role="tab">Door &amp; Room</button>
+    </div>
+    <div class="store-page" data-page="characters">
+      <p class="store-intro">Earn 1 coin for every minute you study. Spend them on new people to check on you.</p>
+      <ul id="store-list" class="store-list"></ul>
+    </div>
+    <div class="store-page" data-page="decor" hidden>
+      <h3 class="store-heading">Color theme <span>free</span></h3>
+      <div id="palette-list" class="palette-list"></div>
+      <h3 class="store-heading">Decorations</h3>
+      <ul id="decor-list" class="store-list decor-list"></ul>
+      <form id="name-form" class="name-form" hidden>
+        <label for="name-input">Name on your door</label>
+        <input id="name-input" type="text" maxlength="18" placeholder="Your name">
+        <button type="submit" class="btn">Save</button>
+      </form>
+    </div>
     <p id="store-note" class="store-note" aria-live="polite"></p>
   </section>
 

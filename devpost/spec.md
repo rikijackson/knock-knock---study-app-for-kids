@@ -125,6 +125,10 @@ PRD ref: `prd.md > Tasks`.
 `js/marketplace.js`. Pop-up showing each character, its price and its state (owned / buy / can't afford / locked), plus your coin balance. Buying deducts coins and adds the character to `owned`.
 PRD ref: `prd.md > Coins and Marketplace`.
 
+### Door & Room Store
+`js/decor.js`, `css/decor.css`. The catalog of decorations (id, name, price, kind), the color-theme palettes (each a set of CSS variable values for light and dark, applied to the page; characters use their own fixed colors so they never change), and `applyDecor()`, which shows the active decorations: classes on the door scene for door/frame items, and a full-page room layer behind the app for backgrounds. Owned and active items, the palette and the nameplate text live in the save under `decor`. Interactive items (lights, notes, doorbell, plant, cat) hook into the session and knock code.
+PRD ref: `prd.md > Door & Room Store`.
+
 ### Stats Panel and Heat Map
 `js/stats.js`, `css/panels.css`. Pop-up with a heat map of the last 12 weeks (a grid of small squares, one per day, shaded by minutes studied) and two numbers: **most-studied day** and **daily average**. A small note says "includes demo data" while sample data exists. It also holds the "Reset data" link. It's built by hand with no chart library.
 PRD ref: `prd.md > Stats and Heat Map`.

@@ -1,0 +1,153 @@
+/* Door & Room decorations and the Store tab that sells them. */
+
+/* ---- A room behind the door ---- */
+.room {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.room svg { width: 100%; height: 100%; display: block; }
+
+/* Dimmed in dark mode so it doesn't fight the door. */
+:root[data-theme="dark"] .room { filter: brightness(0.42) saturate(0.85); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .room { filter: brightness(0.42) saturate(0.85); }
+}
+
+.app { position: relative; z-index: 1; }
+
+/* A soft shadow so the door stands out from a busy room. */
+.has-room .door-back { filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35)); }
+
+/* ---- Decorations on the door ---- */
+.door-scene .decor { display: none; }
+.door-scene.has-nameplate .decor-nameplate,
+.door-scene.has-christmas .decor-christmas,
+.door-scene.has-halloween .decor-halloween { display: inline; }
+
+.decor-halloween .bat {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: bat-flap 0.5s ease-in-out infinite alternate, bat-drift 6s ease-in-out infinite alternate;
+}
+.decor-halloween .bat-2 { animation-delay: 0.2s, 1.5s; }
+
+@keyframes bat-flap {
+  from { transform: scaleY(1); }
+  to   { transform: scaleY(0.45); }
+}
+
+@keyframes bat-drift {
+  from { translate: 0 0; }
+  to   { translate: -24px 14px; }
+}
+
+/* ---- Store tabs ---- */
+.store-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--pale);
+}
+
+.store-tab {
+  flex: 1;
+  font: inherit;
+  font-weight: 700;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--locked);
+  cursor: pointer;
+}
+
+.store-tab.is-active { background: var(--bg); color: var(--ink); }
+.store-page[hidden] { display: none; }
+
+.store-heading {
+  margin: 4px 0 10px;
+  font-size: 1rem;
+}
+
+.store-heading span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--teal);
+  margin-left: 6px;
+}
+
+/* Color theme swatches */
+.palette-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.palette {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: none;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.palette i {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  box-shadow: 0 0 0 2px var(--pale);
+}
+
+.palette.is-active i { border-color: var(--bg); box-shadow: 0 0 0 3px var(--ink); }
+
+/* Decoration cards */
+.decor-list { grid-template-columns: repeat(3, 1fr); }
+
+.decor-preview {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  background: var(--doorway);
+  overflow: hidden;
+}
+
+.decor-preview svg { width: 100%; height: 100%; display: block; }
+
+.store-card.is-on .store-btn {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--bg);
+}
+
+.name-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.name-form label { width: 100%; font-weight: 700; font-size: 0.9rem; }
+
+.name-form input {
+  flex: 1;
+  font: inherit;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--pale);
+  background: var(--bg);
+  color: var(--ink);
+}
