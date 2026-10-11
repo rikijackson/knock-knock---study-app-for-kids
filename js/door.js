@@ -39,6 +39,10 @@ const DOOR_HTML = `
   </svg>
 </div>`;
 
+// How far the door can open (see door.css): a crack, a gap (the intro's
+// knocks), ajar (peeking out), intro (the first hello), or wide (finales).
+const OPEN_CLASSES = ['door--crack', 'door--gap', 'door--ajar', 'door--intro', 'door--wide'];
+
 // Wait for the door's swing to finish (with a safety timeout).
 function waitForSwing(panel) {
   return new Promise(resolve => {
@@ -79,10 +83,9 @@ export function createDoor(container) {
       if (door.characterEl) slot.append(door.characterEl);
     },
 
-    // amount: 'crack' (just a little), 'ajar' (wide enough to peek out)
-    // or 'wide' (all the way, for the finale)
+    // amount: 'crack', 'gap', 'ajar', 'intro' or 'wide' (see OPEN_CLASSES)
     async open(amount = 'ajar') {
-      scene.classList.remove('door--crack', 'door--ajar', 'door--wide');
+      scene.classList.remove(...OPEN_CLASSES);
       scene.classList.add(`door--${amount}`);
       await waitForSwing(panel);
     },
@@ -90,20 +93,20 @@ export function createDoor(container) {
     // A normal close: the bang plays softly the moment it meets the frame.
     async close() {
       const wasOpen = door.isOpen();
-      scene.classList.remove('door--crack', 'door--ajar', 'door--wide');
+      scene.classList.remove(...OPEN_CLASSES);
       await waitForSwing(panel);
       if (wasOpen) playSound('bang', { volume: 0.45 });
     },
 
     isOpen() {
-      return ['door--crack', 'door--ajar', 'door--wide'].some(c => scene.classList.contains(c));
+      return OPEN_CLASSES.some(c => scene.classList.contains(c));
     },
 
     // Shut it hard: a fast swing and a full-volume BANG.
     // { angry: true } also shakes the whole screen.
     async slam({ angry = false } = {}) {
       scene.classList.add('door--slam');
-      scene.classList.remove('door--crack', 'door--ajar', 'door--wide');
+      scene.classList.remove(...OPEN_CLASSES);
       await waitForSwing(panel);
       playSound('bang');
       if (angry) {

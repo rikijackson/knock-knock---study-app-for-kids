@@ -4,6 +4,22 @@ import { STARTING_COINS, DEFAULT_BREAK_LIMIT_MIN } from './config.js';
 
 const KEY = 'studyCheckIn.save';
 
+// Sample past study time, so the heat map isn't empty in the demo.
+// The Stats panel labels it as sample data.
+function makeDemoHistory() {
+  const demo = {};
+  const today = new Date();
+  for (let daysAgo = 1; daysAgo <= 70; daysAgo++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - daysAgo);
+    const weekend = date.getDay() === 0 || date.getDay() === 6;
+    if (Math.random() < (weekend ? 0.45 : 0.75)) {
+      demo[todayKey(date)] = Math.round(15 + Math.random() * (weekend ? 90 : 170));
+    }
+  }
+  return demo;
+}
+
 function defaultSave() {
   return {
     introSeen: false,
@@ -14,7 +30,8 @@ function defaultSave() {
     owned: ['mother'],
     tasks: [],
     history: {},
-    demoHistory: {},
+    demoHistory: makeDemoHistory(),
+    demoSeeded: true,
   };
 }
 
@@ -36,6 +53,8 @@ function load() {
       tasks: Array.isArray(data.tasks) ? data.tasks : fresh.tasks,
       history: data.history && typeof data.history === 'object' ? data.history : {},
       demoHistory: data.demoHistory && typeof data.demoHistory === 'object' ? data.demoHistory : {},
+      // Saves from before the heat map existed get their sample data now.
+      ...(data.demoSeeded ? {} : { demoHistory: makeDemoHistory(), demoSeeded: true }),
     };
   } catch {
     return defaultSave();

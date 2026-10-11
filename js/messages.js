@@ -2,6 +2,13 @@
 
 // The voice from the dark doorway, before you've picked anyone.
 export const DOOR_LINES = {
+  // The very first visit: someone's not happy about all that knocking.
+  introYo: 'Yo, why are you knocking on my door?',
+  introStudy: "Sorry! I just want to study.",
+  introWho: 'Who are you?!',
+  introAfterStudy: "Oh! A studier! Well then. Knock again when you're ready, and I'll get you set up.",
+  introAfterWho: "I'm the one who makes sure you actually study. Knock again when you're ready!",
+  introOk: 'Okay!',
   start: 'Do you want to start a study session?',
   pick: 'Who do you want to check up on you?',
 };

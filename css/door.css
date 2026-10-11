@@ -77,6 +77,8 @@
 /* Opening takes exactly as long as the creak sound (2s), at a steady pace
    that eases in and out with it. */
 .door--crack .door-panel,
+.door--gap   .door-panel,
+.door--intro .door-panel,
 .door--ajar  .door-panel,
 .door--wide  .door-panel {
   transition-duration: 2s;
@@ -84,7 +86,9 @@
 }
 
 .door--crack .door-panel { transform: rotateY(-14deg); }
+.door--gap   .door-panel { transform: rotateY(-26deg); }   /* the intro's first knocks */
 .door--ajar  .door-panel { transform: rotateY(-40deg); }
+.door--intro .door-panel { transform: rotateY(-52deg); }   /* her first hello */
 .door--wide  .door-panel { transform: rotateY(-90deg); }   /* fully open: edge-on */
 .door--crack .door-panel::after { opacity: 0.08; }
 .door--ajar  .door-panel::after { opacity: 0.2; }

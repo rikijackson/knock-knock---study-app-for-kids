@@ -8,9 +8,10 @@ import { runSession } from './session.js';
 import { runCheckIn } from './checkins.js';
 import { runFinale, recordSession } from './finale.js';
 import { addTask, getTask, openTasks, setDone } from './tasks.js';
-import { getSave } from './storage.js';
+import { getSave, update } from './storage.js';
 import { closePanels } from './ui.js';
 import './marketplace.js';
+import './stats.js';
 import { throwPie, fireBullets } from './effects.js';
 import { DOOR_LINES, LINES, pick } from './messages.js';
 import { playSound } from './sound.js';
@@ -45,7 +46,47 @@ const PIE_WINDOW_MS = 15000;
 let knockTimes = [];
 let studyCharacter = null;
 
+// The very first visit: only the door. Knocks 1–2 crack it open and shut;
+// on the 3rd, the mother peeks out, and after a short chat the buttons appear.
+let introKnocks = 0;
+if (!getSave().introSeen) document.body.classList.add('first-visit');
+
+async function introKnock() {
+  introKnocks += 1;
+  playSound('knock');
+  await wait(900);
+  if (introKnocks < 3) {
+    playSound('creak');
+    await door.open('gap');
+    await wait(500);
+    await door.close();
+    return;
+  }
+
+  door.setCharacter(getCharacter('mother').svg());
+  playSound('creak');
+  await door.open('intro');
+  await stepOut(door.characterEl);
+  const answer = await ask(DOOR_LINES.introYo, [
+    { label: DOOR_LINES.introStudy, value: 'study' },
+    { label: DOOR_LINES.introWho, value: 'who' },
+  ]);
+  await ask(answer === 'study' ? DOOR_LINES.introAfterStudy : DOOR_LINES.introAfterWho, [
+    { label: DOOR_LINES.introOk, value: true },
+  ]);
+  await stepIn(door.characterEl);
+  await door.close();
+  update(s => { s.introSeen = true; });
+  document.body.classList.remove('first-visit');   // the buttons appear
+}
+
 door.onKnock(async () => {
+  if (document.body.classList.contains('first-visit')) {
+    if (busy) return;
+    busy = true;
+    try { await introKnock(); } finally { busy = false; }
+    return;
+  }
   if (app.classList.contains('is-studying')) {
     if (onBreak) return;
     const now = Date.now();

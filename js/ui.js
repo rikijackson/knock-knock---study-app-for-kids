@@ -30,6 +30,33 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closePanels();
 });
 
+// Light / dark mode: follows your computer until you pick one with the
+// sun/moon button; your pick is remembered.
+const themeBtn = document.querySelector('.theme-btn');
+
+function effectiveTheme() {
+  const t = getSave().theme;
+  if (t === 'light' || t === 'dark') return t;
+  return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function applyTheme() {
+  const t = getSave().theme;
+  if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  else delete document.documentElement.dataset.theme;
+  const dark = effectiveTheme() === 'dark';
+  themeBtn.classList.toggle('is-dark', dark);
+  themeBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+}
+
+themeBtn.addEventListener('click', () => {
+  const next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+  update(s => { s.theme = next; });
+  applyTheme();
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+applyTheme();
+
 // Settings: sound effects on/off, remembered in the save.
 const soundToggle = document.getElementById('sound-toggle');
 soundToggle.checked = getSave().soundOn !== false;

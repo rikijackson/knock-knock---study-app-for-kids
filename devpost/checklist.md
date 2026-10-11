@@ -49,7 +49,7 @@ Build mode: learn
   Learner check: Open the Marketplace, buy the soldier, start a short session with him, and tell me if his personality comes through.
   Commit: `Add marketplace and soldier character`
 
-- [ ] **5. First-visit door intro, stats heat map, and theme toggle**
+- [x] **5. First-visit door intro, stats heat map, and theme toggle**
   Becomes usable: A brand-new visitor sees only the door; knocks 1–2 open it a crack, knock 3 gets "Yo, why are you knocking on my door?" and a short chat, then the side buttons appear. The Stats panel shows a 12-week heat map (labeled "includes demo data"), most-studied day and daily average, and a "Reset data" link. A sun/moon toggle switches light/dark and is remembered.
   Why now: These polish the first impression and the study-tracking side, and they need the saving and history from slice 3. They're last because they don't change the core loop, and the heat map is the first thing to simplify if needed.
   PRD ref: `prd.md > Door Intro (first visit)`, `prd.md > Stats and Heat Map`, `prd.md > Look and Feel`
@@ -109,3 +109,5 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - Soldier's hair redone from the learner's reference image: a fringe of locks peeking out under the cap brim, curling at the temples above the ears (side hair and sideburns removed). Bullet-hole cracks thinned.
 - Saluting arm now drawn in front of his head (it was hidden behind it) — learner feedback.
 - Knocking once mid-study: the character now peeks out very slightly (one eye) before the slam, instead of an empty dark doorway — learner request, for both characters.
+- Slice 5: the theme toggle is a sun/moon button beside the settings gear (top-right) rather than a separate corner; Stats joins Tasks and Store in the top-left. Sample heat-map data is generated once for existing saves too (`demoSeeded`).
+- Intro knocks open the door wider (a new 'gap' and 'intro' opening) — learner feedback.
