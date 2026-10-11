@@ -1,0 +1,130 @@
+/* Effects that break out of the scene: things flying at the screen,
+   messes stuck to the screen (pie, bullet holes), and confetti. */
+
+/* ---- Flying at the screen ---- */
+.flight {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  perspective: 700px;
+  pointer-events: none;
+}
+
+/* Starts small at her hand, far away, then rushes at the screen spinning. */
+.flying-thing {
+  position: absolute;
+  width: 240px;
+  height: 160px;
+  margin: -80px 0 0 -120px;
+  transform-style: preserve-3d;
+  animation: fly-at-screen 0.7s cubic-bezier(0.45, 0, 0.9, 0.55) forwards;
+}
+
+.flying-thing svg { width: 100%; height: 100%; display: block; }
+
+@keyframes fly-at-screen {
+  0%   { transform: translate(var(--from-x), var(--from-y)) translateZ(-1400px) rotateZ(0deg) rotateX(50deg); }
+  100% { transform: translate(0px, 0px) translateZ(var(--end-z, 620px)) rotateZ(380deg) rotateX(6deg); }
+}
+
+/* ---- Messes stuck to the screen ---- */
+.mess {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  cursor: pointer;
+  animation: mess-on 0.25s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+
+/* A small mess at one spot (a bullet hole). */
+.mess.mess-spot {
+  inset: auto;
+  transform: translate(-50%, -50%);
+  animation-name: mess-spot-on;
+}
+
+.mess svg { width: 100%; height: 100%; display: block; overflow: visible; }
+
+.mess .mess-drips {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: drip 5s ease-in 0.3s both;
+}
+
+.mess.is-wiped { animation: mess-off 0.7s ease-in forwards; }
+.mess.mess-spot { animation-duration: 0.08s; }
+.mess.mess-spot.is-wiped { animation: mess-spot-off 0.7s ease-in forwards; }
+
+@keyframes mess-on {
+  0%   { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes mess-spot-on {
+  0%   { transform: translate(-50%, -50%) scale(0.85); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+@keyframes drip {
+  0%   { transform: scaleY(0.2); }
+  100% { transform: scaleY(1.3); }
+}
+
+@keyframes mess-off {
+  0%   { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(40vh); opacity: 0; }
+}
+
+@keyframes mess-spot-off {
+  0%   { transform: translate(-50%, -50%); opacity: 1; }
+  100% { transform: translate(-50%, -50%); opacity: 0; }
+}
+
+/* Smoke curling up out of a bullet hole, in staggered puffs. */
+.mess .smoke {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: smoke-rise 1.8s ease-out infinite;
+  opacity: 0;
+}
+.mess .smoke-1 { animation-delay: 0.6s; }
+.mess .smoke-2 { animation-delay: 1.2s; }
+
+@keyframes smoke-rise {
+  0%   { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translate(14px, -120px) scale(2.2); opacity: 0; }
+}
+
+/* ---- Confetti ---- */
+.confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 61;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti i {
+  position: absolute;
+  width: 10px;
+  height: 16px;
+  border-radius: 2px;
+  animation: 3.4s cubic-bezier(0.25, 0.6, 0.5, 1) both;
+}
+
+.confetti i.rain  { animation-name: confetti-rain; }
+.confetti i.burst { animation-name: confetti-burst; }
+
+@keyframes confetti-rain {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translate(var(--dx), 110vh) rotate(var(--spin)); opacity: 0; }
+}
+
+@keyframes confetti-burst {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(0.4); opacity: 1; }
+  25%  { transform: translate(var(--dx), var(--dy)) rotate(calc(var(--spin) / 3)) scale(1); }
+  90%  { opacity: 1; }
+  100% { transform: translate(var(--dx), calc(var(--dy) + 80vh)) rotate(var(--spin)) scale(1); opacity: 0; }
+}

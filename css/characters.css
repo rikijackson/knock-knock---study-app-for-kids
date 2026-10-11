@@ -53,6 +53,7 @@
 .char.mood-ecstatic .blush { display: inline; }
 
 /* Angry moods (only during a long break): annoyed → angry → furious */
+.char .shout,
 .char .brows-flat,
 .char .brows-angry,
 .char .mouth-flat,
@@ -345,6 +346,38 @@
   84%  { opacity: 0; }
 }
 
+/* ---- sly-peek (you knocked while studying): leans out just enough for one
+        eye to show past the door, a suspicious sideways look, and gone ---- */
+.anim-sly-peek          { animation: sly-body 2.4s ease-in-out both; }
+.anim-sly-peek .head    { animation: sly-head 2.4s ease-in-out both; }
+.anim-sly-peek .pupil   { animation: sly-pupils 2.4s ease-in-out both; }
+.anim-sly-peek .arm-r   { animation: sly-arm 2.4s ease-in-out both; }
+
+@keyframes sly-body {
+  0%       { transform: translateX(0) rotate(0deg); }
+  28%, 74% { transform: translateX(78px) rotate(14deg); }   /* just an eye past the door edge */
+  100%     { transform: translateX(0) rotate(0deg); }
+}
+
+@keyframes sly-head {
+  0%       { transform: rotate(0deg); }
+  28%, 74% { transform: rotate(-14deg); }
+  100%     { transform: rotate(0deg); }
+}
+
+@keyframes sly-arm {
+  0%       { transform: rotate(0deg); }
+  24%, 78% { transform: rotate(24deg); }   /* arm tucked in, out of sight */
+  100%     { transform: rotate(0deg); }
+}
+
+@keyframes sly-pupils {
+  0%, 30%  { transform: translate(0, 0); }
+  38%, 50% { transform: translate(-4px, 1px); }   /* looks at you... */
+  56%, 70% { transform: translate(4px, 1px); }    /* ...hmm */
+  80%, 100% { transform: translate(0, 0); }
+}
+
 /* ---- wait (loops during a break): out of the doorway, looking around the
         room and whistling, with one quick glance at her watch per round ---- */
 .char .whistle,
@@ -460,6 +493,33 @@
   75%      { transform: translateX(88.5px) rotate(12.6deg); }
 }
 
+/* ---- throw (too much knocking): from her "out" pose she rears back,
+        winds her arm over her head, and FLINGS. Release is at 45%. ---- */
+.char.anim-throw          { animation: throw-body 3s ease-in-out both; }
+.char.anim-throw .arm-r   { animation: throw-arm 3s ease-in-out both; }
+.char.anim-throw .head    { animation: throw-head 3s ease-in-out both; }
+
+@keyframes throw-body {
+  0%        { transform: translateX(90px) rotate(13deg); }
+  30%       { transform: translateX(80px) rotate(4deg); }     /* rears back... */
+  45%       { transform: translateX(100px) rotate(22deg); }   /* ...FLING */
+  60%, 100% { transform: translateX(90px) rotate(13deg); }
+}
+
+@keyframes throw-arm {
+  0%        { transform: rotate(0deg); }
+  30%, 38%  { transform: rotate(-200deg); }   /* pie up behind her head */
+  45%       { transform: rotate(-60deg); }    /* thrown at you */
+  70%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes throw-head {
+  0%        { transform: rotate(-13deg); }
+  30%, 38%  { transform: rotate(-20deg); }
+  45%       { transform: rotate(-6deg); }
+  60%, 100% { transform: rotate(-13deg); }
+}
+
 /* ---- Finales: she comes all the way out, in front of the open door ----
    Most finales give the body's transform the same shape so keyframes blend:
    translate(x, y) rotate(r) translate(0, 240px) scale(sx, sy)
@@ -480,9 +540,9 @@
 
 /* Only the chosen food shows under the lid. */
 .char .food { display: none; }
-.char[data-food="pie"] .food-pie,
-.char[data-food="cake"] .food-cake,
-.char[data-food="cookies"] .food-cookies { display: inline; }
+.char[data-variant="pie"] .food-pie,
+.char[data-variant="cake"] .food-cake,
+.char[data-variant="cookies"] .food-cookies { display: inline; }
 
 .char .flame {
   transform-box: fill-box;

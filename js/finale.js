@@ -9,6 +9,7 @@ import { minutesStudied } from './session.js';
 import { update, todayKey } from './storage.js';
 import { renderCoins, showCoinGain } from './ui.js';
 import { playSound } from './sound.js';
+import { confetti, throwConfettiBomb } from './effects.js';
 import { FINALE_PROUD_MIN, FINALE_DISH_MIN, FINALE_STUNT_MIN } from './config.js';
 
 function summary(lines, minutes, checkIns, doneCount, tier) {
@@ -28,9 +29,23 @@ function summary(lines, minutes, checkIns, doneCount, tier) {
 function chooseFinale(character, studiedMin) {
   const f = character.finales;
   if (studiedMin >= FINALE_STUNT_MIN) return { tier: 'stunt', move: pick(f.stunts) };
-  if (studiedMin >= FINALE_DISH_MIN) return { tier: 'dish', move: f.dish, food: pick(f.foods) };
+  if (studiedMin >= FINALE_DISH_MIN) return { tier: 'dish', move: f.dish, variant: pick(f.variants) };
   if (studiedMin >= FINALE_PROUD_MIN) return { tier: 'proud', move: f.proud };
   return { tier: 'meh', move: f.meh };
+}
+
+// Confetti and bombs that go off partway through a finale.
+function runEffect(name, el) {
+  if (name === 'confetti-rain') confetti({ mode: 'rain' });
+  if (name === 'confetti-cannon') {
+    const barrel = el.querySelector('.cannon-barrel').getBoundingClientRect();
+    playSound('bang', { volume: 0.7 });
+    confetti({ mode: 'burst', at: { x: barrel.right, y: barrel.top } });
+  }
+  if (name === 'confetti-bomb') {
+    const hand = el.querySelector('.arm-r').getBoundingClientRect();
+    throwConfettiBomb({ x: hand.left + hand.width / 2, y: hand.top + hand.height / 2 });
+  }
 }
 
 // 1 coin per whole minute studied, and today's minutes into the history.
@@ -52,26 +67,37 @@ export async function runFinale(door, character, session, doneCount) {
   recordSession(session);
 
   const el = door.characterEl;
-  if (finale.food) el.dataset.food = finale.food;   // which dish is under the lid
-  setMood(el, { meh: 'suspicious', proud: 'pleased', dish: 'delighted', stunt: 'ecstatic' }[finale.tier]);
+  const f = character.finales;
+  // What's in their hands for this finale (which dish, medal or trophy...).
+  const variant = finale.variant ?? f.holding?.[finale.move];
+  if (variant) el.dataset.variant = variant;
+  const moods = { meh: 'suspicious', proud: 'pleased', dish: 'delighted', stunt: 'ecstatic', ...f.moods };
+  setMood(el, moods[finale.tier]);
 
   playSound('creak');
   await door.open('wide');
   door.bringToFront();   // out in the room, so no arm can vanish behind the door
+
+  const effect = f.effects?.[finale.move];
+  if (effect) setTimeout(() => runEffect(effect.run, el), effect.at * 1000);
   await play(el, finale.move, { keep: true });   // holds the final pose
 
   let text = summary(lines, minutes, session.checkInCount, doneCount, finale.tier);
   if (finale.tier === 'meh') text = `${pick(lines.mehIntro)} ${text}`;
-  if (finale.tier === 'dish') text = `${lines.dishIntro[finale.food]} ${text}`;
+  if (finale.tier === 'proud' && lines.proudIntro) text = `${pick(lines.proudIntro)} ${text}`;
+  if (finale.tier === 'dish') text = `${lines.dishIntro[finale.variant]} ${text}`;
   if (finale.tier === 'stunt') text = `${pick(lines.stuntIntro)} ${text}`;
 
   await ask(text, [{ label: finale.tier === 'meh' ? lines.mehThanks : lines.thanks, value: true }]);
 
   // Back inside, starting from the pose this finale ended in.
   el.classList.remove(`anim-${finale.move}`);
-  const exit = { meh: 'finale-exit-meh', dish: 'finale-exit-hold' }[finale.tier] ?? 'finale-exit';
+  const armEnd = f.armEnd?.[finale.move];
+  if (armEnd) el.style.setProperty('--arm-from', armEnd);
+  const exit = f.exits?.[finale.move] ?? 'finale-exit';
   await play(el, exit);
-  delete el.dataset.food;
+  el.style.removeProperty('--arm-from');
+  delete el.dataset.variant;
   setMood(el, 'suspicious');
   door.sendBack();
   await door.close();

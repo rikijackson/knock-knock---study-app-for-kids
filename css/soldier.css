@@ -1,0 +1,337 @@
+/* The soldier's own moves: his drill-whistle check-in, his finales, and the
+   gun punishment. Shared moves (look-around, peek, stare, breaks,
+   moods) live in characters.css. Same rig and transform shapes as the
+   mother's moves. */
+
+/* He's strict: when pleased he keeps his stern brows (just a smirk), when
+   delighted no squint, and only over the moon does he really grin. */
+.char .mouth-cheer { display: none; }
+.char-soldier.mood-pleased .brows-soft { display: none; }
+.char-soldier.mood-pleased .brows-suspicious { display: inline; }
+.char-soldier.mood-delighted .happy-lid { display: none; }
+.char-soldier.mood-ecstatic .mouth-grin { display: none; }
+.char-soldier.mood-ecstatic .mouth-cheer { display: inline; }
+
+/* Shouting orders: an open mouth replaces the others. */
+.char:is(.anim-soldier-meh, .anim-shoot) .mouth { display: none; }
+.char:is(.anim-soldier-meh, .anim-shoot) .shout { display: inline; }
+
+/* ===== soldier-whistle (signature check-in, 7.4s): lean out, scan the room,
+         TWEEEET on his whistle, then jab a finger at you and bark ===== */
+.anim-soldier-whistle               { animation: sw-body 7.4s ease-in-out both; }
+.anim-soldier-whistle .head         { animation: sw-head 7.4s ease-in-out both; }
+.anim-soldier-whistle .features     { animation: sw-face 7.4s ease-in-out both; }
+.anim-soldier-whistle .pupil        { animation: sw-pupils 7.4s ease-in-out both; }
+.anim-soldier-whistle .arm-r        { animation: sw-arm 7.4s ease-in-out both; }
+.anim-soldier-whistle .prop-whistle { animation: sw-whistle 7.4s step-end both; }
+.anim-soldier-whistle .mouth        { animation: sw-mouth 7.4s step-end both; }
+.anim-soldier-whistle .shout        { display: inline; animation: sw-shout 7.4s step-end both; }
+
+@keyframes sw-body {
+  0%       { transform: translateX(0) rotate(0deg); }
+  14%      { transform: translateX(80px) rotate(12deg); }
+  18%, 84% { transform: translateX(76px) rotate(11deg); }
+  100%     { transform: translateX(0) rotate(0deg); }
+}
+
+@keyframes sw-head {
+  0%       { transform: rotate(0deg); }
+  14%      { transform: rotate(-11deg); }
+  22%      { transform: rotate(-7deg); }
+  30%      { transform: rotate(-15deg); }
+  36%, 84% { transform: rotate(-11deg); }
+  40%      { transform: rotate(-11deg) translateY(-3px); }   /* TWEET */
+  100%     { transform: rotate(0deg); }
+}
+
+@keyframes sw-face {
+  0%, 16%  { transform: translate(0, 0); }
+  22%      { transform: translate(4px, 1px); }
+  30%      { transform: translate(-4px, 1px); }
+  36%, 100% { transform: translate(0, 0); }
+}
+
+@keyframes sw-pupils {
+  0%, 16%  { transform: translate(0, 0); }
+  20%, 24% { transform: translate(5px, 1px); }
+  28%, 32% { transform: translate(-5px, 1px); }
+  36%, 100% { transform: translate(0, 0); }
+}
+
+@keyframes sw-arm {
+  0%, 58%  { transform: rotate(0deg); }
+  64%, 84% { transform: rotate(-75deg); }    /* jabbing a finger at you */
+  70%      { transform: rotate(-68deg); }
+  76%      { transform: rotate(-78deg); }
+  92%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes sw-whistle {
+  0%   { opacity: 0; }
+  38%  { opacity: 1; }
+  58%  { opacity: 0; }
+}
+
+@keyframes sw-mouth {
+  0%   { opacity: 1; }
+  38%  { opacity: 0; }   /* whistle in */
+  58%  { opacity: 0; }   /* barking */
+  86%  { opacity: 1; }
+}
+
+@keyframes sw-shout {
+  0%   { opacity: 0; }
+  58%  { opacity: 1; }
+  86%  { opacity: 0; }
+}
+
+/* ===== Finales. Body transform: translate(x, y) rotate(r) translate(0, 240px)
+         scale(sx, sy), the same as the mother's, so finale-exit-body fits. ===== */
+
+@keyframes soldier-step-out {
+  0%        { transform: translate(0px, -240px) rotate(0deg) translate(0px, 240px) scale(1, 1); }
+  22%, 100% { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
+}
+
+/* Under 15 min: points at the floor and barks "DROP AND GIVE ME TWENTY!" */
+.anim-soldier-meh          { animation: soldier-step-out 3.8s ease-in-out both; }
+.anim-soldier-meh .arm-r   { animation: sm-arm 3.8s ease-in-out both; }
+.anim-soldier-meh .head    { animation: sm-head 3.8s ease-in-out both; }
+
+@keyframes sm-arm {
+  0%, 26%   { transform: rotate(0deg); }
+  36%       { transform: rotate(-52deg); }   /* down! */
+  44%       { transform: rotate(-34deg); }
+  52%       { transform: rotate(-52deg); }   /* DOWN! */
+  60%, 100% { transform: rotate(-45deg); }
+}
+
+@keyframes sm-head {
+  0%, 30%   { transform: rotate(0deg) translateY(0); }
+  36%       { transform: rotate(0deg) translateY(-5px); }   /* barking */
+  44%       { transform: rotate(0deg) translateY(2px); }
+  52%       { transform: rotate(0deg) translateY(-5px); }
+  60%, 100% { transform: rotate(0deg) translateY(0); }
+}
+
+/* 15–40 min: a curt nod, and he holds out a badge. */
+.anim-soldier-badge            { animation: soldier-step-out 3.6s ease-in-out both; }
+.anim-soldier-badge .arm-r     { animation: hold-out-arm 3.6s ease-in-out both; }
+.anim-soldier-badge .head      { animation: curt-nod 3.6s ease-in-out both; }
+.anim-soldier-badge .prop-badge { animation: prop-in 3.6s step-end both; }
+
+/* 40 min – 2 h: a medal or a trophy (data-variant), presented with a lift. */
+.anim-soldier-award          { animation: soldier-step-out 4.2s ease-in-out both; }
+.anim-soldier-award .arm-r   { animation: present-arm 4.2s ease-in-out both; }
+.anim-soldier-award .head    { animation: curt-nod 4.2s ease-in-out both; }
+.char.anim-soldier-award[data-variant="medal"] .prop-medal,
+.char.anim-soldier-award[data-variant="trophy"] .prop-trophy { animation: prop-in 4.2s step-end both; }
+
+@keyframes hold-out-arm {
+  0%, 24%   { transform: rotate(0deg); }
+  36%, 100% { transform: rotate(-70deg); }
+}
+
+@keyframes present-arm {
+  0%, 24%   { transform: rotate(0deg); }
+  36%       { transform: rotate(-70deg); }
+  50%, 58%  { transform: rotate(-115deg); }   /* holds it up: "for you" */
+  70%, 100% { transform: rotate(-70deg); }
+}
+
+@keyframes curt-nod {
+  0%, 40%   { transform: rotate(0deg) translateY(0); }
+  48%       { transform: rotate(0deg) translateY(5px); }   /* one sharp nod */
+  56%, 100% { transform: rotate(0deg) translateY(0); }
+}
+
+@keyframes prop-in {
+  0%   { opacity: 0; }
+  26%  { opacity: 1; }
+}
+
+/* 2 h +: stunts. */
+
+/* Salute: snaps to attention and salutes; confetti rains from the top. */
+.anim-soldier-salute                  { animation: salute-body 4s ease-in-out both; }
+.anim-soldier-salute .arm-r           { animation: salute-straight-arm 4s step-end both; }
+.anim-soldier-salute .prop-salute-arm { animation: salute-bent-arm 4s step-end both; }
+.anim-soldier-salute .head            { animation: salute-head 4s ease-in-out both; }
+
+@keyframes salute-body {
+  0%        { transform: translate(0px, -240px) rotate(0deg) translate(0px, 240px) scale(1, 1); }
+  22%       { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
+  30%       { transform: translate(40px, -244px) rotate(0deg) translate(0px, 240px) scale(1.08, 1.17); }   /* ATTEN-TION */
+  36%, 100% { transform: translate(40px, -240px) rotate(0deg) translate(0px, 240px) scale(1.12, 1.12); }
+}
+
+/* At "ATTEN-TION" his straight arm is swapped for the bent saluting arm. */
+@keyframes salute-straight-arm {
+  0%   { opacity: 1; }
+  32%  { opacity: 0; }
+}
+
+@keyframes salute-bent-arm {
+  0%   { opacity: 0; }
+  32%  { opacity: 1; }
+}
+
+/* Going back in after a salute: the bent arm drops back to his straight one. */
+.char.anim-soldier-exit[data-variant="salute"] .prop-salute-arm { animation: salute-bent-arm-out 1.3s step-end both; }
+.char.anim-soldier-exit[data-variant="salute"] .arm-r { animation: salute-straight-arm-in 1.3s step-end both; }
+
+@keyframes salute-bent-arm-out {
+  0%   { opacity: 1; }
+  20%  { opacity: 0; }
+}
+
+@keyframes salute-straight-arm-in {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+}
+
+@keyframes salute-head {
+  0%, 30%   { transform: rotate(0deg) translateY(0); }
+  36%, 100% { transform: rotate(0deg) translateY(-3px); }   /* chin up */
+}
+
+/* Confetti cannon: a cannon rolls in beside him; he points; BOOM. */
+.anim-soldier-cannon              { animation: soldier-step-out 4.4s ease-in-out both; }
+.anim-soldier-cannon .arm-r       { animation: cannon-arm 4.4s ease-in-out both; }
+.anim-soldier-cannon .head        { animation: curt-nod 4.4s ease-in-out both; }
+.anim-soldier-cannon .prop-cannon { animation: prop-in 4.4s step-end both; }
+.anim-soldier-cannon .cannon-barrel { animation: cannon-recoil 4.4s ease-out both; }
+
+@keyframes cannon-arm {
+  0%, 26%   { transform: rotate(0deg); }
+  34%, 44%  { transform: rotate(-30deg); }   /* "FIRE!" */
+  58%, 100% { transform: rotate(-70deg); }
+}
+
+.char .cannon-barrel {
+  transform-box: fill-box;
+  transform-origin: 0% 100%;
+}
+
+@keyframes cannon-recoil {
+  0%, 44%  { transform: translate(0, 0); }
+  46%      { transform: translate(-10px, 6px); }   /* BOOM */
+  60%, 100% { transform: translate(0, 0); }
+}
+
+/* Confetti bomb: winds up and lobs a bomb at you; it bursts into confetti. */
+.anim-soldier-bomb             { animation: soldier-step-out 4s ease-in-out both; }
+.anim-soldier-bomb .arm-r      { animation: bomb-arm 4s ease-in-out both; }
+.anim-soldier-bomb .head       { animation: curt-nod 4s ease-in-out both; }
+.anim-soldier-bomb .prop-bomb  { animation: bomb-held 4s step-end both; }
+
+@keyframes bomb-arm {
+  0%, 24%   { transform: rotate(0deg); }
+  34%, 38%  { transform: rotate(-200deg); }   /* wind up... */
+  44%       { transform: rotate(-60deg); }    /* ...LOB */
+  58%, 100% { transform: rotate(-70deg); }
+}
+
+@keyframes bomb-held {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  43%  { opacity: 0; }   /* it's gone: flying at you */
+}
+
+/* soldier-exit: back inside from whatever pose he ended in. The finale sets
+   --arm-from (his arm's final angle) and data-variant (what he's holding). */
+.anim-soldier-exit          { animation: finale-exit-body 1.3s ease-in-out both; }
+.anim-soldier-exit .arm-r   { animation: soldier-exit-arm 1.3s ease-in-out both; }
+.char.anim-soldier-exit[data-variant="badge"] .prop-badge,
+.char.anim-soldier-exit[data-variant="medal"] .prop-medal,
+.char.anim-soldier-exit[data-variant="trophy"] .prop-trophy,
+.char.anim-soldier-exit[data-variant="cannon"] .prop-cannon { opacity: 1; }
+
+@keyframes soldier-exit-arm {
+  0%        { transform: rotate(var(--arm-from, 0deg)); }
+  60%, 100% { transform: rotate(0deg); }
+}
+
+/* ===== The gun punishment: he leans out with his pistol pointed at you
+         and fires three shots from 45% ===== */
+.char.anim-shoot          { animation: shoot-body 3.4s ease-in-out both; }
+.char.anim-shoot .arm-r   { animation: shoot-arm 3.4s ease-in-out both; }
+.char.anim-shoot .prop-gun { animation: shoot-gun 3.4s step-end both; }
+
+@keyframes shoot-body {
+  0%        { transform: translateX(90px) rotate(13deg) scale(1); }
+  30%       { transform: translateX(92px) rotate(10deg) scale(1.1); }   /* leans in and takes aim at you */
+  45%, 80%  { transform: translateX(92px) rotate(10deg) scale(1.1); }
+  48%, 58%, 68% { transform: translateX(90px) rotate(8deg) scale(1.08); } /* recoil */
+  100%      { transform: translateX(90px) rotate(13deg) scale(1); }
+}
+
+@keyframes shoot-arm {
+  0%        { transform: rotate(0deg); }
+  30%, 84%  { transform: rotate(-52deg); }   /* gun held out in front, aimed at you */
+  100%      { transform: rotate(0deg); }
+}
+
+@keyframes shoot-gun {
+  0%   { opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 0; }
+}
+
+/* ===== Held items stay upright: they turn the opposite way to his arm,
+         around his hand (the gun lines up along his arm instead). ===== */
+.char .arm-r .prop {
+  transform-box: view-box;
+  transform-origin: 72px -195px;
+}
+
+.anim-soldier-badge .prop-badge {
+  animation: prop-in 3.6s step-end both, upright-hold 3.6s ease-in-out both;
+}
+.char.anim-soldier-award[data-variant="medal"] .prop-medal,
+.char.anim-soldier-award[data-variant="trophy"] .prop-trophy {
+  animation: prop-in 4.2s step-end both, upright-present 4.2s ease-in-out both;
+}
+.char.anim-soldier-exit[data-variant] .arm-r .prop {
+  animation: upright-exit 1.3s ease-in-out both;
+}
+.char.anim-shoot .prop-gun {
+  animation: shoot-gun 3.4s step-end both, upright-gun 3.4s ease-in-out both;
+}
+
+@keyframes upright-hold {
+  0%, 24%   { transform: rotate(0deg); }
+  36%, 100% { transform: rotate(70deg); }
+}
+
+@keyframes upright-present {
+  0%, 24%   { transform: rotate(0deg); }
+  36%       { transform: rotate(70deg); }
+  50%, 58%  { transform: rotate(115deg); }
+  70%, 100% { transform: rotate(70deg); }
+}
+
+@keyframes upright-exit {
+  0%        { transform: rotate(calc(var(--arm-from, 0deg) * -1)); }
+  60%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes upright-gun {
+  0%        { transform: rotate(0deg); }
+  30%, 84%  { transform: rotate(52deg); }
+  100%      { transform: rotate(0deg); }
+}
+
+/* A flash at the barrel for each of the three shots. */
+.char .muzzle-flash { opacity: 0; }
+.char.anim-shoot .muzzle-flash { animation: muzzle 3.4s step-end both; }
+
+@keyframes muzzle {
+  0%   { opacity: 0; }
+  45%  { opacity: 1; }
+  48%  { opacity: 0; }
+  57%  { opacity: 1; }
+  60%  { opacity: 0; }
+  69%  { opacity: 1; }
+  72%  { opacity: 0; }
+}

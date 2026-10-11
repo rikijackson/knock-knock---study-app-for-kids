@@ -2,7 +2,7 @@
 // knock → start? → pick a character → setup questions → study → end.
 import { createDoor } from './door.js';
 import { CHARACTERS, getCharacter } from './characters/index.js';
-import { stepOut, stepIn, setMood } from './animations.js';
+import { stepOut, stepIn, setMood, play } from './animations.js';
 import { initDialogue, ask, askChecklist, say, hideBubble, BACK } from './dialogue.js';
 import { runSession } from './session.js';
 import { runCheckIn } from './checkins.js';
@@ -10,6 +10,8 @@ import { runFinale, recordSession } from './finale.js';
 import { addTask, getTask, openTasks, setDone } from './tasks.js';
 import { getSave } from './storage.js';
 import { closePanels } from './ui.js';
+import './marketplace.js';
+import { throwPie, fireBullets } from './effects.js';
 import { DOOR_LINES, LINES, pick } from './messages.js';
 import { playSound } from './sound.js';
 import { TIMER_LENGTHS, FIXED_INTERVALS, BREAK_UNIT_MS, ANGER_STAGES } from './config.js';
@@ -36,10 +38,25 @@ function speakerPoint() {
 }
 
 let busy = false;
+// Knocking while studying: a quick sly peek, then BANG. Knock 3 times
+// within 15 seconds and they come out and punish you (pie / gun).
+const PIE_KNOCKS = 3;
+const PIE_WINDOW_MS = 15000;
+let knockTimes = [];
+let studyCharacter = null;
+
 door.onKnock(async () => {
-  // Clicking the door while studying: it creaks open onto darkness... BANG.
   if (app.classList.contains('is-studying')) {
-    if (!doorAction && !onBreak) useDoor(darkPeek);
+    if (onBreak) return;
+    const now = Date.now();
+    knockTimes = knockTimes.filter(t => now - t < PIE_WINDOW_MS);
+    knockTimes.push(now);
+    if (knockTimes.length >= PIE_KNOCKS) {
+      knockTimes = [];
+      useDoor(() => punish(studyCharacter));
+    } else if (!doorAction) {
+      useDoor(slyPeek);
+    }
     return;
   }
   if (busy) return;
@@ -146,14 +163,51 @@ async function slamAndEnd(character) {
   document.getElementById('end-btn').click();   // ends the session
 }
 
-async function darkPeek() {
+// Too much knocking: the mother throws a pie in your face; the soldier
+// shoots at the screen (cartoon bullet holes in the glass).
+async function punish(character) {
   const el = door.characterEl;
-  if (el) el.style.visibility = 'hidden';   // nobody there... apparently
+  const lines = LINES[character.id];
+  el.style.visibility = '';
+  setMood(el, 'furious');
   playSound('creak');
   await door.open('ajar');
+  await stepOut(el);
+  say(pick(lines.knockWarn));
   await wait(1100);
+  hideBubble();
+
+  const move = character.punish === 'gun' ? 'anim-shoot' : 'anim-throw';
+  el.classList.add(move);
+  const handPoint = () => {
+    const hand = el.querySelector('.arm-r').getBoundingClientRect();
+    return { x: hand.left + hand.width / 2, y: hand.top + hand.height / 2 };
+  };
+  if (character.punish === 'gun') {
+    await wait(1530);                      // takes aim (shots from 45% of 3.4s)
+    await fireBullets();
+  } else {
+    await wait(1350);                      // wind-up; release at 45% of 3s
+    await throwPie(handPoint());
+  }
+  await wait(1000);
+
+  say(pick(lines.knockAfter));
+  await wait(2200);
+  hideBubble();
+  el.classList.remove(move);
+  await stepIn(el);
   await door.slam();
-  if (el) el.style.visibility = '';
+  setMood(el, 'suspicious');
+}
+
+// Knocking once while studying: the door creaks open, whoever's behind it
+// leans out just enough to show one eye and gives you a look... SLAM.
+async function slyPeek() {
+  playSound('creak');
+  await door.open('crack');   // only a crack, so just their face can poke out
+  if (door.characterEl) await play(door.characterEl, 'sly-peek');
+  await door.slam();
 }
 
 async function knock() {
@@ -282,6 +336,8 @@ async function askStep(step, lines, answers, { back }) {
 }
 
 async function study(character, settings) {
+  studyCharacter = character;
+  knockTimes = [];
   showSessionTasks(settings.taskIds);
   app.classList.add('is-studying');     // door slides left, the clock appears
   // The clock starts right away, so Break and End work from the first second.
@@ -291,7 +347,7 @@ async function study(character, settings) {
     isOn => (isOn ? startBreak(character) : endBreak(character)),
   );
   if (onBreak) await endBreak(character, { sessionOver: true });   // ended mid-break
-  while (doorAction) await doorAction;   // let a dark peek finish slamming
+  while (doorAction) await doorAction;   // let a sly peek finish slamming
 
   app.classList.remove('is-studying');
   document.body.classList.remove('is-on-break');

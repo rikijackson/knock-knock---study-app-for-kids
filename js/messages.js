@@ -72,6 +72,9 @@ export const LINES = {
         'ONE... TWO...',
       ],
     },
+    // Too much knocking while you're meant to be studying.
+    knockWarn: ['WHAT?!', 'Knock ONE more time...', "THAT'S IT!"],
+    knockAfter: ['Stop knocking and STUDY!', 'That door is for emergencies only!', 'Now get back to work!'],
     breakLimit: ["That's IT! Study time is OVER!", 'ENOUGH! This session is over!'],
     breakEnd: ['Good. Back to it!', 'There we go. Back to work.'],
     breakOver: ['Oh! Done already?', 'Finished? Let me come out, then.'],
@@ -107,6 +110,69 @@ export const LINES = {
     focusPraise: ['No tasks done, but what focus!', 'Nothing ticked off, but you sat and focused. That counts.'],
     thanks: 'Thanks, Mom!',
     mehThanks: 'Okay, okay…',
+  },
+  // A strict drill sergeant. Everything is an order.
+  soldier: {
+    hello: ['Recruit! Front and centre!', "At ease. Not for long. Let's get you set up."],
+    mode: 'State your mission, recruit! Timer or stopwatch?',
+    length: 'How long is this operation?',
+    frequency: 'How often do I inspect you?',
+    confirm: 'Ready to begin the operation?',
+    go: ['MOVE OUT! I will be watching.', 'Dismissed! Eyes on your work, soldier!'],
+    cancel: ['Hmph. Report back when you are ready, recruit.', 'Dismissed. That is NOT a compliment.'],
+    checkIn: {
+      'look-around': [
+        'Perimeter check. You had better be studying.',
+        'Area secure. Carry on.',
+        'Is that your homework or your phone, recruit?',
+      ],
+      peek: ['Inspection! ...Acceptable. Carry on.', 'I see you. Keep moving.', 'Eyes front!'],
+      stare: ['Did I say you could slack off?', 'I am watching you, recruit.', '...'],
+      'soldier-whistle': ['EYES ON YOUR WORK!', 'FOCUS, RECRUIT!', 'Back to it! MOVE, MOVE, MOVE!'],
+    },
+    checkInWarm: {
+      pleased: ['Good discipline, recruit.', 'Hm. Keep that up.', 'Still at it. Good.'],
+      delighted: ['An HOUR! Now THAT is a soldier!', 'Outstanding work, recruit!', 'Keep this up and I might smile.'],
+    },
+    breakStart: ['Break granted. Do not get comfortable.', 'Five minutes, recruit. I am counting.'],
+    breakNag: {
+      annoyed: ['Your break is getting long, recruit.', 'Tick tock, soldier.', 'I said a SHORT break.'],
+      angry: ['BACK TO YOUR POST, RECRUIT!', 'This is NOT a holiday!', 'Break time is OVER!'],
+      furious: ['I will count to three, RECRUIT!', 'DO YOU WANT LAPS?!', 'ONE... TWO...'],
+    },
+    knockWarn: ['WHO IS KNOCKING?!', 'You knock ONE more time...', 'THAT DOES IT!'],
+    knockAfter: ['That door is OFF LIMITS, recruit!', 'Stop knocking and STUDY!', 'Next time it is laps!'],
+    breakLimit: ['DESERTION! This operation is OVER!', 'ENOUGH! Operation terminated!'],
+    breakEnd: ['Back to your post. Good.', 'About time, recruit!'],
+    breakOver: ['Done already?! Report!', 'Operation over? Let me come out.'],
+    // Under 15 minutes: he's not having it.
+    mehIntro: [
+      'Under fifteen minutes?! DROP AND GIVE ME TWENTY!',
+      'THAT was your operation?! Push-ups. NOW!',
+      'Pathetic! Twenty push-ups, recruit!',
+    ],
+    mehClosing: ['Next time, you give me at least fifteen minutes!', 'I expect better tomorrow, recruit.'],
+    mehThanks: 'Sir, yes sir…',
+    proudIntro: ['Acceptable, recruit. You have earned a badge.', 'Not bad. Take this badge, and wear it with pride.'],
+    tasks: 'Which objectives are we completing today?',
+    noTasksYet: 'You have no objectives, recruit! Add some here, or skip.',
+    finished: 'Report! Which objectives did you complete?',
+    summary: [
+      'Debrief: {minutes} of studying, I inspected you {checkIns}{tasks}. {praise}',
+      'Operation report: you studied {minutes} and I checked on you {checkIns}{tasks}. {praise}',
+    ],
+    dishIntro: {
+      medal: 'For outstanding service, I award you this medal!',
+      trophy: 'Recruit! This trophy is yours. You earned it.',
+    },
+    stuntIntro: [
+      'TWO HOURS! That deserves full military honours!',
+      'Now THAT is how a soldier studies!',
+      'Outstanding! Celebrate, recruit! That is an order!',
+    ],
+    praise: ['Carry on, soldier.', 'Good work, recruit.', 'Dismissed.'],
+    focusPraise: ['No objectives completed, but you held your post.', 'Nothing ticked off. Next time, complete the mission.'],
+    thanks: 'Sir, yes sir!',
   },
 };
 

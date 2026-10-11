@@ -39,7 +39,7 @@ Build mode: learn
   Learner check: Add three tasks, run a short session, finish all three, and watch the finale. Reload the page and check your tasks and coins are still there.
   Commit: `Add tasks, finale, coins and saving`
 
-- [ ] **4. Marketplace: unlock the soldier**
+- [x] **4. Marketplace: unlock the soldier**
   Becomes usable: The character picker shows mother, soldier and father, with locked ones greyed out. The Marketplace panel shows prices, your coins, and owned / buy / can't afford / locked. Buying the soldier (100) makes him choosable right away, with his own look, signature check-in and finales; father (200) stays a locked silhouette.
   Why now: The unlock is the "why you come back" reward, and it depends on coins from slice 3. The soldier reuses the rig, so it's mostly drawing and choosing his finale move.
   PRD ref: `prd.md > Coins and Marketplace`, `prd.md > Characters`
@@ -102,3 +102,10 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - New lowest finale tier: under 15 min she's unimpressed (suspicious face, head shake, no praise) — the learner didn't want her happy about a 0-minute session. Ending a session mid-break now says "Oh! Done already?" and glides her back in before the door closes — she was snapping out of sight.
 - Break anger: annoyed/angry/furious stages and a door-slam that ends the session at the break limit, adjustable in Settings (default 1 hour); a small break timer above the clock — learner requests; PRD updated. Shoulders rebuilt: each arm now has its own rounded top centred on its pivot (her left arm shaded like her body), replacing the separate caps the learner kept finding odd.
 - Every door close now plays the bang (softly for normal closes, full volume for slams); only the angry break-limit slam shakes the whole screen — learner request. She now glares, then storms back in before that slam (she was vanishing again; fixed at the root in stepIn).
+- Finale character was invisible after the screen-shake change (the front-layer rule was overwritten); restored and committed as a fix. Pie in the face for knocking 3 times within 15 s while studying — learner request (first asked as a chappal, then changed to a pie); PRD updated.
+- Soldier designed with the learner: strict drill sergeant in dark green; finales follow the same time tiers (push-up orders, badge, medal/trophy, salute/confetti cannon/confetti bomb); signature check-in became a drill whistle instead of binoculars (the rig has no elbows to hold binoculars up). His knocking punishment is a cartoon gun cracking bullet holes in the screen (learner's choice over paintball). Pie/paint/confetti code moved into a shared `effects.js`.
+- Soldier tuned after the learner tried him: stays stern much longer (pleased = smirk with stern brows, delighted = small closed smile, a grin only for 2-hour stunts); a dedicated bent-elbow saluting arm replaces the straight-arm salute; solid short back-and-sides and sideburns; the pistol is drawn end-on so it aims at the viewer; bullet holes redrawn with a scorched hole, fine cracks and rising smoke.
+- Soldier's hair redrawn as curved shapes following his head with tapered sideburns (the blocks read as rectangles); bullet holes made bigger with shorter cracks — learner feedback.
+- Soldier's hair redone from the learner's reference image: a fringe of locks peeking out under the cap brim, curling at the temples above the ears (side hair and sideburns removed). Bullet-hole cracks thinned.
+- Saluting arm now drawn in front of his head (it was hidden behind it) — learner feedback.
+- Knocking once mid-study: the character now peeks out very slightly (one eye) before the slam, instead of an empty dark doorway — learner request, for both characters.

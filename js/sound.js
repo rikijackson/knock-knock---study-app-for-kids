@@ -46,6 +46,32 @@ export function playClick() {
   }
 }
 
+// A referee-style whistle: a high tone with a fast trill.
+export function playWhistle() {
+  if (!soundOn()) return;
+  try {
+    audio ??= new AudioContext();
+    const now = audio.currentTime;
+    const tone = audio.createOscillator();
+    const trill = audio.createOscillator();
+    const trillDepth = audio.createGain();
+    const volume = audio.createGain();
+    tone.frequency.value = 2900;
+    trill.frequency.value = 38;
+    trillDepth.gain.value = 260;
+    trill.connect(trillDepth).connect(tone.frequency);
+    volume.gain.setValueAtTime(0.0001, now);
+    volume.gain.exponentialRampToValueAtTime(0.06, now + 0.03);
+    volume.gain.setValueAtTime(0.06, now + 0.75);
+    volume.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
+    tone.connect(volume).connect(audio.destination);
+    tone.start(now); trill.start(now);
+    tone.stop(now + 0.95); trill.stop(now + 0.95);
+  } catch {
+    // No Web Audio: no whistle.
+  }
+}
+
 // Every button on the page clicks.
 document.addEventListener('click', e => {
   if (e.target.closest('button')) playClick();

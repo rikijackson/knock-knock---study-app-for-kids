@@ -87,7 +87,7 @@ PRD ref: `prd.md > Starting a Session`, `prd.md > Session End and Finale`.
 ### Characters
 `js/characters/index.js` holds the list of characters, each with an `id`, name, price, whether it's free, its SVG and its animation names. One file per character draws its SVG:
 - `mother.js`: free. Finales: a proud moment; a covered dish revealing blueberry pie, cake or cookies; a stunt: cartwheel, backflip or rocket.
-- `soldier.js`: price 100. Signature finale decided during the build (open question carried from the PRD).
+- `soldier.js`: price 100. A strict drill sergeant in dark green (patrol cap, stripes, brass buckle). Signature check-in: a drill whistle (sound made in the browser), then he points and barks. Finales: under 15 min he orders push-ups (angry); a badge; a medal or trophy; a salute, confetti cannon or confetti bomb (confetti in `effects.js`). Knocking 3 times: he shoots cartoon bullet holes into the screen. Held items counter-rotate so they stay upright in his hand.
 - `father.js`: price 200. Only a dark locked silhouette in this version, with no animations.
 
 **Shared rig:** mother and soldier are built on the **same skeleton** (same named parts: `head`, `eye-l`, `eye-r`, `torso`, `arm-l`, `arm-r`), so the general moves can be reused, each character gets its own signature check-in and finales, and their looks and lines differ. *(Simplification. See below.)*

@@ -71,11 +71,15 @@ There is one main page, plus pop-up panels that open inside the page.
 - [ ] The tasks chosen for this session are listed below the clock, each with a tickbox. Ticking one marks it done right away. *(Added during the build at the learner's request.)*
 
 ### Door Pranks
-- [ ] Clicking the door while studying makes it creak open onto darkness (nobody there), then slam shut with a bang. It never interrupts a check-in. *(Added during the build at the learner's request.)*
+- [ ] Clicking the door while studying makes it creak open; whoever is behind it leans out just enough to show one eye, gives you a look, and the door slams shut with a bang. It never interrupts a check-in. *(Added during the build at the learner's request; changed from an empty dark doorway.)*
 
 ### Settings and Sounds
 - [ ] A settings button in the top-right corner opens a panel with a **sound effects on/off** switch, remembered between visits. *(Added during the build at the learner's request.)*
 - [ ] Buttons make a soft click sound (made in the browser, no file needed). *(Added during the build.)*
+
+### Too Much Knocking
+- [ ] With the **soldier**, he aims a cartoon pistol at you and fires three shots that crack bullet holes into the screen (they fade after a few seconds; a click clears them). *(Learner's choice, during the build.)*
+- [ ] Knock on the door 3 times within 15 seconds while studying and she comes out furious and **throws a pie in your face**: it flies at the screen in 3D and **splats**, leaving the screen dirty (it drips, then slides away; a click wipes it). Then "Stop knocking and STUDY!" and a slam. *(Added during the build at the learner's request.)*
 
 ### Breaks
 Source: `scope.md > The POC Boundary`.
@@ -165,6 +169,6 @@ Everything under *Features and Behavior*: the door intro, starting a session thr
 
 ## Open Questions
 - **Project name (can wait, needed by `6-ship`):** still "Study Check-In (working title)."
-- **Soldier's signature finale move (can wait until build):** mom's is a backflip or bringing out a dish. The soldier's is not decided.
+- ~~Soldier's signature finale move~~ *Decided in the build:* push-up orders (under 15 min), a badge, a medal or trophy, and a salute or confetti cannon/bomb for long sessions.
 
 *Resolved at review: coin numbers (start 150, soldier 100, father 200) and what's kept between visits.*
