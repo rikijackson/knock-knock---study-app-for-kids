@@ -78,7 +78,7 @@ There is one main page, plus pop-up panels that open inside the page.
 - [ ] Buttons make a soft click sound (made in the browser, no file needed). *(Added during the build.)*
 
 ### Too Much Knocking
-- [ ] With the **soldier**, he aims a cartoon pistol at you and fires three shots that crack bullet holes into the screen (they fade after a few seconds; a click clears them). *(Learner's choice, during the build.)*
+- [ ] With the **soldier**, he brings up a megaphone and blasts an order at you: sound waves, a screen shake, and giant words slamming in one at a time ("STOP. KNOCKING."). *(Changed during the build from a cartoon gun to something non-violent, at the learner's request.)*
 - [ ] Knock on the door 3 times within 15 seconds while studying and she comes out furious and **throws a pie in your face**: it flies at the screen in 3D and **splats**, leaving the screen dirty (it drips, then slides away; a click wipes it). Then "Stop knocking and STUDY!" and a slam. *(Added during the build at the learner's request.)*
 
 ### Breaks
@@ -107,6 +107,7 @@ Source: `scope.md > The POC Boundary`.
 - [ ] You can add tasks to a to-do list anytime from the Tasks panel.
 - [ ] Before a session, you choose which tasks to work on from that list, or add new ones there.
 - [ ] Tasks you complete are marked done.
+- [ ] You can add a task in the middle of a session; it joins that session. *(Added during the build at the learner's request.)*
 
 ### Coins and Marketplace
 - [ ] You earn 1 coin per minute studied.
@@ -124,7 +125,7 @@ Source: `scope.md > The POC Boundary`.
 - [ ] **Holiday decor (175 each):** a Christmas wreath, or Halloween pumpkin, bats and cobweb.
 - [ ] **Nameplate (300):** your name on a plaque on the door.
 - [ ] **Fairy lights (350):** light up bulb by bulb as a session goes on.
-- [ ] **Sticky-note tasks (350):** the session's tasks as notes on the door; tear one off to tick it.
+- [ ] **Sticky-note tasks (350):** your unfinished tasks as notes on the door (your whole to-do list on the door screen, the session's tasks while studying); drag them around the door, tear one off to tick it.
 - [ ] **Doorbell (500):** a bell beside the door; clicking it or the door rings a ding-dong instead of a knock.
 - [ ] **Study plant (700):** grows with your streak of study days; wilts slowly when you miss days.
 - [ ] **Cat flap (1100):** a cat pokes out during sessions and reacts when clicked.

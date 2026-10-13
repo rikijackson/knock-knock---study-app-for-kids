@@ -16,7 +16,9 @@
   :root:not([data-theme="light"]) .room { filter: brightness(0.42) saturate(0.85); }
 }
 
-.app { position: relative; z-index: 1; }
+/* The app sits above the room (it comes later on the page); no z-index of its
+   own, so the speech bubble inside it can rise above the corner buttons. */
+.app { position: relative; }
 
 /* A soft shadow so the door stands out from a busy room. */
 .has-room .door-back { filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35)); }
@@ -24,6 +26,7 @@
 /* ---- Decorations on the door ---- */
 .door-scene .decor { display: none; }
 .door-scene.has-nameplate .decor-nameplate,
+.door-scene.has-fairy-lights .decor-fairy-lights,
 .door-scene.has-christmas .decor-christmas,
 .door-scene.has-halloween .decor-halloween { display: inline; }
 
@@ -33,6 +36,19 @@
   animation: bat-flap 0.5s ease-in-out infinite alternate, bat-drift 6s ease-in-out infinite alternate;
 }
 .decor-halloween .bat-2 { animation-delay: 0.2s, 1.5s; }
+
+/* The jack-o'-lantern's face glows and flickers like a candle inside. */
+.pumpkin-face {
+  filter: drop-shadow(0 0 3px #ffb347);
+  animation: candle 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes candle {
+  0%   { opacity: 1; }
+  40%  { opacity: 0.8; }
+  60%  { opacity: 0.95; }
+  100% { opacity: 0.85; }
+}
 
 @keyframes bat-flap {
   from { transform: scaleY(1); }
@@ -150,4 +166,107 @@
   border: 2px solid var(--pale);
   background: var(--bg);
   color: var(--ink);
+}
+
+/* ---- Fairy lights ---- */
+.bulb .glass { fill: #3d4554; transition: fill 0.4s, filter 0.4s; }
+.bulb.is-lit.bulb-a .glass { fill: #ffe8a3; filter: drop-shadow(0 0 6px #ffe8a3); }
+.bulb.is-lit.bulb-b .glass { fill: #a3d4ff; filter: drop-shadow(0 0 6px #a3d4ff); }
+.bulb.is-lit.bulb-c .glass { fill: #a3ffe0; filter: drop-shadow(0 0 6px #a3ffe0); }
+.bulb.is-lit.bulb-d .glass { fill: #ffb3c8; filter: drop-shadow(0 0 6px #ffb3c8); }
+
+/* All lit: they twinkle. */
+.lights-full .bulb .glass { animation: twinkle 1.6s ease-in-out infinite alternate; }
+.lights-full .bulb:nth-child(odd) .glass { animation-delay: 0.8s; }
+
+@keyframes twinkle {
+  from { opacity: 1; }
+  to   { opacity: 0.55; }
+}
+
+/* ---- Doorbell ---- */
+.doorbell {
+  position: absolute;
+  left: 86%;
+  top: 46%;
+  width: 6%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: none;
+  z-index: 3;
+  transition: transform 0.12s;
+}
+
+.doorbell svg { width: 100%; display: block; filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35)); }
+.doorbell:active { transform: scale(0.92); }
+.doorbell:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; border-radius: 6px; }
+.door-scene.has-doorbell .doorbell { display: block; }
+
+/* ---- Sticky notes on the door ---- */
+.door-notes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sticky-note {
+  position: absolute;
+  width: 48%;
+  min-height: 17%;
+  padding: 5% 4%;
+  font: 700 clamp(11px, 1.3vw, 17px) / 1.2 "Segoe Print", "Comic Sans MS", cursive;
+  text-align: left;
+  color: #3a3a3a;
+  background: var(--note);
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transform: rotate(var(--tilt));
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+  overflow-wrap: normal;
+  word-break: normal;
+  transition: transform 0.15s;
+}
+
+.sticky-note::before {   /* a bit of tape */
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 35%;
+  width: 30%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.sticky-note:hover { transform: rotate(var(--tilt)) scale(1.05); }
+
+/* Being dragged: lifted off the door a little. */
+.sticky-note.is-dragging {
+  cursor: grabbing;
+  transform: rotate(var(--tilt)) scale(1.08);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+  transition: none;
+}
+
+.sticky-note.is-torn {
+  animation: tear-off 0.9s cubic-bezier(0.5, 0, 0.8, 0.4) forwards;
+  pointer-events: none;
+}
+
+@keyframes tear-off {
+  0%   { transform: rotate(var(--tilt)); }
+  20%  { transform: rotate(calc(var(--tilt) + 14deg)) translateY(-6px); }
+  100% { transform: rotate(calc(var(--tilt) + 70deg)) translate(40px, 160%); opacity: 0; }
+}
+
+/* With a room behind, the clock gets a soft frosted backing so it stays readable. */
+.has-room .study {
+  padding: 24px 20px 28px;
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(6px);
 }

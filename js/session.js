@@ -3,7 +3,8 @@
 // mid-session loses it (on purpose).
 import { nextGapMs } from './checkins.js';
 import { getSave } from './storage.js';
-import { BREAK_UNIT_MS } from './config.js';
+import { BREAK_UNIT_MS, DEMO_MODE } from './config.js';
+import { lightUp } from './decor.js';
 
 const MINUTE = 60 * 1000;
 
@@ -53,6 +54,12 @@ export function runSession(settings, onCheckIn, onBreak = () => {}) {
       breakClockEl.textContent = breakStartedAt
         ? `Break ${format(Date.now() - breakStartedAt)} / ${format(getSave().breakLimitMin * BREAK_UNIT_MS)}`
         : '';
+      // Fairy lights: timer fills them as it runs down; stopwatch lights one
+      // bulb every 5 minutes (5 seconds in demo mode).
+      const bulbMs = (DEMO_MODE ? 5 / 60 : 5) * MINUTE;
+      lightUp(session.mode === 'timer'
+        ? studied() / (session.lengthMin * MINUTE)
+        : studied() / (bulbMs * document.querySelectorAll('.door-scene .bulb').length));
     };
 
     const finish = () => {

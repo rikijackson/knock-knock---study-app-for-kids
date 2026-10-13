@@ -604,3 +604,25 @@ body:has(.is-studying) .side {
 }
 
 .link-btn:hover { color: var(--ink); }
+
+/* ---- Adding a task mid-session ---- */
+.session-add {
+  display: flex;
+  gap: 8px;
+  max-width: 360px;
+  margin: 8px auto 0;
+}
+
+.session-add input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--pale);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.session-add input:focus { outline: none; border-color: var(--blue); }
+.session-add .btn { padding: 8px 16px; }

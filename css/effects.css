@@ -1,5 +1,5 @@
 /* Effects that break out of the scene: things flying at the screen,
-   messes stuck to the screen (pie, bullet holes), and confetti. */
+   messes stuck to the screen (pie), the megaphone blast, and confetti. */
 
 /* ---- Flying at the screen ---- */
 .flight {
@@ -36,7 +36,7 @@
   animation: mess-on 0.25s cubic-bezier(0.2, 1.6, 0.4, 1) both;
 }
 
-/* A small mess at one spot (a bullet hole). */
+/* A small mess at one spot. */
 .mess.mess-spot {
   inset: auto;
   transform: translate(-50%, -50%);
@@ -80,22 +80,6 @@
   100% { transform: translate(-50%, -50%); opacity: 0; }
 }
 
-/* Smoke curling up out of a bullet hole, in staggered puffs. */
-.mess .smoke {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
-  animation: smoke-rise 1.8s ease-out infinite;
-  opacity: 0;
-}
-.mess .smoke-1 { animation-delay: 0.6s; }
-.mess .smoke-2 { animation-delay: 1.2s; }
-
-@keyframes smoke-rise {
-  0%   { transform: translate(0, 0) scale(0.5); opacity: 0; }
-  15%  { opacity: 1; }
-  100% { transform: translate(14px, -120px) scale(2.2); opacity: 0; }
-}
-
 /* ---- Confetti ---- */
 .confetti {
   position: fixed;
@@ -127,4 +111,59 @@
   25%  { transform: translate(var(--dx), var(--dy)) rotate(calc(var(--spin) / 3)) scale(1); }
   90%  { opacity: 1; }
   100% { transform: translate(var(--dx), calc(var(--dy) + 80vh)) rotate(var(--spin)) scale(1); opacity: 0; }
+}
+
+/* ---- The soldier's megaphone blast ---- */
+.blast {
+  position: fixed;
+  inset: 0;
+  z-index: 62;
+  pointer-events: none;
+  overflow: hidden;
+  transition: opacity 0.6s;
+}
+
+.blast.is-fading { opacity: 0; }
+
+.blast-words {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 0 0.35em;
+  padding: 0 4vw;
+  font: 900 clamp(48px, 11vw, 170px) / 1 Impact, "Arial Black", system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: #ffffff;
+  -webkit-text-stroke: 4px #b23535;
+  text-shadow: 0 8px 0 #b23535, 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
+.blast-words span {
+  display: inline-block;
+  animation: word-slam 0.32s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+
+@keyframes word-slam {
+  0%   { transform: scale(3) rotate(-6deg); opacity: 0; }
+  100% { transform: scale(1) rotate(-3deg); opacity: 1; }
+}
+
+/* Sound waves bursting out of the megaphone. */
+.blast-ring {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border: 6px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  animation: ring-out 1s ease-out both;
+}
+
+@keyframes ring-out {
+  0%   { transform: scale(0.3); opacity: 1; }
+  100% { transform: scale(14); opacity: 0; }
 }

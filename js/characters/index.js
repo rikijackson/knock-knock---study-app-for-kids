@@ -60,8 +60,8 @@ export const CHARACTERS = [
       // He's strict: a short session makes him angry, not just unimpressed.
       moods: { meh: 'angry', proud: 'suspicious', dish: 'pleased' },
     },
-    // Knock 3 times while studying: he shoots at the screen.
-    punish: 'gun',
+    // Knock 3 times while studying: a megaphone blast.
+    punish: 'megaphone',
   },
   {
     id: 'father',

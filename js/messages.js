@@ -10,6 +10,7 @@ export const DOOR_LINES = {
   introAfterWho: "I'm the one who makes sure you actually study. Knock again when you're ready!",
   introOk: 'Okay!',
   start: 'Do you want to start a study session?',
+  startBell: "Who is it?... Oh, it's you. Do you want to start a study session?",
   pick: 'Who do you want to check up on you?',
 };
 
@@ -148,6 +149,8 @@ export const LINES = {
       furious: ['I will count to three, RECRUIT!', 'DO YOU WANT LAPS?!', 'ONE... TWO...'],
     },
     knockWarn: ['WHO IS KNOCKING?!', 'You knock ONE more time...', 'THAT DOES IT!'],
+    // Blasted through his megaphone, one word at a time.
+    megaphone: ['STOP. KNOCKING.', 'EYES ON YOUR BOOKS!', 'THIS IS NOT A DRILL! STUDY!', 'BACK. TO. WORK.'],
     knockAfter: ['That door is OFF LIMITS, recruit!', 'Stop knocking and STUDY!', 'Next time it is laps!'],
     breakLimit: ['DESERTION! This operation is OVER!', 'ENOUGH! Operation terminated!'],
     breakEnd: ['Back to your post. Good.', 'About time, recruit!'],

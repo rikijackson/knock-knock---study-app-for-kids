@@ -37,6 +37,7 @@ function removeTask(id) {
 }
 
 export function renderTasks() {
+  document.dispatchEvent(new CustomEvent('taskschange'));
   const tasks = getSave().tasks;
   listEl.innerHTML = '';
   emptyEl.hidden = tasks.length > 0;

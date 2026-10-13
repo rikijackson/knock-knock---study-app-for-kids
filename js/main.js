@@ -12,8 +12,8 @@ import { getSave, update } from './storage.js';
 import { closePanels } from './ui.js';
 import './marketplace.js';
 import './stats.js';
-import { applyDecor } from './decor.js';
-import { throwPie, fireBullets } from './effects.js';
+import { applyDecor, lightUp, isOn } from './decor.js';
+import { throwPie, megaphoneBlast } from './effects.js';
 import { DOOR_LINES, LINES, pick } from './messages.js';
 import { playSound } from './sound.js';
 import { TIMER_LENGTHS, FIXED_INTERVALS, BREAK_UNIT_MS, ANGER_STAGES } from './config.js';
@@ -42,7 +42,7 @@ function speakerPoint() {
 
 let busy = false;
 // Knocking while studying: a quick sly peek, then BANG. Knock 3 times
-// within 15 seconds and they come out and punish you (pie / gun).
+// within 15 seconds and they come out and punish you (pie / megaphone).
 const PIE_KNOCKS = 3;
 const PIE_WINDOW_MS = 15000;
 let knockTimes = [];
@@ -91,6 +91,7 @@ door.onKnock(async () => {
   }
   if (app.classList.contains('is-studying')) {
     if (onBreak) return;
+    playSound('knock');   // a knock, or a ding-dong if you have the doorbell
     const now = Date.now();
     knockTimes = knockTimes.filter(t => now - t < PIE_WINDOW_MS);
     knockTimes.push(now);
@@ -207,12 +208,13 @@ async function slamAndEnd(character) {
 }
 
 // Too much knocking: the mother throws a pie in your face; the soldier
-// shoots at the screen (cartoon bullet holes in the glass).
+// blasts an order at you through his megaphone.
 async function punish(character) {
   const el = door.characterEl;
   const lines = LINES[character.id];
   el.style.visibility = '';
   setMood(el, 'furious');
+  await wait(700);   // let the knock or ding-dong finish first
   playSound('creak');
   await door.open('ajar');
   await stepOut(el);
@@ -220,15 +222,16 @@ async function punish(character) {
   await wait(1100);
   hideBubble();
 
-  const move = character.punish === 'gun' ? 'anim-shoot' : 'anim-throw';
+  const move = character.punish === 'megaphone' ? 'anim-megaphone' : 'anim-throw';
   el.classList.add(move);
   const handPoint = () => {
     const hand = el.querySelector('.arm-r').getBoundingClientRect();
     return { x: hand.left + hand.width / 2, y: hand.top + hand.height / 2 };
   };
-  if (character.punish === 'gun') {
-    await wait(1530);                      // takes aim (shots from 45% of 3.4s)
-    await fireBullets();
+  if (character.punish === 'megaphone') {
+    await wait(1670);                      // deep breath (the blast is at 38% of 4.4s)
+    const bell = el.querySelector('.prop-megaphone-arm ellipse').getBoundingClientRect();
+    await megaphoneBlast({ x: bell.left + bell.width / 2, y: bell.top + bell.height / 2 }, pick(lines.megaphone));
   } else {
     await wait(1350);                      // wind-up; release at 45% of 3s
     await throwPie(handPoint());
@@ -247,6 +250,7 @@ async function punish(character) {
 // Knocking once while studying: the door creaks open, whoever's behind it
 // leans out just enough to show one eye and gives you a look... SLAM.
 async function slyPeek() {
+  await wait(800);   // let the knock or ding-dong finish first
   playSound('creak');
   await door.open('crack');   // only a crack, so just their face can poke out
   if (door.characterEl) await play(door.characterEl, 'sly-peek');
@@ -261,7 +265,7 @@ async function knock() {
   playSound('creak');
   await door.open('ajar');
 
-  const start = await ask(DOOR_LINES.start, [
+  const start = await ask(isOn('doorbell') ? DOOR_LINES.startBell : DOOR_LINES.start, [
     { label: 'Yes', value: true },
     { label: 'No', value: false },
   ]);
@@ -381,6 +385,8 @@ async function askStep(step, lines, answers, { back }) {
 async function study(character, settings) {
   studyCharacter = character;
   knockTimes = [];
+  sessionTaskIds = settings.taskIds;   // tasks added mid-session join this list
+  lightUp(0);   // fairy lights go dark, then light up one by one as you study
   showSessionTasks(settings.taskIds);
   app.classList.add('is-studying');     // door slides left, the clock appears
   // The clock starts right away, so Break and End work from the first second.
@@ -394,6 +400,7 @@ async function study(character, settings) {
 
   app.classList.remove('is-studying');
   document.body.classList.remove('is-on-break');
+  lightUp(1);   // fairy lights all on again (twinkling) on the door screen
   await wait(800);
 
   // She ended it herself (break too long): no task question, no finale.
@@ -401,6 +408,7 @@ async function study(character, settings) {
   if (slammedShut) {
     slammedShut = false;
     recordSession(session);
+    sessionTaskIds = null;
     showSessionTasks([]);
     return;
   }
@@ -421,12 +429,14 @@ async function study(character, settings) {
   }
 
   await runFinale(door, character, session, doneCount);
+  sessionTaskIds = null;
   showSessionTasks([]);
 }
 
 // The session's tasks, listed under the clock. Tick one off the moment
 // you finish it; it's saved as done straight away.
 function showSessionTasks(ids) {
+  refreshNotes();
   sessionTasksEl.innerHTML = '';
   for (const task of ids.map(getTask).filter(Boolean)) {
     const li = document.createElement('li');
@@ -435,10 +445,107 @@ function showSessionTasks(ids) {
     const box = li.querySelector('input');
     box.checked = task.done;
     li.querySelector('span').textContent = task.text;
+    box.dataset.task = task.id;
     box.addEventListener('change', () => {
       setDone(task.id, box.checked);
       li.className = box.checked ? 'is-done' : '';
+      refreshNotes();
     });
     sessionTasksEl.append(li);
   }
 }
+
+// Sticky-note tasks (bought in the Store): your unfinished tasks are notes on
+// the door: the whole to-do list on the door screen, this session's tasks
+// while studying. Drag one to move it around the door; a quick click tears it
+// off, which ticks the task.
+let sessionTaskIds = null;   // set while a session runs
+const notePlaces = {};       // where you've dragged each note
+const NOTE_COLORS = ['#fff4a3', '#ffd6e0', '#c9f2d4', '#cfe4ff'];
+
+function refreshNotes() {
+  const board = document.querySelector('.door-notes');
+  // Notes being torn off finish falling; the rest are rebuilt.
+  board.querySelectorAll('.sticky-note:not(.is-torn)').forEach(n => n.remove());
+  if (!isOn('sticky-notes')) return;
+  const ids = sessionTaskIds ?? openTasks().map(t => t.id);
+  ids.map(getTask).filter(t => t && !t.done).slice(0, 4).forEach((task, i) => {
+    const note = document.createElement('button');
+    note.type = 'button';
+    note.className = 'sticky-note';
+    note.style.setProperty('--tilt', `${(i % 2 ? 1 : -1) * (2 + i)}deg`);
+    note.style.setProperty('--note', NOTE_COLORS[i % NOTE_COLORS.length]);
+    const place = notePlaces[task.id] ?? { left: i % 2 ? 49 : 3, top: 10 + i * 20 };
+    note.style.left = `${place.left}%`;
+    note.style.top = `${place.top}%`;
+    note.textContent = task.text;
+    note.title = 'Drag to move · click to tear off when done';
+    makeDraggable(note, board, task, () => tearOff(note, task));
+    board.append(note);
+  });
+}
+
+document.addEventListener('taskschange', refreshNotes);
+document.addEventListener('decorchange', refreshNotes);
+
+// Adding a task in the middle of a session: it joins the session.
+document.getElementById('session-add').addEventListener('submit', e => {
+  e.preventDefault();
+  const input = e.target.querySelector('input');
+  const text = input.value.trim();
+  if (!text || !sessionTaskIds) return;
+  sessionTaskIds.push(addTask(text).id);
+  input.value = '';
+  showSessionTasks(sessionTaskIds);
+});
+
+function tearOff(note, task) {
+  note.classList.add('is-torn');
+  setDone(task.id, true);
+  const box = sessionTasksEl.querySelector(`input[data-task="${task.id}"]`);
+  if (box) { box.checked = true; box.closest('li').className = 'is-done'; }
+  setTimeout(() => note.remove(), 900);
+}
+
+// Drag within the door; if the pointer barely moved, it was a click.
+function makeDraggable(note, board, task, onClick) {
+  note.addEventListener('click', e => e.stopPropagation());
+  note.addEventListener('pointerdown', down => {
+    down.stopPropagation();
+    note.setPointerCapture(down.pointerId);
+    const area = board.getBoundingClientRect();
+    const start = { x: down.clientX, y: down.clientY, left: parseFloat(note.style.left), top: parseFloat(note.style.top) };
+    let dragged = false;
+
+    const move = e => {
+      const dx = e.clientX - start.x;
+      const dy = e.clientY - start.y;
+      if (!dragged && Math.hypot(dx, dy) < 6) return;
+      dragged = true;
+      note.classList.add('is-dragging');
+      const maxLeft = 100 - (note.offsetWidth / board.offsetWidth) * 100;
+      const maxTop = 100 - (note.offsetHeight / board.offsetHeight) * 100;
+      const left = Math.min(Math.max(start.left + (dx / area.width) * 100, 0), maxLeft);
+      const top = Math.min(Math.max(start.top + (dy / area.height) * 100, 0), maxTop);
+      note.style.left = `${left}%`;
+      note.style.top = `${top}%`;
+      notePlaces[task.id] = { left, top };
+    };
+    const up = () => {
+      note.removeEventListener('pointermove', move);
+      note.classList.remove('is-dragging');
+      if (!dragged) onClick();
+    };
+    note.addEventListener('pointermove', move);
+    note.addEventListener('pointerup', up, { once: true });
+  });
+}
+
+// The doorbell rings just like knocking on the door.
+document.querySelector('.doorbell').addEventListener('click', e => {
+  e.stopPropagation();
+  door.scene.click();
+});
+
+refreshNotes();   // your to-do list on the door as soon as the page opens
+lightUp(1);       // fairy lights twinkle on the door screen

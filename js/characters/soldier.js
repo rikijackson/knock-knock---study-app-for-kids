@@ -20,7 +20,7 @@ const C = {
   watchBand: '#1d1916', watchFace: '#dfe6dc',
   metal: '#b9c3cc', metalShade: '#8b96a1',
   gold: '#e0b44c', goldShade: '#b88a2c', ribbon: '#2f6fdd', ribbonShade: '#2457b3',
-  badge: '#2c4527', gun: '#3a3f45', gunShade: '#5a6168', gunGrip: '#2a2420', flash: '#ffd45a',
+  badge: '#2c4527', megaphone: '#d64545', megaphoneShade: '#a83434', megaphoneBand: '#f4f4f4',
 };
 
 // One eye, around its center. Narrower than the mother's, with a heavy
@@ -123,20 +123,6 @@ export function soldierSvg() {
       <path d="M86 -188 Q92 -196 98 -194" stroke="${C.metalShade}" stroke-width="2.5" fill="none"/>
       <circle cx="98" cy="-194" r="3.5" fill="${C.gold}"/>
       <text x="82" y="-171" text-anchor="middle" font-size="11" font-weight="800" fill="${C.gold}">!</text>
-    </g></g>
-    <g class="prop prop-gun"><g transform="translate(72 -195) scale(2.2) translate(-72 195)">
-      <!-- grip under his hand -->
-      <path d="M68 -186 L80 -186 L82 -164 L70 -164 Z" fill="${C.gunGrip}"/>
-      <!-- the gun, end-on: a square slide with the round muzzle in the middle -->
-      <rect x="62" y="-212" width="24" height="24" rx="4" fill="${C.gun}"/>
-      <rect x="62" y="-212" width="24" height="5" rx="2" fill="${C.gunShade}"/>
-      <circle cx="74" cy="-199" r="8" fill="${C.gunShade}"/>
-      <circle cx="74" cy="-199" r="5" fill="#05070c"/>
-      <!-- the flash bursts toward you -->
-      <g class="muzzle-flash">
-        <path d="M74 -221 L78 -206 L92 -213 L82 -201 L96 -195 L81 -194 L86 -180 L74 -190 L62 -180 L67 -194 L52 -195 L66 -201 L56 -213 L70 -206 Z" fill="${C.flash}"/>
-        <circle cx="74" cy="-199" r="6" fill="#ffffff"/>
-      </g>
     </g></g>
 
   </g>
@@ -292,6 +278,27 @@ export function soldierSvg() {
     <!-- flat hand at the brim -->
     <path d="M51 -446 L35 -428 L16 -437 Q12 -446 18 -450 L32 -454 Z" fill="${C.skin}"/>
     <path d="M51 -446 L35 -428 L40 -438 Z" fill="${C.skinShade}"/>
+  </g>
+
+  <!-- his megaphone arm (too much knocking): elbow out, hand at his cheek,
+       a red-and-white megaphone at his mouth pointing out at you. Shown
+       instead of his straight arm; drawn last so it's in front of his face. -->
+  <g class="prop prop-megaphone-arm">
+    <circle cx="56" cy="-321" r="13" fill="${C.uniformShade}"/>
+    <path d="M63.3 -311.5 L48.7 -330.5 L88.7 -361.5 L103.3 -342.5 Z" fill="${C.uniformShade}"/>
+    <path d="M48.7 -330.5 L88.7 -361.5 L92 -357 L52 -326 Z" fill="${C.uniform}"/>
+    <circle cx="96" cy="-352" r="12" fill="${C.uniformShade}"/>
+    <path d="M99.7 -362.3 L92.3 -341.7 L42.3 -359.7 L49.7 -380.3 Z" fill="${C.uniformShade}"/>
+    <!-- the megaphone -->
+    <rect x="6" y="-372" width="10" height="10" rx="2" fill="#2a2a2a"/>
+    <path d="M14 -373 L86 -396 L86 -340 L14 -361 Z" fill="${C.megaphone}"/>
+    <path d="M14 -364 L86 -352 L86 -340 L14 -361 Z" fill="${C.megaphoneShade}"/>
+    <path d="M70 -391 L86 -396 L86 -340 L70 -345 Z" fill="${C.megaphoneBand}"/>
+    <ellipse cx="86" cy="-368" rx="9" ry="28" fill="${C.megaphoneShade}"/>
+    <ellipse cx="87" cy="-368" rx="5.5" ry="22" fill="#2a1a1a"/>
+    <!-- his hand gripping it -->
+    <ellipse cx="46" cy="-366" rx="10" ry="9" fill="${C.skin}"/>
+    <path d="M40 -360 Q46 -356 54 -361" stroke="${C.skinShade}" stroke-width="2" fill="none"/>
   </g>
 </g>`;
 }

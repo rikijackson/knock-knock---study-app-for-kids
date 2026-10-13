@@ -12,6 +12,9 @@ export const DECOR = [
   { id: 'christmas',   name: 'Christmas wreath', kind: 'holiday', price: 175 },
   { id: 'halloween',   name: 'Halloween', kind: 'holiday', price: 175 },
   { id: 'nameplate',   name: 'Nameplate', kind: 'item', price: 300 },
+  { id: 'fairy-lights', name: 'Fairy lights', kind: 'item', price: 350 },
+  { id: 'sticky-notes', name: 'Sticky-note tasks', kind: 'item', price: 350 },
+  { id: 'doorbell',    name: 'Doorbell', kind: 'item', price: 500 },
 ];
 
 export const getDecor = id => DECOR.find(d => d.id === id);
@@ -122,6 +125,7 @@ export function setName(name) {
 // ---------- Showing what's switched on ----------
 
 export function applyDecor() {
+  document.dispatchEvent(new CustomEvent('decorchange'));
   const scene = document.querySelector('.door-scene');
   const room = document.querySelector('.room');
   const { active, name } = getSave().decor;
@@ -131,6 +135,25 @@ export function applyDecor() {
     room.innerHTML = ROOMS[active.background] ?? '';
   }
   document.body.classList.toggle('has-room', Boolean(active.background));
+  setLights(litCount);
   const plate = scene.querySelector('.nameplate-text');
   plate.textContent = name || 'Your name';
+}
+
+// ---------- Fairy lights: bulb by bulb as the session goes on ----------
+let litCount = 0;
+
+// fraction: 0 (session start) to 1 (all lit, they twinkle). The first bulb
+// lights straight away, so you can see the lights are counting your session.
+export function lightUp(fraction) {
+  const bulbs = document.querySelectorAll('.door-scene .bulb');
+  const count = Math.min(bulbs.length, 1 + Math.floor(fraction * bulbs.length));
+  if (count !== litCount) setLights(count);
+}
+
+function setLights(count) {
+  litCount = count;
+  const bulbs = document.querySelectorAll('.door-scene .bulb');
+  bulbs.forEach((b, i) => b.classList.toggle('is-lit', i < count));
+  document.querySelector('.door-scene').classList.toggle('lights-full', count > 0 && count >= bulbs.length);
 }

@@ -15,6 +15,28 @@ const DOOR_HTML = `
     <rect class="door-frame" x="88" y="58" width="324" height="632"/>
     <polygon class="door-frame-shade" points="390,80 412,58 412,690 390,690"/>
     <rect class="doorway" x="110" y="80" width="280" height="600"/>
+    <!-- Fairy lights (bought in the Store): they light up bulb by bulb during a session -->
+    <g class="decor decor-fairy-lights">
+      <path d="M80 420 Q72 385 80 350 Q72 315 80 280 Q72 245 80 210 Q72 175 80 140 Q72 94 80 48 Q108 58 136 48 Q165 58 194 48 Q222 58 250 48 Q278 58 306 48 Q335 58 364 48 Q392 58 420 48 Q428 94 420 140 Q428 175 420 210 Q428 245 420 280 Q428 315 420 350 Q428 385 420 420" fill="none" stroke="#2c323d" stroke-width="2.5"/>
+      <g class="bulb bulb-a"><rect x="77" y="418" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="80" cy="430" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-b"><rect x="77" y="348" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="80" cy="360" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-c"><rect x="77" y="278" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="80" cy="290" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-d"><rect x="77" y="208" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="80" cy="220" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-a"><rect x="77" y="138" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="80" cy="150" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-b"><rect x="77" y="46" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="80" cy="58" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-c"><rect x="133" y="46" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="136" cy="58" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-d"><rect x="191" y="46" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="194" cy="58" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-a"><rect x="247" y="46" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="250" cy="58" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-b"><rect x="303" y="46" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="306" cy="58" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-c"><rect x="361" y="46" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="364" cy="58" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-d"><rect x="417" y="46" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="420" cy="58" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-a"><rect x="417" y="138" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="420" cy="150" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-b"><rect x="417" y="208" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="420" cy="220" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-c"><rect x="417" y="278" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="420" cy="290" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-d"><rect x="417" y="348" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="420" cy="360" rx="6" ry="8.5"/></g>
+      <g class="bulb bulb-a"><rect x="417" y="418" width="6" height="6" rx="1" fill="#3a4250"/><ellipse class="glass" cx="420" cy="430" rx="6" ry="8.5"/></g>
+    </g>
+
     <!-- Halloween (bought in the Store): a cobweb in the corner, bats, a pumpkin -->
     <g class="decor decor-halloween">
       <g stroke="rgba(230, 236, 245, 0.75)" stroke-width="2" fill="none">
@@ -23,11 +45,22 @@ const DOOR_HTML = `
       </g>
       <g class="bat" fill="#1a1420"><path d="M440 70 Q452 58 462 70 Q470 62 478 70 Q468 72 462 80 Q456 72 440 70 Z"/></g>
       <g class="bat bat-2" fill="#1a1420"><path d="M20 120 Q30 110 38 120 Q45 113 52 120 Q44 122 38 128 Q32 122 20 120 Z"/></g>
-      <ellipse cx="458" cy="684" rx="34" ry="8" fill="rgba(0,0,0,0.25)"/>
-      <ellipse cx="458" cy="662" rx="32" ry="26" fill="#e07a2f"/>
-      <path d="M440 662 Q458 640 476 662" fill="none" stroke="#b85f1f" stroke-width="3"/>
-      <path d="M455 636 Q458 624 466 622" stroke="#4a6e3a" stroke-width="5" fill="none"/>
-      <path d="M445 656 L452 648 L456 657 Z M461 656 L466 648 L472 657 Z M444 668 Q458 680 472 668 L466 671 L460 667 L455 671 Z" fill="#ffd45a"/>
+      <!-- a jack-o'-lantern: ribbed segments, a curly stem, a glowing carved face -->
+      <ellipse cx="458" cy="688" rx="40" ry="8" fill="rgba(0,0,0,0.3)"/>
+      <ellipse cx="434" cy="662" rx="18" ry="25" fill="#c4581a"/>
+      <ellipse cx="482" cy="662" rx="18" ry="25" fill="#b3501a"/>
+      <ellipse cx="446" cy="662" rx="17" ry="27" fill="#e0702a"/>
+      <ellipse cx="471" cy="662" rx="17" ry="27" fill="#d0661f"/>
+      <ellipse cx="458" cy="662" rx="15" ry="28" fill="#f08a36"/>
+      <path d="M444 640 Q440 654 443 676" stroke="#f6a35c" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.8"/>
+      <path d="M456 636 Q454 626 460 618 Q466 614 470 618" stroke="#4f7a36" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M470 618 Q476 612 474 606" stroke="#4f7a36" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <g class="pumpkin-face" fill="#ffd45a">
+        <path d="M441 656 L448 645 L454 656 Z"/>
+        <path d="M462 656 L468 645 L475 656 Z"/>
+        <path d="M455 662 L458 657 L461 662 Z"/>
+        <path d="M440 668 Q458 684 476 668 Q472 676 468 672 L465 678 L461 672 L458 678 L455 672 L451 678 L448 672 Q444 676 440 668 Z"/>
+      </g>
     </g>
 
     <!-- The character stands here, between the feet at (210, 680). -->
@@ -61,7 +94,19 @@ const DOOR_HTML = `
       </g>
     </svg>
     <div class="door-edge"></div>
+    <div class="door-notes"></div>
   </div>
+
+  <!-- The doorbell (bought in the Store), on the wall beside the frame -->
+  <button type="button" class="doorbell decor" aria-label="Ring the doorbell">
+    <svg viewBox="0 0 40 60" aria-hidden="true">
+      <rect x="4" y="2" width="32" height="56" rx="8" fill="#c9a85a"/>
+      <rect x="8" y="6" width="24" height="48" rx="6" fill="none" stroke="#9c7d3c" stroke-width="2"/>
+      <circle cx="20" cy="30" r="10" fill="#f4e7c3"/><circle cx="20" cy="30" r="6" fill="#e9d29a"/>
+    </svg>
+  </button>
+
+  <!-- Sticky-note tasks (bought in the Store) go on the door during a session -->
 
   <!-- In front of the door: where a character stands once fully out (finale). -->
   <svg class="door-front" viewBox="0 0 500 720" xmlns="${SVG_NS}">
@@ -147,9 +192,13 @@ export function createDoor(container) {
       scene.classList.remove('door--slam');
     },
 
-    // Clicking or pressing Enter/Space on the door counts as a knock.
+    // Clicking or pressing Enter/Space on the door (or ringing the doorbell)
+    // counts as a knock. Sticky notes on the door don't.
     onKnock(handler) {
-      scene.addEventListener('click', handler);
+      scene.addEventListener('click', e => {
+        if (e.target.closest('.sticky-note')) return;
+        handler();
+      });
       scene.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();

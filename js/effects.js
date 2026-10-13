@@ -1,6 +1,6 @@
 // Screen effects that break out of the scene: things flying at the screen
-// in 3D, messes left on the screen (pie, bullet holes), and confetti.
-import { playSound } from './sound.js';
+// in 3D, messes left on the screen (pie), the megaphone blast, and confetti.
+import { playSound, playMegaphone } from './sound.js';
 
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
@@ -34,7 +34,7 @@ export async function flyAtScreen(markup, from, { to = null, size = 1, ms = 700 
 // ---------- Messes left on the screen ----------
 
 // A mess stuck to the screen. It drips, then slides away after a while;
-// a click wipes it off sooner. at/size place a small mess (bullet hole);
+// a click wipes it off sooner. at/size place a small mess at one spot;
 // without them it covers the whole screen (pie).
 export function addMess(markup, { at = null, size = null, lastMs = 6500 } = {}) {
   const mess = document.createElement('div');
@@ -112,50 +112,38 @@ export async function throwPie(from) {
   addMess(PIE_MESS_SVG);
 }
 
-// ---------- The soldier's gun: bullet holes in the "glass" ----------
+// ---------- The soldier's megaphone: his order blasts across the screen ----------
 
-function bulletHoleSvg(seed) {
-  // Fine glass cracks radiating out (each with a small branch), a little
-  // different every time.
-  const r = n => ((Math.sin(seed * 12.9 + n * 7.3) + 1) / 2);
-  const cracks = Array.from({ length: 8 }, (_, i) => {
-    const a = (i / 8) * Math.PI * 2 + r(i) * 0.6;
-    const len = 48 + r(i + 3) * 52;
-    const ex = Math.cos(a) * len, ey = Math.sin(a) * len;
-    const mx = Math.cos(a + 0.08) * len * 0.55, my = Math.sin(a + 0.08) * len * 0.55;
-    const ba = a + (r(i + 5) > 0.5 ? 0.6 : -0.6);
-    const bx = mx + Math.cos(ba) * len * 0.3, by = my + Math.sin(ba) * len * 0.3;
-    return `M${(Math.cos(a) * 24).toFixed(1)} ${(Math.sin(a) * 24).toFixed(1)} L${mx.toFixed(1)} ${my.toFixed(1)} L${ex.toFixed(1)} ${ey.toFixed(1)} M${mx.toFixed(1)} ${my.toFixed(1)} L${bx.toFixed(1)} ${by.toFixed(1)}`;
-  }).join(' ');
-  const puffs = [0, 1, 2].map(i => `<circle class="smoke smoke-${i}" cx="${(r(i + 11) - 0.5) * 14}" cy="-10" r="${20 + i * 5}"/>`).join('');
-  return `
-<svg viewBox="-200 -200 400 400" aria-hidden="true">
-  <defs><filter id="smoke-blur"><feGaussianBlur stdDeviation="5"/></filter></defs>
-  <path d="${cracks}" stroke="rgba(235, 242, 250, 0.7)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
-  <circle r="40" fill="none" stroke="rgba(235, 242, 250, 0.35)" stroke-width="0.9" stroke-dasharray="12 8"/>
-  <!-- the scorched hole -->
-  <circle r="27" fill="rgba(40, 32, 26, 0.75)"/>
-  <circle r="18" fill="#030407"/>
-  <path d="M-13 -14 A19 19 0 0 1 14 -13" stroke="rgba(255, 255, 255, 0.5)" stroke-width="2.5" fill="none"/>
-  <!-- smoke curling up out of it -->
-  <g class="smoke-puffs" fill="rgba(170, 176, 186, 0.55)" filter="url(#smoke-blur)">${puffs}</g>
-</svg>`;
-}
-
-// Three shots, each cracking a bullet hole in the screen.
-export async function fireBullets() {
-  for (let shot = 0; shot < 3; shot++) {
-    playSound('bang', { volume: 0.85 });
-    shakeScreen();
-    addMess(bulletHoleSvg(Math.random() * 100), {
-      at: {
-        x: window.innerWidth * (0.2 + Math.random() * 0.6),
-        y: window.innerHeight * (0.2 + Math.random() * 0.6),
-      },
-      size: Math.min(window.innerWidth, 900) * 0.42,
-    });
-    await wait(410);
+// Sound-wave rings burst out of the megaphone, the screen shakes, and the
+// words slam in one at a time, then fade.
+export async function megaphoneBlast(from, order) {
+  const words = order.split(' ');
+  const layer = document.createElement('div');
+  layer.className = 'blast';
+  layer.innerHTML = `<div class="blast-words"></div>`;
+  for (let i = 0; i < 3; i++) {
+    const ring = document.createElement('i');
+    ring.className = 'blast-ring';
+    ring.style.left = `${from.x}px`;
+    ring.style.top = `${from.y}px`;
+    ring.style.animationDelay = `${i * 160}ms`;
+    layer.append(ring);
   }
+  document.body.append(layer);
+  const box = layer.querySelector('.blast-words');
+
+  for (const word of words) {
+    playMegaphone();
+    shakeScreen();
+    const w = document.createElement('span');
+    w.textContent = word;
+    box.append(w);
+    await wait(520);
+  }
+  await wait(1300);
+  layer.classList.add('is-fading');
+  await wait(600);
+  layer.remove();
 }
 
 // ---------- Confetti ----------

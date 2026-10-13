@@ -1,5 +1,5 @@
 /* The soldier's own moves: his drill-whistle check-in, his finales, and the
-   gun punishment. Shared moves (look-around, peek, stare, breaks,
+   megaphone punishment. Shared moves (look-around, peek, stare, breaks,
    moods) live in characters.css. Same rig and transform shapes as the
    mother's moves. */
 
@@ -13,8 +13,8 @@
 .char-soldier.mood-ecstatic .mouth-cheer { display: inline; }
 
 /* Shouting orders: an open mouth replaces the others. */
-.char:is(.anim-soldier-meh, .anim-shoot) .mouth { display: none; }
-.char:is(.anim-soldier-meh, .anim-shoot) .shout { display: inline; }
+.char:is(.anim-soldier-meh, .anim-megaphone) .mouth { display: none; }
+.char:is(.anim-soldier-meh, .anim-megaphone) .shout { display: inline; }
 
 /* ===== soldier-whistle (signature check-in, 7.4s): lean out, scan the room,
          TWEEEET on his whistle, then jab a finger at you and bark ===== */
@@ -252,34 +252,43 @@
   60%, 100% { transform: rotate(0deg); }
 }
 
-/* ===== The gun punishment: he leans out with his pistol pointed at you
-         and fires three shots from 45% ===== */
-.char.anim-shoot          { animation: shoot-body 3.4s ease-in-out both; }
-.char.anim-shoot .arm-r   { animation: shoot-arm 3.4s ease-in-out both; }
-.char.anim-shoot .prop-gun { animation: shoot-gun 3.4s step-end both; }
+/* ===== The megaphone (too much knocking): he leans out, brings the
+         megaphone up, winds up and BLASTS at you (from 38%) ===== */
+.char.anim-megaphone                        { animation: mega-body 4.4s ease-in-out both; }
+.char.anim-megaphone .arm-r                 { animation: mega-straight-arm 4.4s step-end both; }
+.char.anim-megaphone .prop-megaphone-arm    { animation: mega-bent-arm 4.4s step-end both; }
+.char.anim-megaphone .head                  { animation: mega-head 4.4s ease-in-out both; }
 
-@keyframes shoot-body {
-  0%        { transform: translateX(90px) rotate(13deg) scale(1); }
-  30%       { transform: translateX(92px) rotate(10deg) scale(1.1); }   /* leans in and takes aim at you */
-  45%, 80%  { transform: translateX(92px) rotate(10deg) scale(1.1); }
-  48%, 58%, 68% { transform: translateX(90px) rotate(8deg) scale(1.08); } /* recoil */
-  100%      { transform: translateX(90px) rotate(13deg) scale(1); }
+@keyframes mega-body {
+  0%        { transform: translateX(90px) rotate(13deg); }
+  30%       { transform: translateX(84px) rotate(7deg); }    /* deep breath... */
+  38%       { transform: translateX(98px) rotate(18deg); }   /* BLAST */
+  42%       { transform: translateX(95px) rotate(16deg); }
+  52%       { transform: translateX(99px) rotate(19deg); }   /* BLAST */
+  56%, 78%  { transform: translateX(96px) rotate(17deg); }
+  90%, 100% { transform: translateX(90px) rotate(13deg); }
 }
 
-@keyframes shoot-arm {
-  0%        { transform: rotate(0deg); }
-  30%, 84%  { transform: rotate(-52deg); }   /* gun held out in front, aimed at you */
-  100%      { transform: rotate(0deg); }
+@keyframes mega-head {
+  0%, 30%   { transform: rotate(-13deg) translateY(0); }
+  38%, 78%  { transform: rotate(-16deg) translateY(-3px); }
+  90%, 100% { transform: rotate(-13deg) translateY(0); }
 }
 
-@keyframes shoot-gun {
+@keyframes mega-straight-arm {
+  0%   { opacity: 1; }
+  16%  { opacity: 0; }
+  90%  { opacity: 1; }
+}
+
+@keyframes mega-bent-arm {
   0%   { opacity: 0; }
-  8%   { opacity: 1; }
-  92%  { opacity: 0; }
+  16%  { opacity: 1; }
+  90%  { opacity: 0; }
 }
 
 /* ===== Held items stay upright: they turn the opposite way to his arm,
-         around his hand (the gun lines up along his arm instead). ===== */
+         around his hand. ===== */
 .char .arm-r .prop {
   transform-box: view-box;
   transform-origin: 72px -195px;
@@ -295,10 +304,6 @@
 .char.anim-soldier-exit[data-variant] .arm-r .prop {
   animation: upright-exit 1.3s ease-in-out both;
 }
-.char.anim-shoot .prop-gun {
-  animation: shoot-gun 3.4s step-end both, upright-gun 3.4s ease-in-out both;
-}
-
 @keyframes upright-hold {
   0%, 24%   { transform: rotate(0deg); }
   36%, 100% { transform: rotate(70deg); }
@@ -314,24 +319,4 @@
 @keyframes upright-exit {
   0%        { transform: rotate(calc(var(--arm-from, 0deg) * -1)); }
   60%, 100% { transform: rotate(0deg); }
-}
-
-@keyframes upright-gun {
-  0%        { transform: rotate(0deg); }
-  30%, 84%  { transform: rotate(52deg); }
-  100%      { transform: rotate(0deg); }
-}
-
-/* A flash at the barrel for each of the three shots. */
-.char .muzzle-flash { opacity: 0; }
-.char.anim-shoot .muzzle-flash { animation: muzzle 3.4s step-end both; }
-
-@keyframes muzzle {
-  0%   { opacity: 0; }
-  45%  { opacity: 1; }
-  48%  { opacity: 0; }
-  57%  { opacity: 1; }
-  60%  { opacity: 0; }
-  69%  { opacity: 1; }
-  72%  { opacity: 0; }
 }

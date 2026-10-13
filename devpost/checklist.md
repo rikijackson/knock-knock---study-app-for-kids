@@ -69,7 +69,7 @@ Build mode: learn
   Learner check: Open the Store's Door & Room tab, try every color theme, buy a background, a holiday decoration and the nameplate, type your name, and reload to check they stay.
   Commit: `Add door and room decorations with color themes`
 
-- [ ] **7. Fairy lights, sticky-note tasks, doorbell**
+- [x] **7. Fairy lights, sticky-note tasks, doorbell**
   Becomes usable: Fairy lights (350) around the frame light up bulb by bulb as a session goes on. Sticky-note tasks (350) put the session's tasks on the door as notes you tear off to tick. The doorbell (500) adds a bell; clicking the bell or the door rings a ding-dong instead of knocking, and whoever's inside reacts.
   Why now: The middle tier of interactive items, built on slice 6's decoration system.
   PRD ref: `prd.md > Door & Room Store`
@@ -142,3 +142,12 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - Slice 5: the theme toggle is a sun/moon button beside the settings gear (top-right) rather than a separate corner; Stats joins Tasks and Store in the top-left. Sample heat-map data is generated once for existing saves too (`demoSeeded`).
 - Intro knocks open the door wider (a new 'gap' and 'intro' opening) — learner feedback.
 - Slices 6–8 added after the core plan was complete: a Door & Room store (free color themes; backgrounds 50, holiday decor 75, nameplate 100, fairy lights 250, sticky notes 250, doorbell 400, study plant 600, cat flap 1000; later raised by the learner to 150, 175, 300, 350, 350, 500, 700, 1100). The learner set the rule that the more interactive an item is, the more it costs. Demo mode earns a coin per second so purchases can be shown on camera.
+- Slice 6 prices raised by the learner: every decoration +100 coins, the nameplate +200 (backgrounds 150, holiday 175, nameplate 300; later items 350/350/500/700/1100). Characters unchanged so the soldier unlock still fits the 150 starting coins.
+- With a room background on, the study clock gets a frosted backing so it stays readable over busy rooms (found while testing slice 7).
+- Every press of the door or bell mid-study now plays the knock (or ding-dong with the doorbell) before the peek or punishment — the learner noticed the bell was silent during the prank. Added a `?coins=N` testing helper that adds coins once.
+- Halloween pumpkin redrawn as a ribbed jack-o'-lantern with a flickering glow; sticky notes made bigger and draggable around the door (a quick click still tears one off) — learner feedback; kept on the door rather than the whole screen so they don't cover the clock.
+- The soldier's knocking punishment changed from a cartoon gun to a megaphone blast (giant words slam across the screen with sound waves and a shake) — the learner wanted something non-violent. Gun, bullet holes and smoke removed.
+- Sticky notes also show your unfinished to-do list on the door screen (not just during a session), and tasks can be added mid-session with a box under the clock — learner requests; PRD updated.
+- Fairy lights are fully lit and twinkling on the door screen, go dark when a session starts and light up bulb by bulb — the learner couldn't see them to test (unlit bulbs were nearly invisible). Door-face decorations stay visible when the door opens (a brief fade-out was tried and undone at the learner's request).
+- Speech bubbles now sit above the corner buttons (they were hidden behind Settings and the theme button) — learner feedback.
+- The first fairy-light bulb now lights as soon as a session starts — in a real (non-demo) session the first bulb took 5 minutes, so the learner thought the lights weren't working.

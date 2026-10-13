@@ -103,4 +103,15 @@ export function todayKey(date = new Date()) {
   return `${y}-${m}-${d}`;
 }
 
+// Testing helper: open the app with ?coins=5000 to add that many coins
+// (once; the number is then removed from the address so a reload doesn't
+// add them again).
+const addCoins = Number(new URLSearchParams(location.search).get('coins'));
+if (addCoins > 0) {
+  save.coins += Math.round(addCoins);
+  const url = new URL(location.href);
+  url.searchParams.delete('coins');
+  history.replaceState(null, '', url);
+}
+
 persist();

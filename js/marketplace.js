@@ -69,6 +69,14 @@ const decorEl = document.getElementById('decor-list');
 const nameForm = document.getElementById('name-form');
 
 const PREVIEWS = {
+  'fairy-lights': `<svg viewBox="-80 -60 160 120"><path d="M-70 -20 Q-50 -6 -30 -20 Q-10 -6 10 -20 Q30 -6 50 -20 Q60 -12 70 -20" fill="none" stroke="#2c323d" stroke-width="3"/>
+    ${[-70, -30, 10, 50].map((x, i) => `<ellipse cx="${x + 20}" cy="${-2}" rx="7" ry="10" fill="${['#ffe8a3', '#a3d4ff', '#a3ffe0', '#ffb3c8'][i]}"/>`).join('')}</svg>`,
+  'sticky-notes': `<svg viewBox="-80 -60 160 120"><rect x="-56" y="-40" width="56" height="56" fill="#fff4a3" transform="rotate(-6)"/>
+    <rect x="6" y="-30" width="56" height="56" fill="#ffd6e0" transform="rotate(5)"/>
+    <path d="M-48 -18 L-14 -20 M-48 -6 L-20 -8 M14 -6 L46 -2 M14 6 L40 9" stroke="#5a5a5a" stroke-width="3" stroke-linecap="round"/></svg>`,
+  doorbell: `<svg viewBox="-80 -60 160 120"><rect x="-18" y="-40" width="36" height="80" rx="9" fill="#c9a85a"/>
+    <circle cx="0" cy="0" r="12" fill="#f4e7c3"/><circle cx="0" cy="0" r="7" fill="#e9d29a"/>
+    <path d="M30 -20 Q40 -10 30 0 M40 -28 Q56 -10 40 8" stroke="#a3d4ff" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`,
   christmas: `<svg viewBox="-80 -60 160 120"><circle r="40" fill="none" stroke="#2f6b3a" stroke-width="18"/>
     <circle r="40" fill="none" stroke="#3d8a4a" stroke-width="8" stroke-dasharray="8 10"/>
     <circle cx="40" cy="0" r="5" fill="#d63c3c"/><circle cx="-28" cy="-28" r="5" fill="#d63c3c"/><circle cx="-28" cy="28" r="5" fill="#d63c3c"/>
