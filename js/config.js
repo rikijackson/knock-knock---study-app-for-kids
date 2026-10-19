@@ -46,4 +46,5 @@ export const SOUND_FILES = {
   knock: 'knock.mp3',
   creak: 'creak.mp3',
   bang: 'bang.mp3',
+  meow: 'meow.mp3',
 };

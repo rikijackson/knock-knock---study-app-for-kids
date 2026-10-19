@@ -85,6 +85,11 @@ const DOOR_HTML = `
         <text class="nameplate-text" x="140" y="303" text-anchor="middle" font-size="19" font-weight="700"
               font-family="Georgia, 'Times New Roman', serif" fill="#3a2a10">Your name</text>
       </g>
+      <!-- the cat flap (bought in the Store): a frame with a dark hole -->
+      <g class="decor decor-cat-flap">
+        <rect x="94" y="494" width="92" height="86" rx="12" fill="#3b4250"/>
+        <rect x="102" y="502" width="76" height="70" rx="7" fill="#14171d"/>
+      </g>
       <g class="decor decor-christmas">
         <circle cx="140" cy="155" r="58" fill="none" stroke="#2f6b3a" stroke-width="26"/>
         <circle cx="140" cy="155" r="58" fill="none" stroke="#3d8a4a" stroke-width="12" stroke-dasharray="10 14"/>
@@ -95,7 +100,18 @@ const DOOR_HTML = `
     </svg>
     <div class="door-edge"></div>
     <div class="door-notes"></div>
+    <!-- The cat comes out through here (cat.js) -->
+    <div class="cat-flap decor" role="button" tabindex="-1" aria-label="The cat flap">
+      <div class="flap-door"></div>
+      <div class="cat"></div>
+    </div>
   </div>
+
+  <!-- The study plant (bought in the Store), on the floor beside the door -->
+  <button type="button" class="plant decor" aria-label="Study plant">
+    <span class="plant-tag" aria-live="polite"></span>
+    <span class="plant-art"></span>
+  </button>
 
   <!-- The doorbell (bought in the Store), on the wall beside the frame -->
   <button type="button" class="doorbell decor" aria-label="Ring the doorbell">
@@ -193,13 +209,14 @@ export function createDoor(container) {
     },
 
     // Clicking or pressing Enter/Space on the door (or ringing the doorbell)
-    // counts as a knock. Sticky notes on the door don't.
+    // counts as a knock. Sticky notes, the plant and the cat flap don't.
     onKnock(handler) {
       scene.addEventListener('click', e => {
-        if (e.target.closest('.sticky-note')) return;
+        if (e.target.closest('.sticky-note, .plant, .cat-flap')) return;
         handler();
       });
       scene.addEventListener('keydown', e => {
+        if (e.target !== scene) return;   // a button on the door handles its own keys
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           handler();

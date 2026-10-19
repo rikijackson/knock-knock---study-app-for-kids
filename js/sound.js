@@ -10,8 +10,9 @@ const clips = {};
 
 const soundOn = () => getSave().soundOn !== false;
 
-// volume: 0 to 1 (1 = the clip as recorded).
-export function playSound(name, { volume = 1 } = {}) {
+// volume: 0 to 1 (1 = the clip as recorded). speed: 1 = as recorded;
+// faster also makes it higher, like speeding up a tape.
+export function playSound(name, { volume = 1, speed = 1 } = {}) {
   if (name === 'knock' && bellOn()) return playDingDong();   // the doorbell replaces the knock
   const file = SOUND_FILES[name];
   if (!file || !soundOn()) return;
@@ -19,6 +20,8 @@ export function playSound(name, { volume = 1 } = {}) {
     clips[name] ??= new Audio(`assets/sounds/${file}`);
     const clip = clips[name];
     clip.volume = volume;
+    clip.preservesPitch = false;
+    clip.playbackRate = speed;
     clip.currentTime = 0;
     clip.play().catch(() => {});
   } catch {
@@ -137,3 +140,42 @@ export function playWhistle() {
 document.addEventListener('click', e => {
   if (e.target.closest('button')) playClick();
 }, true);
+
+// The cat's meow (a recording, see config.js). kind: 'meow' (a full hello)
+// or 'chirp' (the same meow, quicker and higher: a "mrrp!" when you boop it).
+export function playMeow(kind = 'meow') {
+  if (kind === 'chirp') playSound('meow', { volume: 0.45, speed: 1.5 });
+  else playSound('meow', { volume: 0.55, speed: 0.95 + Math.random() * 0.1 });
+}
+
+// A purr: a low rumble that pulses about 25 times a second.
+export function playPurr() {
+  if (!soundOn()) return;
+  try {
+    audio ??= new AudioContext();
+    const now = audio.currentTime;
+    const rumble = audio.createOscillator();
+    const soften = audio.createBiquadFilter();
+    const pulse = audio.createOscillator();
+    const pulseDepth = audio.createGain();
+    const volume = audio.createGain();
+    const fade = audio.createGain();
+    rumble.type = 'sawtooth';
+    rumble.frequency.value = 55;
+    soften.type = 'lowpass';
+    soften.frequency.value = 380;
+    pulse.frequency.value = 25;
+    pulseDepth.gain.value = 0.5;
+    volume.gain.value = 0.5;
+    pulse.connect(pulseDepth).connect(volume.gain);
+    fade.gain.setValueAtTime(0.0001, now);
+    fade.gain.exponentialRampToValueAtTime(0.35, now + 0.25);
+    fade.gain.setValueAtTime(0.35, now + 1.1);
+    fade.gain.exponentialRampToValueAtTime(0.0001, now + 1.5);
+    rumble.connect(soften).connect(volume).connect(fade).connect(audio.destination);
+    rumble.start(now); pulse.start(now);
+    rumble.stop(now + 1.55); pulse.stop(now + 1.55);
+  } catch {
+    // No Web Audio: a silent purr.
+  }
+}

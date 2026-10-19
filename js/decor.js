@@ -15,6 +15,8 @@ export const DECOR = [
   { id: 'fairy-lights', name: 'Fairy lights', kind: 'item', price: 350 },
   { id: 'sticky-notes', name: 'Sticky-note tasks', kind: 'item', price: 350 },
   { id: 'doorbell',    name: 'Doorbell', kind: 'item', price: 500 },
+  { id: 'plant',       name: 'Study plant', kind: 'item', price: 700 },
+  { id: 'cat-flap',    name: 'Cat flap', kind: 'item', price: 1100 },
 ];
 
 export const getDecor = id => DECOR.find(d => d.id === id);

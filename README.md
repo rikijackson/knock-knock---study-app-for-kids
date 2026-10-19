@@ -21,5 +21,5 @@ Plain HTML, CSS and JavaScript, with no framework and no AI-generated images. Th
 ## Credits
 
 Sound effects:
-- Knock and door slam from [Pixabay](https://pixabay.com/sound-effects/), used under the [Pixabay Content License](https://pixabay.com/service/license-summary/).
+- Knock, door slam and the cat's meow from [Pixabay](https://pixabay.com/sound-effects/), used under the [Pixabay Content License](https://pixabay.com/service/license-summary/).
 - Door creak: "Scary wooden door opening" from [Mixkit](https://mixkit.co/free-sound-effects/), used under the [Mixkit Sound Effects Free License](https://mixkit.co/license/#sfxFree). Sped up and made quieter for this project.

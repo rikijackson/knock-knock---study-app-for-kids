@@ -126,7 +126,7 @@ PRD ref: `prd.md > Tasks`.
 PRD ref: `prd.md > Coins and Marketplace`.
 
 ### Door & Room Store
-`js/decor.js`, `css/decor.css`. The catalog of decorations (id, name, price, kind), the color-theme palettes (each a set of CSS variable values for light and dark, applied to the page; characters use their own fixed colors so they never change), and `applyDecor()`, which shows the active decorations: classes on the door scene for door/frame items, and a full-page room layer behind the app for backgrounds. Owned and active items, the palette and the nameplate text live in the save under `decor`. Interactive items (lights, notes, doorbell, plant, cat) hook into the session and knock code.
+`js/decor.js`, `css/decor.css`. The catalog of decorations (id, name, price, kind), the color-theme palettes (each a set of CSS variable values for light and dark, applied to the page; characters use their own fixed colors so they never change), and `applyDecor()`, which shows the active decorations: classes on the door scene for door/frame items, and a full-page room layer behind the app for backgrounds. Owned and active items, the palette and the nameplate text live in the save under `decor`. Interactive items (lights, notes, doorbell, plant, cat) hook into the session and knock code. The plant lives in `js/plant.js` (its stage is worked out from your real study history every time it's shown) and the cat in `js/cat.js` (visits on a random timer during a session, only while nothing else is using the door).
 PRD ref: `prd.md > Door & Room Store`.
 
 ### Stats Panel and Heat Map

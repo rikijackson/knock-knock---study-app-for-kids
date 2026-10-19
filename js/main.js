@@ -14,6 +14,8 @@ import './marketplace.js';
 import './stats.js';
 import { applyDecor, lightUp, isOn } from './decor.js';
 import { throwPie, megaphoneBlast } from './effects.js';
+import { initPlant } from './plant.js';
+import { initCat, startCatVisits, stopCatVisits, hideCat } from './cat.js';
 import { DOOR_LINES, LINES, pick } from './messages.js';
 import { playSound } from './sound.js';
 import { TIMER_LENGTHS, FIXED_INTERVALS, BREAK_UNIT_MS, ANGER_STAGES } from './config.js';
@@ -117,6 +119,7 @@ door.onKnock(async () => {
 let doorAction = null;
 async function useDoor(action) {
   while (doorAction) await doorAction;
+  hideCat();   // the cat ducks back in before the door opens
   doorAction = action();
   try {
     await doorAction;
@@ -389,6 +392,7 @@ async function study(character, settings) {
   lightUp(0);   // fairy lights go dark, then light up one by one as you study
   showSessionTasks(settings.taskIds);
   app.classList.add('is-studying');     // door slides left, the clock appears
+  startCatVisits();                     // the cat (if you have one) pops out now and then
   // The clock starts right away, so Break and End work from the first second.
   const session = await runSession(
     settings,
@@ -397,6 +401,7 @@ async function study(character, settings) {
   );
   if (onBreak) await endBreak(character, { sessionOver: true });   // ended mid-break
   while (doorAction) await doorAction;   // let a sly peek finish slamming
+  stopCatVisits();
 
   app.classList.remove('is-studying');
   document.body.classList.remove('is-on-break');
@@ -549,3 +554,7 @@ document.querySelector('.doorbell').addEventListener('click', e => {
 
 refreshNotes();   // your to-do list on the door as soon as the page opens
 lightUp(1);       // fairy lights twinkle on the door screen
+initPlant();      // the study plant shows how your streak is doing
+// The cat only comes out when nothing else is using the door.
+const studying = () => app.classList.contains('is-studying');
+initCat(door, { canAppear: () => !doorAction && !door.isOpen() && (studying() || !busy) });

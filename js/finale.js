@@ -57,6 +57,7 @@ export function recordSession(session) {
     s.coins += coins;
     if (minutes > 0) s.history[todayKey()] = (s.history[todayKey()] ?? 0) + minutes;
   });
+  document.dispatchEvent(new CustomEvent('historychange'));   // the study plant grows
   renderCoins();
   if (coins > 0) showCoinGain(coins);
   return minutes;

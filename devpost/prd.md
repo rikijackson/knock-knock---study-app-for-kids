@@ -127,8 +127,8 @@ Source: `scope.md > The POC Boundary`.
 - [ ] **Fairy lights (350):** light up bulb by bulb as a session goes on.
 - [ ] **Sticky-note tasks (350):** your unfinished tasks as notes on the door (your whole to-do list on the door screen, the session's tasks while studying); drag them around the door, tear one off to tick it.
 - [ ] **Doorbell (500):** a bell beside the door; clicking it or the door rings a ding-dong instead of a knock.
-- [ ] **Study plant (700):** grows with your streak of study days; wilts slowly when you miss days.
-- [ ] **Cat flap (1100):** a cat pokes out during sessions and reacts when clicked.
+- [ ] **Study plant (700):** grows with your streak of study days (seed, sprout, seedling, leafy, budding, full bloom); wilts slowly when you miss days and perks back up when you study again. Click it to see your streak.
+- [ ] **Cat flap (1100):** a cat pokes out during sessions and reacts: click to boop its nose (it meows), rub it to pet it (it purrs, hearts float up). Tap the flap to call it out any time.
 - [ ] In demo mode, every second studied earns a coin, so purchases can be shown in the video.
 
 ### Stats and Heat Map

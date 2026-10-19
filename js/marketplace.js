@@ -6,6 +6,8 @@ import { getSave, update } from './storage.js';
 import { renderCoins } from './ui.js';
 import { DECOR, PALETTES, owns, isOn, buy as buyDecor, toggle, setPalette, setName } from './decor.js';
 import { ROOMS } from './rooms.js';
+import { plantSvg } from './plant.js';
+import { CAT_SVG } from './cat.js';
 
 const listEl = document.getElementById('store-list');
 const noteEl = document.getElementById('store-note');
@@ -89,6 +91,11 @@ const PREVIEWS = {
     <rect x="-56" y="-14" width="112" height="28" rx="5" fill="none" stroke="#9c7d3c" stroke-width="2"/>
     <text y="7" text-anchor="middle" font-size="18" font-weight="700" font-family="Georgia, serif" fill="#3a2a10">Your name</text></svg>`,
 };
+
+// The plant in full bloom, and the cat peeking out of its flap.
+PREVIEWS.plant = `<div class="preview-plant">${plantSvg(5)}</div>`;
+PREVIEWS['cat-flap'] = `<div class="preview-cat"><svg viewBox="0 0 160 120"><rect x="34" y="40" width="92" height="76" rx="12" fill="#3b4250"/>
+  <rect x="42" y="48" width="76" height="62" rx="7" fill="#14171d"/></svg>${CAT_SVG}</div>`;
 
 function decorState(item, save) {
   if (owns(item.id)) return isOn(item.id) ? { label: 'On ✓', kind: 'on' } : { label: 'Switch on', kind: 'owned' };

@@ -79,7 +79,7 @@ Build mode: learn
   Learner check: Buy all three, start a session with tasks, watch the lights, tear off a note, and ring the bell.
   Commit: `Add fairy lights, sticky-note tasks and doorbell`
 
-- [ ] **8. Study plant and cat flap**
+- [x] **8. Study plant and cat flap**
   Becomes usable: The study plant (700) grows with your streak of study days, from sprout to flowers, and slowly wilts when you miss days. The cat flap (1100) has a cat that pokes out during sessions and reacts when clicked or petted.
   Why now: The two most interactive (and most expensive) items, last so the simpler ones are finished first.
   PRD ref: `prd.md > Door & Room Store`
@@ -151,3 +151,6 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - Fairy lights are fully lit and twinkling on the door screen, go dark when a session starts and light up bulb by bulb — the learner couldn't see them to test (unlit bulbs were nearly invisible). Door-face decorations stay visible when the door opens (a brief fade-out was tried and undone at the learner's request).
 - Speech bubbles now sit above the corner buttons (they were hidden behind Settings and the theme button) — learner feedback.
 - The first fairy-light bulb now lights as soon as a session starts — in a real (non-demo) session the first bulb took 5 minutes, so the learner thought the lights weren't working.
+- Study plant growth rule: each study day grows it one step, each missed day shrinks it half a step and makes it droop (it never dies); today isn't "missed" until it's over. Testing helper `?streak=N&missed=N` previews a plant without touching the save.
+- Cat flap: click = boop (meow), rubbing = pet (purr + hearts, stays longer); tapping the flap calls the cat out; it ducks back in whenever the door is about to open. Meow and purr are generated in the browser like the other effects.
+- The cat's meow is a Pixabay recording (`assets/sounds/meow.mp3`) after a generated meow sounded wrong; the boop chirp is the same clip played faster and higher. The purr stays generated.
