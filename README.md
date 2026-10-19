@@ -1,4 +1,4 @@
-# Study Check-In (working title)
+# Knock-Knock (working title)
 
 A free, minimalistic study website where a funny animated character pops out from behind a door to check that you're still studying.
 
