@@ -96,6 +96,7 @@ Build mode: learn
 
 ## Final Review
 
+- [ ] Spam-clicking the door (or doorbell) mid-session queued a door opening per click; now knocks are ignored while the door is busy
 - [ ] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map
@@ -154,3 +155,4 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - Study plant growth rule: each study day grows it one step, each missed day shrinks it half a step and makes it droop (it never dies); today isn't "missed" until it's over. Testing helper `?streak=N&missed=N` previews a plant without touching the save.
 - Cat flap: click = boop (meow), rubbing = pet (purr + hearts, stays longer); tapping the flap calls the cat out; it ducks back in whenever the door is about to open. Meow and purr are generated in the browser like the other effects.
 - The cat's meow is a Pixabay recording (`assets/sounds/meow.mp3`) after a generated meow sounded wrong; the boop chirp is the same clip played faster and higher. The purr stays generated.
+- Final review: knocks during a session are ignored while the door is busy, and the pie/megaphone window grew from 15 s to 30 s so three "real" knocks (each followed by a peek) still trigger it.

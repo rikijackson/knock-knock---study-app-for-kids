@@ -46,7 +46,7 @@ let busy = false;
 // Knocking while studying: a quick sly peek, then BANG. Knock 3 times
 // within 15 seconds and they come out and punish you (pie / megaphone).
 const PIE_KNOCKS = 3;
-const PIE_WINDOW_MS = 15000;
+const PIE_WINDOW_MS = 30000;   // long enough for 3 knocks with a peek after each
 let knockTimes = [];
 let studyCharacter = null;
 
@@ -92,7 +92,9 @@ door.onKnock(async () => {
     return;
   }
   if (app.classList.contains('is-studying')) {
-    if (onBreak) return;
+    // While the door is busy (a peek, a pie, a check-in), extra knocks are
+    // ignored, so spam-clicking can't pile up a queue of door openings.
+    if (onBreak || doorAction) return;
     playSound('knock');   // a knock, or a ding-dong if you have the doorbell
     const now = Date.now();
     knockTimes = knockTimes.filter(t => now - t < PIE_WINDOW_MS);
@@ -100,7 +102,7 @@ door.onKnock(async () => {
     if (knockTimes.length >= PIE_KNOCKS) {
       knockTimes = [];
       useDoor(() => punish(studyCharacter));
-    } else if (!doorAction) {
+    } else {
       useDoor(slyPeek);
     }
     return;
