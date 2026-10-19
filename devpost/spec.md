@@ -54,6 +54,8 @@ PRD ref: `prd.md > The Core Journey`.
 - **Recording the demo:** set `DEMO_MODE = true` in `js/config.js`, then record with your screen recorder. Demo mode makes random check-ins happen within seconds instead of minutes (see *What Was Simplified and Why*). The fixed-interval option already includes 1 minute.
 - **Reset for a fresh demo:** a small "Reset data" link in the Stats panel clears the save, so the door intro plays again.
 - **Required for submission:** the demo video and the public GitHub repo.
+  - Public repo: https://github.com/rikijackson/knock-knock---study-app-for-kids
+  - Demo video: _not recorded yet_
 - **Optional, chosen by the learner:** **GitHub Pages**, set up in `6-ship`. It serves the repo's files at `https://<username>.github.io/<repo-name>/`. It's free, needs no build step, and uses the same files as local.
 
 ## Look and Feel
