@@ -92,24 +92,24 @@ Build mode: learn
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — after slice 1 (the look test), before any other building. Learner feedback reshaped the art: natural skin, curves not blocks, Carmen Sandiego–style face, 3D door swing, new look-around.
-- [ ] Final kick-the-tires exploration and feedback completed
+- [x] Final kick-the-tires exploration and feedback completed
 
 ## Final Review
 
-- [ ] Spam-clicking the door (or doorbell) mid-session queued a door opening per click; now knocks are ignored while the door is busy
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+- [x] Spam-clicking the door (or doorbell) mid-session queued a door opening per click; now knocks are ignored while the door is busy
+- [x] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
+- [x] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: [what actually happened; real document/test/code references; unfinished work if interrupted]
-Route and stops: [actual paths and symbols; guided stops completed, or reference-only route]
-Edit outcome: [tried/kept/reverted/declined/not applicable; verification if changed]
-Reflection: [offered/answered/declined/already covered — personal answer belongs only in the ignored profile]
-Activity mode: [live app and editor, explicit static fallback, focused alternative, prior practice, or recap]
+Activity and evidence: guided route following a mid-session knock through the code, tied to the learner's goal ("understanding how to actually build an app with AI") and the spam-click bug found in the final review (fix `a48c71b`, reproduced as 12 fast clicks → 1 peek). The learner reported "done" after the stops.
+Route and stops: `js/door.js` `onKnock(handler)` → `js/main.js` `door.onKnock(` / `useDoor` / `slyPeek` → `css/characters.css` `.anim-sly-peek`.
+Edit outcome: offered (`door.open('crack')` → `'gap'` in `slyPeek`); no change left in the code.
+Reflection: offered with the map.
+Activity mode: live app and editor.
 
 ## Revisions
 
