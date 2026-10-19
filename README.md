@@ -18,6 +18,10 @@ Don't open `index.html` by double-clicking it. The JavaScript is split into modu
 
 Plain HTML, CSS and JavaScript, with no framework and no AI-generated images. The door and the characters are drawn as SVG shapes, and their movements are CSS keyframe animations.
 
+## License
+
+The code and drawings are released under the [MIT License](LICENSE). The sound effects in `assets/sounds/` are not covered by it; they keep their own licenses, listed below.
+
 ## Credits
 
 Sound effects:
