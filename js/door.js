@@ -63,6 +63,16 @@ const DOOR_HTML = `
       </g>
     </g>
 
+    <!-- The doorbell (bought in the Store), on the wall beside the frame. It's
+         part of the wall drawing, so a character leaning out is in front of it. -->
+    <g class="decor decor-doorbell doorbell" role="button" tabindex="0" aria-label="Ring the doorbell">
+      <g class="doorbell-body" transform="translate(430 331) scale(0.75)">
+        <rect x="4" y="2" width="32" height="56" rx="8" fill="#c9a85a"/>
+        <rect x="8" y="6" width="24" height="48" rx="6" fill="none" stroke="#9c7d3c" stroke-width="2"/>
+        <circle cx="20" cy="30" r="10" fill="#f4e7c3"/><circle cx="20" cy="30" r="6" fill="#e9d29a"/>
+      </g>
+    </g>
+
     <!-- The character stands here, between the feet at (210, 680). -->
     <g class="char-slot" transform="translate(210 680)"></g>
   </svg>
@@ -111,15 +121,6 @@ const DOOR_HTML = `
   <button type="button" class="plant decor" aria-label="Study plant">
     <span class="plant-tag" aria-live="polite"></span>
     <span class="plant-art"></span>
-  </button>
-
-  <!-- The doorbell (bought in the Store), on the wall beside the frame -->
-  <button type="button" class="doorbell decor" aria-label="Ring the doorbell">
-    <svg viewBox="0 0 40 60" aria-hidden="true">
-      <rect x="4" y="2" width="32" height="56" rx="8" fill="#c9a85a"/>
-      <rect x="8" y="6" width="24" height="48" rx="6" fill="none" stroke="#9c7d3c" stroke-width="2"/>
-      <circle cx="20" cy="30" r="10" fill="#f4e7c3"/><circle cx="20" cy="30" r="6" fill="#e9d29a"/>
-    </svg>
   </button>
 
   <!-- Sticky-note tasks (bought in the Store) go on the door during a session -->

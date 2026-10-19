@@ -549,9 +549,17 @@ function makeDraggable(note, board, task, onClick) {
 }
 
 // The doorbell rings just like knocking on the door.
-document.querySelector('.doorbell').addEventListener('click', e => {
+const bell = document.querySelector('.doorbell');
+bell.addEventListener('click', e => {
   e.stopPropagation();
   door.scene.click();
+});
+bell.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    e.stopPropagation();
+    door.scene.click();
+  }
 });
 
 refreshNotes();   // your to-do list on the door as soon as the page opens

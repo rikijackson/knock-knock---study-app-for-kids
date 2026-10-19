@@ -97,6 +97,8 @@ Build mode: learn
 ## Final Review
 
 - [x] Spam-clicking the door (or doorbell) mid-session queued a door opening per click; now knocks are ignored while the door is busy
+- [x] Settings "Longest break" description no longer mentions only Mom (works for any character)
+- [x] Doorbell drew on top of the character leaning out of the doorway; it's now part of the wall drawing behind her
 - [x] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map
@@ -156,3 +158,4 @@ Activity mode: live app and editor.
 - Cat flap: click = boop (meow), rubbing = pet (purr + hearts, stays longer); tapping the flap calls the cat out; it ducks back in whenever the door is about to open. Meow and purr are generated in the browser like the other effects.
 - The cat's meow is a Pixabay recording (`assets/sounds/meow.mp3`) after a generated meow sounded wrong; the boop chirp is the same clip played faster and higher. The purr stays generated.
 - Final review: knocks during a session are ignored while the door is busy, and the pie/megaphone window grew from 15 s to 30 s so three "real" knocks (each followed by a peek) still trigger it.
+- After the final review, the learner asked for two small fixes: character-neutral wording for the break-limit setting, and the doorbell moved from an overlay into the door's back SVG so characters are in front of it.
